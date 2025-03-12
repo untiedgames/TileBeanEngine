@@ -2,16 +2,9 @@ package com.untiedgames.TileBeanEngine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Sprite {
+public class Sprite extends Object2D {
 
 	private Texture texture;
-
-	public float x = 0;
-	public float y = 0;
-	public float z = 0;
-	public float rotation = 0;
-	public float scale_x = 1;
-	public float scale_y = 1;
 
 	public Sprite(Texture texture) {
 		this.texture = texture;

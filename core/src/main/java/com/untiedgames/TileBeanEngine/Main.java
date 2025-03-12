@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 	Texture image;
+	Object2DHandle sprite;
 
 	@Override
 	public void create() {
@@ -19,8 +20,7 @@ public class Main extends ApplicationAdapter {
 		Sprite s = new Sprite(image);
 		s.x = 0;
 		s.y = 0;
-		s.rotation = 1;
-		TileBeanEngine.sprites.add(s);
+		sprite = TileBeanEngine.world.add(s);
 	}
 
 	@Override
@@ -32,8 +32,7 @@ public class Main extends ApplicationAdapter {
 	public void render() {
 		ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 		TileBeanEngine.run();
-		TileBeanEngine.sprites.get(0).rotation += .01f;
-		//TileBeanEngine.sprites.get(0).y -= 1;
+		TileBeanEngine.world.get(sprite).get().rotation += .01f;
 	}
 
 	@Override

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 public class TileBeanEngine {
 
 	private static SpriteBatch spritebatch;
-	public static ArrayList<Sprite> sprites;
+	public static World world;
 	private static Camera camera;
 
 	public static void initialize() {
 		spritebatch = new SpriteBatch();
-		sprites = new ArrayList<Sprite>();
+		world = new World();
 		camera = new Camera(1920, 1080);
 	}
 
@@ -28,14 +28,16 @@ public class TileBeanEngine {
 	}
 
 	public static void run() {
-		for (Sprite sprite : sprites) {
-			sprite.update(1);
+		for (Object2DHandle handle : world.sprites) {
+			Sprite s = (Sprite)world.get(handle).get();
+			s.update(1);
 		}
 
 		camera.setActive();
 		spritebatch.begin();
-		for (Sprite sprite : sprites) {
-			sprite.draw(spritebatch);
+		for (Object2DHandle handle : world.sprites) {
+			Sprite s = (Sprite)world.get(handle).get();
+			s.draw(spritebatch);
 		}
 		spritebatch.end();
 	}
