@@ -1,6 +1,7 @@
 package com.untiedgames.TileBeanEngine;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.util.ArrayList;
 
 public class TileBeanEngine {
@@ -28,15 +29,16 @@ public class TileBeanEngine {
 	}
 
 	public static void run() {
-		for (Object2DHandle handle : world.sprites) {
-			Sprite s = (Sprite)world.get(handle).get();
-			s.update(1);
+		for (ArrayList<Component> list : world.components.values()) {
+			for (Component c : list) {
+				c.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
+			}
 		}
 
 		camera.setActive();
 		spritebatch.begin();
-		for (Object2DHandle handle : world.sprites) {
-			Sprite s = (Sprite)world.get(handle).get();
+		for (Component c : world.getComponentsOfClass(Sprite.class.hashCode())) {
+			Sprite s = (Sprite)c;
 			s.draw(spritebatch);
 		}
 		spritebatch.end();

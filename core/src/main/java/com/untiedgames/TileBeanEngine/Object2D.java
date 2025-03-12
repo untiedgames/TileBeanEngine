@@ -1,7 +1,9 @@
 package com.untiedgames.TileBeanEngine;
 
-public abstract class Object2D {
+public class Object2D {
 
+	protected Object2DHandle self;
+	
 	public float x = 0; // The X-coordinate of the object.
 	public float y = 0; // The Y-coordinate of the object. (In TileBeanEngine, negative Y is up.)
 	public float z = 0; // The visual depth of the object. Smaller values are in back, larger values are in front.
