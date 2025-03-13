@@ -10,10 +10,6 @@ dependencies {
   api "io.github.spair:imgui-java-natives-macos:1.89.0"
   api "io.github.spair:imgui-java-natives-windows:1.89.0"
 
-  //implementation files("../libs/imgui-app-1.89.0.jar")
-  //implementation files("../libs/imgui-binding-1.89.0.jar")
-  //implementation files("../libs/imgui-lwjgl3-1.89.0.jar")
-
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
