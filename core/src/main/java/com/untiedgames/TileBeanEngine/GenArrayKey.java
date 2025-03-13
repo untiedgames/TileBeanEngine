@@ -24,4 +24,8 @@ public abstract class GenArrayKey {
 		return index == other.index && generation == other.generation;
 	}
 
+	public int hashCode() {
+		return (index << 16) | generation;
+	}
+
 }
