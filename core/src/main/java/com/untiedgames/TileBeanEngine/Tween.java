@@ -44,10 +44,11 @@ public abstract class Tween extends Component {
 	public void start(TYPE type, float time, float... target_values) {
 		this.type = type;
 		this.time = time;
-		for (int i = 0; i < target_values.length; i++) {
+		for (int i = 0; i < Math.min(this.target_values.length, target_values.length); i++) {
 			this.target_values[i] = target_values[i];
 		}
 		is_running = true;
+		progress = 0;
 	}
 	
 	public void update(float delta) {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.HashSet;
+import java.util.Optional;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -30,6 +31,13 @@ public class Main extends ApplicationAdapter {
 		Object2D obj = new Object2D();
 		obj_handle = TileBeanEngine.world.add(obj);
 		TileBeanEngine.world.addComponent(obj_handle, new Sprite(image));
+		
+		TweenRotation tween_rotation = new TweenRotation();
+		TileBeanEngine.world.addComponent(obj_handle, tween_rotation);
+		
+		TimerManager timer_manager = new TimerManager();
+		TileBeanEngine.world.addComponent(obj_handle, timer_manager);
+		timer_manager.start("timer_rotation", 2.0f, -1, false);
 
 		Object2D obj2 = new Object2D();
 		obj2.x = 0;
@@ -52,8 +60,17 @@ public class Main extends ApplicationAdapter {
 	public void render() {
 		ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 		TileBeanEngine.run();
-		TileBeanEngine.world.get(obj_handle).get().rotation += .01f;
 
+		// Check obj_handle's timer. If it's finished, we'll rotate the object using a tween.
+		Object2D obj = TileBeanEngine.world.get(obj_handle);
+		TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class.hashCode());
+		TimerInstance timer_rotation = timer_manager.get("timer_rotation");
+		if (timer_rotation.isFinished()) {
+			TweenRotation tween_rotation = (TweenRotation)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class.hashCode());
+			tween_rotation.start(Tween.TYPE.ELASTICOUT, 2.0f, obj.rotation + (float)Math.PI * .5f);
+			timer_rotation.clearFinished();
+		}
+		
 		// Testing World's type info
 		/*
 		HashSet<Component> set = TileBeanEngine.world.getComponentsOfClass(DerivedSprite.class.hashCode());

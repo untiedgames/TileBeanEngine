@@ -18,6 +18,7 @@ public class World {
 		component_type_info = new HashMap<>();
 	}
 
+	// Adds an object to the world.
 	public Object2DHandle add(Object2D obj) {
 		if (obj == null) return Object2DHandle.empty();
 		if (obj.self != null) {
@@ -29,6 +30,7 @@ public class World {
 		return ret;
 	}
 
+	// Removes an object from the world.
 	public void remove(Object2DHandle handle) {
 		if (!handle.isValid() || contents.expired(handle)) return;
 		Optional<Object2D> opt = contents.get(handle);
@@ -47,17 +49,26 @@ public class World {
 		}
 	}
 
+	// Removes everything from the world.
 	public void clear() {
 		contents.clear();
 		components.clear();
 	}
 
-	public Optional<Object2D> get(Object2DHandle handle) {
+	// Retrieves an object from the world, if present.
+	public Optional<Object2D> tryGet(Object2DHandle handle) {
 		return contents.get(handle);
 	}
 
-	public void addComponent(Object2DHandle target, Component component) {
-		component.setOwner(target, wk);
+	// The less-safe version of tryGet. Use this when you expect the object to be there.
+	public Object2D get(Object2DHandle handle) {
+		return contents.get(handle).get();
+	}
+
+	// Adds a component to an object.
+	public void addComponent(Object2DHandle handle, Component component) {
+		if (!handle.isValid() || contents.expired(handle)) return;
+		component.setOwner(handle, wk);
 		ArrayList<Component> list;
 		int hash = component.getClass().hashCode();
 		if (components.containsKey(hash)) {
@@ -82,7 +93,31 @@ public class World {
 		list.add(component);
 	}
 
-	// Returns a set of all components that are of the class with the given hash code, including derived classes.
+	// Retrieves a component of an object with the given class hash code, if present.
+	public Optional<Component> tryGetComponent(Object2DHandle handle, int hash) {
+		if (!handle.isValid() || contents.expired(handle)) return Optional.empty();
+		if (components.containsKey(hash)) {
+			ArrayList<Component> list = components.get(hash);
+			for (Component c : list) {
+				if (c.getOwner().equals(handle)) return Optional.of(c);
+			}
+		}
+		return Optional.empty();
+	}
+
+	// The less-safe version of tryGetComponent. Use this when you expect the component to be there.
+	public Component getComponent(Object2DHandle handle, int hash) {
+		if (!handle.isValid() || contents.expired(handle)) return null;
+		if (components.containsKey(hash)) {
+			ArrayList<Component> list = components.get(hash);
+			for (Component c : list) {
+				if (c.getOwner().equals(handle)) return c;
+			}
+		}
+		return null;
+	}
+
+	// Returns a set of all components that are of the class with the given class hash code, including derived classes.
 	public HashSet<Component> getComponentsOfClass(int hash) {
 		HashSet<Component> ret = new HashSet<Component>();
 		//ArrayList<Component> ret = new ArrayList<Component>();
@@ -96,19 +131,6 @@ public class World {
 			}
 		}
 		return ret;
-		/*
-		if (component_type_info.containsKey(hash)) {
-			ArrayList<Integer> type_info = component_type_info.get(hash);
-
-		}
-		if (components.containsKey(hash)) {
-			ArrayList<Component> list = components.get(hash);
-			Component[] ret = new Component[list.size()];
-			return components.get(hash).toArray(ret);
-		}
-		Component[] ret = {};
-		return ret;
-		*/
 	}
 
 	// This little class acts as a "key" that Component.setOwner requires.

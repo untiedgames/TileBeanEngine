@@ -1,12 +1,12 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.Optional;
 
-public class TweenLocation extends Tween {
+public class TweenColor extends Tween {
 
-	public TweenLocation() {
-		initial_values = new float[3];
-		target_values = new float[3];
-		result_values = new float[3];
+	public TweenColor() {
+		initial_values = new float[4];
+		target_values = new float[4];
+		result_values = new float[4];
 	}
 
 	public void start(TYPE type, float time, float... target_values) {
@@ -14,9 +14,10 @@ public class TweenLocation extends Tween {
 		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
-			initial_values[0] = obj.x;
-			initial_values[1] = obj.y;
-			initial_values[2] = obj.z;
+			initial_values[0] = obj.r;
+			initial_values[1] = obj.g;
+			initial_values[2] = obj.b;
+			initial_values[3] = obj.a;
 		}
 	}
 
@@ -24,9 +25,10 @@ public class TweenLocation extends Tween {
 		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
-			obj.x = values[0];
-			obj.y = values[1];
-			obj.z = values[2];
+			obj.r = values[0];
+			obj.g = values[1];
+			obj.b = values[2];
+			obj.a = values[3];
 		}
 	}
 

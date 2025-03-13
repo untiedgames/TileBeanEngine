@@ -22,7 +22,7 @@ public class Sprite extends Component {
 	}
 
 	protected void draw(SpriteBatch spritebatch) {
-		Optional<Object2D> opt = TileBeanEngine.world.get(owner);
+		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
 			int w = texture.getWidth();
