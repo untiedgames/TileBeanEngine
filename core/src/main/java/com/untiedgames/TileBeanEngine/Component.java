@@ -1,5 +1,7 @@
 package com.untiedgames.TileBeanEngine;
 
+// Component is a class which represents a specialized part of an object or entity.
+// Components have a handle representing their owner and an update method which can be used to perform logic each frame.
 public abstract class Component {
 
 	Object2DHandle owner = Object2DHandle.empty();

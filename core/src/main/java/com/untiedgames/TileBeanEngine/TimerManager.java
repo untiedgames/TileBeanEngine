@@ -2,6 +2,9 @@ package com.untiedgames.TileBeanEngine;
 import java.util.ArrayList;
 import java.util.Optional;
 
+// TimerManager is a component which supports adding, removing, and manipulating multiple TimerInstances.
+// It's a good example of a component which can support many instances of a "sub-component."
+// The TimerInstance component may also be used individually, if your object only needs one timer.
 public class TimerManager extends Component {
 
 	private ArrayList<TimerInstance> timers;

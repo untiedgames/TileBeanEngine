@@ -1,6 +1,7 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.Optional;
 
+// TweenRotation represents a change in rotation of a game object over time.
 public class TweenRotation extends Tween {
 
 	public TweenRotation() {

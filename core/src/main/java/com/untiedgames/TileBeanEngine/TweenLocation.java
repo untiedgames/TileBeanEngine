@@ -1,6 +1,7 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.Optional;
 
+// TweenLocation represents a change in location of a game object over time.
 public class TweenLocation extends Tween {
 
 	public TweenLocation() {
