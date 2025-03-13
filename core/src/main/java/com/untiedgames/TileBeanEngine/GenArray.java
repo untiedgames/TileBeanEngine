@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Iterator;
 
+// GenArray is a generational array collection. (Also found in the wild as "generational vectors," from C++.)
+// A generational array returns keys (handles) when you add things to it, and you use those keys to retrieve entries in the array.
+// The usefulness of a generational array is that when items are removed or replaced in the collection, any handles which have been given out
+// become invalidated, and can no longer be used to retrieve an entry.
 public class GenArray<T, U extends GenArrayKey> implements Iterable<GenArrayEntry<T, U>> {
 
 	private Class<U> u_class;
@@ -37,7 +41,7 @@ public class GenArray<T, U extends GenArrayKey> implements Iterable<GenArrayEntr
 	public U add(T item) {
 		for (int i = first_free; i < contents.size(); i++) {
 			GenArrayEntry<T, U> entry = contents.get(i);
-			if (entry.data.isEmpty()) {
+			if (!entry.data.isPresent()) {
 				first_free++;
 				entry.data = Optional.of(item);
 				return entry.key;

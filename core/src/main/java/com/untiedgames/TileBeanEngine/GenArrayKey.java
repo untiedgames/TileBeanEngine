@@ -1,5 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 
+// GenArrayKey is a handle which can grant access to an entry in a GenArray (generational array).
 public abstract class GenArrayKey {
 	
 	protected int index = Integer.MAX_VALUE;
@@ -13,7 +14,7 @@ public abstract class GenArrayKey {
 		this.generation = generation;
 	}
 
-	public boolean isValid() {
+	public boolean isEmpty() {
 		return index != Integer.MAX_VALUE;
 	}
 

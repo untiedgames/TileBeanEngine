@@ -27,7 +27,7 @@ public class World {
 	public Object2DHandle add(Object2D obj) {
 		if (obj == null) return Object2DHandle.empty();
 		if (obj.self != null) {
-			if (obj.self.isValid()) return obj.self; // Object has been added to the world already, simply return its existing handle
+			if (obj.self.isEmpty()) return obj.self; // Object has been added to the world already, simply return its existing handle
 			else return Object2DHandle.empty();
 		}
 		Object2DHandle ret = contents.add(obj);
@@ -39,7 +39,7 @@ public class World {
 
 	// Removes an object from the world.
 	public void remove(Object2DHandle handle) {
-		if (!handle.isValid() || contents.expired(handle)) return;
+		if (!handle.isEmpty() || contents.expired(handle)) return;
 		Optional<Object2D> opt = contents.get(handle);
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
@@ -68,6 +68,11 @@ public class World {
 		object_components.clear();
 	}
 
+	// Returns true if the object that the handle refers to exists, false otherwise.
+	public boolean exists(Object2DHandle handle) {
+		return !contents.expired(handle);
+	}
+
 	// Retrieves an object from the world, if present.
 	public Optional<Object2D> tryGet(Object2DHandle handle) {
 		return contents.get(handle);
@@ -81,8 +86,8 @@ public class World {
 	// Adds a component to an object.
 	// If the component already has an owner or if the object already has a component of the same type, nothing happens.
 	public void addComponent(Object2DHandle handle, Component component) {
-		if (!handle.isValid() || contents.expired(handle)) return; // Invalid or removed handle
-		if (component.getOwner().isValid()) return; // Component is already added
+		if (!handle.isEmpty() || contents.expired(handle)) return; // Invalid or removed handle
+		if (component.getOwner().isEmpty()) return; // Component is already added
 		
 		int hash = component.getClass().hashCode();
 		if (object_components.containsKey(handle)) {
@@ -123,7 +128,7 @@ public class World {
 	// Removes a component from an object.
 	// If the object does not have a component with the specified class hash code, nothing happens.
 	public void removeComponent(Object2DHandle handle, int hash) {
-		if (!handle.isValid() || contents.expired(handle)) return; // Invalid or removed handle
+		if (!handle.isEmpty() || contents.expired(handle)) return; // Invalid or removed handle
 
 		if (object_component_types.containsKey(handle)) {
 			ArrayList<Integer> obj_types = object_component_types.get(handle);
@@ -147,7 +152,7 @@ public class World {
 
 	// Retrieves a component of an object with the given class hash code, if present.
 	public Optional<Component> tryGetComponent(Object2DHandle handle, int hash) {
-		if (!handle.isValid() || contents.expired(handle)) return Optional.empty(); // Invalid or removed handle
+		if (!handle.isEmpty() || contents.expired(handle)) return Optional.empty(); // Invalid or removed handle
 
 		if (components.containsKey(hash)) {
 			ArrayList<Component> list = components.get(hash);
@@ -160,7 +165,7 @@ public class World {
 
 	// The less-safe version of tryGetComponent. Use this when you expect the component to be there.
 	public Component getComponent(Object2DHandle handle, int hash) {
-		if (!handle.isValid() || contents.expired(handle)) return null; // Invalid or removed handle
+		if (!handle.isEmpty() || contents.expired(handle)) return null; // Invalid or removed handle
 
 		if (components.containsKey(hash)) {
 			ArrayList<Component> list = components.get(hash);
@@ -172,6 +177,8 @@ public class World {
 	}
 
 	// Returns a set of all components that are of the class with the given class hash code, including derived classes.
+	// For example, if you call getComponentsOfClass(SomeClassDerivedFromSprite.class.hashCode()), you will get all components which are SomeClassDerivedFromSprite,
+	// whereas if you call getComponentsOfClass(Sprite.class.hashCode()) you will get all components of type Sprite and of type SomeClassDerivedFromSprite.
 	public HashSet<Component> getComponentsOfClass(int hash) {
 		HashSet<Component> ret = new HashSet<Component>();
 		for(Integer key : component_type_info.keySet()) {
