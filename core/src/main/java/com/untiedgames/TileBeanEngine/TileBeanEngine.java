@@ -18,6 +18,7 @@ public class TileBeanEngine {
 	// Engine core features
 	
 	public static Game game; // Contains functions to perform game logic and run the GUI (if any) each frame.
+	public static AssetManager assets; // Contains all graphics and other assets for the game.
 	public static World world; // Contains all game objects and their components.
 	private static Camera camera;
 	private static SpriteBatch spritebatch;
@@ -33,10 +34,11 @@ public class TileBeanEngine {
 	public static void initialize() {
 		// Engine setup
 
-		spritebatch = new SpriteBatch();
+		assets = new AssetManager();
 		world = new World();
 		camera = new Camera(1920, 1080);
-
+		spritebatch = new SpriteBatch();
+		
 		// Dear Imgui setup
 
 		imgui_glfw = new ImGuiImplGlfw();

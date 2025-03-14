@@ -8,33 +8,119 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 // It provides both update and draw methods, which can be overridden in derived classes.
 public class Sprite extends Component {
 
-	private Texture texture;
+	private TextureAssetHandle texture_handle = TextureAssetHandle.empty();
+	private boolean is_playing = false;
+	private float current_frame = 0;
+	private float play_speed = 1;
 
-	public Sprite(Texture texture) {
-		this.texture = texture;
+	public boolean is_looping = true;
+
+	////////////////////////
+	// Animation controls //
+	////////////////////////
+	
+	public void setGraphics(TextureAssetHandle handle) {
+		this.texture_handle = handle;
+		current_frame = 0;
+		Optional<TextureAsset> opt_texture_asset = TileBeanEngine.assets.tryGet(texture_handle);
+		if (opt_texture_asset.isPresent()) is_looping = opt_texture_asset.get().isLooping();
 	}
 
+	public void play() {
+		is_playing = true;
+	}
+
+	public void gotoAndPlay(int frame) {
+		current_frame = frame;
+		if (current_frame < 0) current_frame = 0;
+		is_playing = true;
+	}
+
+	public boolean isPlaying() {
+		return is_playing;
+	}
+
+	public void stop() {
+		is_playing = false;
+	}
+
+	public void gotoAndStop(int frame) {
+		current_frame = frame;
+		if (current_frame < 0) current_frame = 0;
+		is_playing = false;
+	}
+
+	/////////////////////
+	// Update and draw //
+	/////////////////////
+
+	// Override me to do custom logic!
+	// Be sure to call super.update in your override method if you want this Sprite to animate.
 	public void update(float delta) {
-		// Override me to do custom logic!
+		if (!is_playing || play_speed == 0.0f) return; // Nothing to do
+
+		Optional<TextureAsset> opt_texture_asset = TileBeanEngine.assets.tryGet(texture_handle);
+		if (!opt_texture_asset.isPresent()) return; // Texture has been removed or wasn't set
+
+		TextureAsset texture_asset = opt_texture_asset.get();
+		float fps = texture_asset.getFPS();
+		if (fps == 0.0f) return; // Nothing to do
+		int total_frames = texture_asset.getTotalFrames();
+		if (total_frames <= 1) return; // Nothing to do
+
+		current_frame += play_speed * delta * fps;
+
+		// Forward looping
+		while (current_frame >= total_frames) {
+			if (is_looping) {
+				current_frame -= (float)total_frames;
+			} else {
+				current_frame = (float)total_frames - 1;
+				stop();
+			}
+		}
+
+		// Backward looping
+		while (current_frame < 0) {
+			if (is_looping) {
+				current_frame += (float)total_frames;
+			} else {
+				current_frame = 0;
+				stop();
+			}
+		}
+
+		// Final range check
+		if (current_frame < 0.0f) current_frame = 0.0f;
+		else if (current_frame > total_frames - .00001f) current_frame = total_frames - .00001f;
 	}
 
+	// Override me to do custom drawing!
+	// Be sure to call drawInternal or super.draw in your override method if you want to draw this Sprite.
 	public void draw(SpriteBatch spritebatch) {
-		// Override me to do custom drawing!
 		drawInternal(spritebatch);
 	}
 
 	// Draws the sprite's graphics.
 	// In a custom draw method, you can call this method to draw the sprite's graphics at any time.
 	protected final void drawInternal(SpriteBatch spritebatch) {
-		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
-		if (opt.isPresent()) {
-			Object2D obj = opt.get();
-			int w = texture.getWidth();
-			int h = texture.getHeight();
-			float w_half = (float)w * .5f;
-			float h_half = (float)h * .5f;
-			spritebatch.setColor(obj.r, obj.g, obj.b, obj.a);
-			spritebatch.draw(texture, obj.x - w_half, -obj.y - h_half, w_half, h_half, w, h, obj.scale_x, obj.scale_y, -obj.rotation * 180f / (float)Math.PI, 0, 0, w, h, false, false);
+		Optional<TextureAsset> opt_texture_asset = TileBeanEngine.assets.tryGet(texture_handle);
+		if (opt_texture_asset.isPresent()) {
+			TextureAsset texture_asset = opt_texture_asset.get();
+			Optional<Texture> opt_texture = texture_asset.getTexture((int)current_frame);
+			if (opt_texture.isPresent()) {
+				Texture texture = opt_texture.get();
+				Optional<Object2D> opt_obj = TileBeanEngine.world.tryGet(getOwner());
+				if (opt_obj.isPresent()) {
+					Object2D obj = opt_obj.get();
+					int w = texture.getWidth();
+					int h = texture.getHeight();
+					float w_half = (float)w * .5f;
+					float h_half = (float)h * .5f;
+					spritebatch.setColor(obj.r, obj.g, obj.b, obj.a);
+					spritebatch.draw(texture, obj.x - w_half, -obj.y - h_half, w_half, h_half, w, h, obj.scale_x, obj.scale_y, -obj.rotation * 180f / (float)Math.PI, 0, 0, w, h, false, false);
+				}
+			}
 		}
 	}
 

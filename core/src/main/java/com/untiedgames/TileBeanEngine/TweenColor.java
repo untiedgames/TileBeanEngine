@@ -12,7 +12,7 @@ public class TweenColor extends Tween {
 
 	public void start(TYPE type, float time, float... target_values) {
 		super.start(type, time, target_values);
-		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
+		Optional<Object2D> opt = TileBeanEngine.world.tryGet(getOwner());
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
 			initial_values[0] = obj.r;
@@ -23,7 +23,7 @@ public class TweenColor extends Tween {
 	}
 
 	protected void setValues(float... values) {
-		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
+		Optional<Object2D> opt = TileBeanEngine.world.tryGet(getOwner());
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
 			obj.r = values[0];

@@ -4,7 +4,7 @@ package com.untiedgames.TileBeanEngine;
 // Components have a handle representing their owner and an update method which can be used to perform logic each frame.
 public abstract class Component {
 
-	Object2DHandle owner = Object2DHandle.empty();
+	private Object2DHandle owner = Object2DHandle.empty();
 
 	// This method is only callable by World, which provides a "key" to access this method.
 	public void setOwner(Object2DHandle owner, World.WorldKey k) {

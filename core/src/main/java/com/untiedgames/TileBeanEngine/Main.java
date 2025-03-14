@@ -1,16 +1,9 @@
 package com.untiedgames.TileBeanEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import imgui.ImGui;
-
-import java.util.HashSet;
-import java.util.Optional;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -18,16 +11,21 @@ public class Main extends ApplicationAdapter {
 	int rotation_counter = 0;
 
 	class TestGame extends Game {
-		Texture image;
+		TextureAssetHandle libgdx_logo;
 		Object2DHandle obj_handle;
 		Object2DHandle obj_handle2;
 		
 		public void initialize() {
-			image = new Texture("libgdx.png");
+			TextureAsset tex = new TextureAsset("libgdx_logo", "libgdx.png");
+			tex.load();
+			libgdx_logo = TileBeanEngine.assets.add(tex);
 
 			Object2D obj = new Object2D();
 			obj_handle = TileBeanEngine.world.add(obj);
-			TileBeanEngine.world.addComponent(obj_handle, new Sprite(image));
+
+			Sprite sprite = new Sprite();
+			sprite.setGraphics(libgdx_logo);
+			TileBeanEngine.world.addComponent(obj_handle, sprite);
 			
 			TweenRotation tween_rotation = new TweenRotation();
 			TileBeanEngine.world.addComponent(obj_handle, tween_rotation);
@@ -35,19 +33,6 @@ public class Main extends ApplicationAdapter {
 			TimerManager timer_manager = new TimerManager();
 			TileBeanEngine.world.addComponent(obj_handle, timer_manager);
 			timer_manager.start("timer_rotation", 2.0f, -1, false);
-			
-			/*
-			Object2D obj2 = new Object2D();
-			obj2.x = 0;
-			obj2.y = 0;
-			obj_handle2 = TileBeanEngine.world.add(obj2);
-			TileBeanEngine.world.addComponent(obj_handle2, new DerivedSprite(image));
-			
-			// Tween demo
-			TweenLocation tween = new TweenLocation();
-			TileBeanEngine.world.addComponent(obj_handle2, tween);
-			tween.start(Tween.TYPE.LINEAR, 10, 300, 300);
-			*/
 		}
 
 		public void update(float delta) {
@@ -60,26 +45,10 @@ public class Main extends ApplicationAdapter {
 				tween_rotation.start(Tween.TYPE.ELASTICOUT, 2.0f, (float)rotation_counter * (float)Math.PI * .5f);
 				timer_rotation.clearFinished();
 			}
-
-			// Testing World's type info
-			/*
-			HashSet<Component> set = TileBeanEngine.world.getComponentsOfClass(DerivedSprite.class.hashCode());
-			for (Component c : set) {
-				TileBeanEngine.world.get(c.getOwner()).get().x++;
-			}
-			*/
 		}
 
 		public void runGUI() {
 			ImGui.showDemoWindow();
-		}
-
-	}
-
-	class DerivedSprite extends Sprite {
-
-		public DerivedSprite(Texture texture) {
-			super(texture);
 		}
 
 	}

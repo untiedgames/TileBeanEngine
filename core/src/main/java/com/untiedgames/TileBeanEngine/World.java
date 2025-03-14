@@ -26,12 +26,12 @@ public class World {
 	// Adds an object to the world.
 	public Object2DHandle add(Object2D obj) {
 		if (obj == null) return Object2DHandle.empty();
-		if (obj.self != null) {
-			if (obj.self.isEmpty()) return obj.self; // Object has been added to the world already, simply return its existing handle
+		if (obj.handle != null) {
+			if (obj.handle.isEmpty()) return obj.handle; // Object has been added to the world already, simply return its existing handle
 			else return Object2DHandle.empty();
 		}
 		Object2DHandle ret = contents.add(obj);
-		obj.self = ret;
+		obj.handle = ret;
 		object_component_types.put(ret, new ArrayList<Integer>());
 		object_components.put(ret, new ArrayList<Component>());
 		return ret;
@@ -43,7 +43,7 @@ public class World {
 		Optional<Object2D> opt = contents.get(handle);
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
-			obj.self = null;
+			obj.handle = null;
 		}
 		contents.remove(handle);
 		

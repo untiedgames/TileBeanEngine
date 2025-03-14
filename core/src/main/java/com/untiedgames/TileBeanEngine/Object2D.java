@@ -5,7 +5,7 @@ package com.untiedgames.TileBeanEngine;
 // (In a traditional ECS, the variables of this class might be in a "Transforms" component instead, but I want to make things a little simpler.)
 public class Object2D {
 
-	protected Object2DHandle self;
+	Object2DHandle handle;
 	
 	public float x = 0; // The X-coordinate of the object.
 	public float y = 0; // The Y-coordinate of the object. (In TileBeanEngine, negative Y is up.)
@@ -17,5 +17,9 @@ public class Object2D {
 	public float g = 1; // The green component of the object's color. (Range: 0.0 .. 1.0)
 	public float b = 1; // The blue component of the object's color. (Range: 0.0 .. 1.0)
 	public float a = 1; // The alpha (transparency) component of the object's color. (Range: 0.0 .. 1.0)
+
+	public Object2DHandle getHandle() {
+		return handle;
+	}
 
 }
