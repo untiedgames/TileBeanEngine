@@ -15,6 +15,8 @@ import java.util.Optional;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 
+	int rotation_counter = 0;
+
 	class TestGame extends Game {
 		Texture image;
 		Object2DHandle obj_handle;
@@ -33,7 +35,8 @@ public class Main extends ApplicationAdapter {
 			TimerManager timer_manager = new TimerManager();
 			TileBeanEngine.world.addComponent(obj_handle, timer_manager);
 			timer_manager.start("timer_rotation", 2.0f, -1, false);
-	
+			
+			/*
 			Object2D obj2 = new Object2D();
 			obj2.x = 0;
 			obj2.y = 0;
@@ -44,16 +47,17 @@ public class Main extends ApplicationAdapter {
 			TweenLocation tween = new TweenLocation();
 			TileBeanEngine.world.addComponent(obj_handle2, tween);
 			tween.start(Tween.TYPE.LINEAR, 10, 300, 300);
+			*/
 		}
 
 		public void update(float delta) {
 			// Check obj_handle's timer. If it's finished, we'll rotate the object using a tween.
-			Object2D obj = TileBeanEngine.world.get(obj_handle);
 			TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class.hashCode());
 			TimerInstance timer_rotation = timer_manager.get("timer_rotation");
 			if (timer_rotation.isFinished()) {
+				rotation_counter++;
 				TweenRotation tween_rotation = (TweenRotation)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class.hashCode());
-				tween_rotation.start(Tween.TYPE.ELASTICOUT, 2.0f, obj.rotation + (float)Math.PI * .5f);
+				tween_rotation.start(Tween.TYPE.ELASTICOUT, 2.0f, (float)rotation_counter * (float)Math.PI * .5f);
 				timer_rotation.clearFinished();
 			}
 
