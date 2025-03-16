@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.Vector4;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import imgui.ImGui;
@@ -16,6 +15,8 @@ import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -126,8 +127,11 @@ public class TileBeanEngine {
 		render_target.begin();
 		ScreenUtils.clear(bg_color);
 		spritebatch.begin();
-		for (Component c : world.getComponentsOfClass(Sprite.class.hashCode())) {
-			Sprite s = (Sprite)c;
+		HashSet<Component> sprites_set = world.getComponentsOfClass(Sprite.class.hashCode());
+		ArrayList<Sprite> sprites = new ArrayList<>();
+		for (Component c : sprites_set) sprites.add((Sprite)c);
+		Collections.sort(sprites);
+		for (Sprite s : sprites) {
 			s.draw(spritebatch);
 		}
 		spritebatch.end();
@@ -153,6 +157,7 @@ public class TileBeanEngine {
 		internal_camera.update();
 		spritebatch.setProjectionMatrix(internal_camera.combined);
 		spritebatch.begin();
+		spritebatch.setColor(1, 1, 1, 1);
 		Texture rt_tex = render_target.getColorBufferTexture();
 		float rt_w = scale_w * render_target_width;
 		float rt_h = scale_h * render_target_height;

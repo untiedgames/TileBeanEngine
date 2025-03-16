@@ -1,8 +1,10 @@
 package com.untiedgames.TileBeanEngine;
 
+import java.util.Optional;
+
 // Component is a class which represents a specialized part of an object or entity.
 // Components have a handle representing their owner and an update method which can be used to perform logic each frame.
-public abstract class Component {
+public abstract class Component implements Comparable<Component> {
 
 	private Object2DHandle owner = Object2DHandle.empty();
 
@@ -23,5 +25,17 @@ public abstract class Component {
 
 	// Performs logic each frame.
 	public abstract void update(float delta);
+
+	// Used to sort by depth.
+	public int compareTo(Component other) {
+		Optional<Object2D> opt = TileBeanEngine.world.tryGet(owner);
+		Optional<Object2D> opt_other = TileBeanEngine.world.tryGet(other.owner);
+		if (!opt.isPresent() || !opt_other.isPresent()) return -1;
+		float z = opt.get().z;
+		float z_other = opt_other.get().z;
+		if (z < z_other) return -1;
+		if (z > z_other) return 1;
+		return 0;
+	}
 
 }

@@ -6,6 +6,7 @@ import imgui.type.ImFloat;
 public class DemoObject2D extends Game {
 
 	Object2DHandle obj_handle;
+	Object2DHandle obj2_handle;
 	
 	public void initialize() {
 		// Load a texture asset.
@@ -13,14 +14,25 @@ public class DemoObject2D extends Game {
 		tex_asset.load();
 		TextureAssetHandle libgdx_logo = TileBeanEngine.assets.add(tex_asset);
 		
-		// Create a new game object.
+		// Create a new game object, which the user can control via ImGui.
 		Object2D obj = new Object2D();
+		obj.z = 1;
 		obj_handle = TileBeanEngine.world.add(obj);
 
 		// Add a Sprite component. Sprites can display images and animations.
 		Sprite sprite = new Sprite();
 		sprite.setGraphics(libgdx_logo);
 		TileBeanEngine.world.addComponent(obj_handle, sprite);
+
+		// Create a second game object, which the user can't control. Initially, it will be behind the user-controlled object above.
+		Object2D obj2 = new Object2D();
+		obj2.r = .5f;
+		obj2.g = .5f;
+		obj2.b = .5f;
+		obj2_handle = TileBeanEngine.world.add(obj2);
+		Sprite sprite2 = new Sprite();
+		sprite2.setGraphics(libgdx_logo);
+		TileBeanEngine.world.addComponent(obj2_handle, sprite2);
 	}
 
 	public void shutdown() {
@@ -28,13 +40,16 @@ public class DemoObject2D extends Game {
 		TileBeanEngine.world.clear();
 	}
 
-	public void update(float delta) {}
+	public void update(float delta) {
+		TileBeanEngine.world.get(obj2_handle).rotation += delta;	
+	}
 
 	public void runGUI() {
-		ImGui.textWrapped("This is a demonstration of creating and manipulating an Object2D.");
+		ImGui.textWrapped("This is a demonstration of creating and manipulating an Object2D.\nYou can set the properties of the lighter object here.");
 		
 		Object2D obj = TileBeanEngine.world.get(obj_handle);
 		float[] loc = { obj.x, obj.y };
+		ImFloat im_z = new ImFloat(obj.z);
 		ImFloat im_rotation = new ImFloat(obj.rotation);
 		float[] scale = { obj.scale_x, obj.scale_y };
 		float[] color = { obj.r, obj.g, obj.b, obj.a };
@@ -42,6 +57,13 @@ public class DemoObject2D extends Game {
 		if (ImGui.inputFloat2("Location", loc)) {
 			obj.x = loc[0];
 			obj.y = loc[1];
+		}
+
+		if (ImGui.inputFloat("Z (Depth)", im_z)) {
+			obj.z = im_z.get();
+		}
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The Z value is the depth of the object in the game world.\nObjects are sorted from back to front for drawing.\nObjects with smaller Z values get drawn first, and objects with larger Z values get drawn last.\nThe darker object has a depth of 0. Try setting a negative depth, and the lighter object will appear behind the darker object!");
 		}
 
 		if (ImGui.inputFloat("Rotation", im_rotation)) {
