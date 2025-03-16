@@ -39,6 +39,18 @@ public class AssetManager {
 		collection_textures.remove(handle);
 	}
 
+	// Removes all assets from the asset manager and unloads them.
+	public void clear() {
+		for(GenArrayEntry<TextureAsset, TextureAssetHandle> entry : collection_textures) {
+			if (entry.hasValue()) {
+				Optional<TextureAsset> opt = entry.getData();
+				opt.get().unload();
+			}
+		}
+		collection_textures.clear();
+		name_map_textures.clear();
+	}
+
 	// Retrieves an asset from the collection if present.
 	public Optional<TextureAsset> tryGet(TextureAssetHandle handle) {
 		return collection_textures.get(handle);
