@@ -42,8 +42,10 @@ public class SoundAsset extends Asset {
 
 	// Unloads the SoundAsset, performing any destruction of resources required.
 	public void unload() {
-		sound.dispose();
-		sound = null;
+		if (sound != null) {
+			sound.dispose();
+			sound = null;
+		}
 	}
 
 	// Returns the libGDX Sound instance that this SoundAsset owns.
