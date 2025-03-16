@@ -17,7 +17,8 @@ public abstract class Tween extends Component {
 		BOUNCEOUT
 	}
 
-	protected TYPE type = TYPE.LINEAR;
+	public TYPE type = TYPE.LINEAR;
+
 	protected float progress = 0;
 	protected float time = 0;
 	protected float[] initial_values;
