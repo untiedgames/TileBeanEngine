@@ -1,5 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.HashSet;
@@ -132,7 +133,7 @@ public class World {
 
 		if (object_component_types.containsKey(handle)) {
 			ArrayList<Integer> obj_types = object_component_types.get(handle);
-			obj_types.remove(hash);
+			obj_types.remove((Integer)hash);
 
 			ArrayList<Component> obj_comps = object_components.get(handle);
 			Component c = null;
@@ -174,6 +175,17 @@ public class World {
 			}
 		}
 		return null;
+	}
+
+	// Returns an array of all components owned by the given object.
+	public Component[] getComponents(Object2DHandle handle) {
+		if (!handle.isEmpty() || contents.expired(handle)) return null; // Invalid or removed handle
+
+		if (object_components.containsKey(handle)) {
+			Object[] array = object_components.get(handle).toArray();
+			return Arrays.copyOf(array, array.length, Component[].class);
+		}
+		return new Component[]{};
 	}
 
 	// Returns a set of all components that are of the class with the given class hash code, including derived classes.
