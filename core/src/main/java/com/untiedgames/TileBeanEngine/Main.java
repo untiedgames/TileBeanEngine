@@ -16,8 +16,8 @@ public class Main extends ApplicationAdapter {
 
 	ImBoolean show_demo_window = new ImBoolean(false); // Whether or not to show the Dear ImGui demo window
 	ImInt current_demo = new ImInt(0);
-	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation" };
-	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation() };
+	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound" };
+	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput() };
 
 	class TestGame extends Game {
 		

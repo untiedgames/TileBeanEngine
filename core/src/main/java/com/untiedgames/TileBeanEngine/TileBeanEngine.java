@@ -20,6 +20,7 @@ public class TileBeanEngine {
 	public static Game game; // Contains functions to perform game logic and run the GUI (if any) each frame.
 	public static AssetManager assets; // Contains all graphics and other assets for the game.
 	public static World world; // Contains all game objects and their components.
+	public static Input input; // Handles input to the game.
 	private static Camera camera;
 	private static SpriteBatch spritebatch;
 	
@@ -36,6 +37,7 @@ public class TileBeanEngine {
 
 		assets = new AssetManager();
 		world = new World();
+		input = new Input();
 		camera = new Camera(1920, 1080);
 		spritebatch = new SpriteBatch();
 		
@@ -88,6 +90,8 @@ public class TileBeanEngine {
 
 		// Game loop (logic)
 
+		input.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
+
 		game.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
 
 		for (ArrayList<Component> list : world.components.values()) {
@@ -113,7 +117,11 @@ public class TileBeanEngine {
 		ImGui.render();
 		imgui_gl3.renderDrawData(ImGui.getDrawData());
 
-		// Finish up: Handle ImGui viewports and input
+		// Finish up
+		
+		input.nextFrame();
+
+		// Handle ImGui viewports and input
 
 		ImGuiIO io = ImGui.getIO();
 		
