@@ -16,8 +16,8 @@ public class Main extends ApplicationAdapter {
 
 	ImBoolean show_demo_window = new ImBoolean(false); // Whether or not to show the Dear ImGui demo window
 	ImInt current_demo = new ImInt(0);
-	String[] demo_titles = { "Tween & Timer" };
-	Game[] demos = { new DemoTweenAndTimer() };
+	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation" };
+	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation() };
 
 	class TestGame extends Game {
 		
@@ -49,7 +49,7 @@ public class Main extends ApplicationAdapter {
 			if (ImGui.isItemHovered()) {
 				ImGui.setTooltip("If checked, the Dear ImGui demo window will be displayed. You can use the demo window to learn how to use Dear ImGui, and see what it's capable of.");
 			}
-			
+
 			int last_demo = current_demo.get();
 			if (ImGui.combo("Current Demo", current_demo, demo_titles)) {
 				demos[last_demo].shutdown();

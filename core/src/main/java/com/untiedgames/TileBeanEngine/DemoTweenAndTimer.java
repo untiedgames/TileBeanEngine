@@ -15,18 +15,20 @@ public class DemoTweenAndTimer extends Game {
 
 	MODE mode = MODE.ROTATION;
 	Tween.TYPE tween_type = Tween.TYPE.ELASTICOUT;
-	TextureAssetHandle libgdx_logo;
 	Object2DHandle obj_handle;
 	int tween_counter;
 	
 	public void initialize() {
-		TextureAsset tex = new TextureAsset("libgdx_logo", "libgdx.png");
-		tex.load();
-		libgdx_logo = TileBeanEngine.assets.add(tex);
+		// Load a texture asset.
+		TextureAsset tex_asset = new TextureAsset("libgdx_logo", "gfx/libgdx.png");
+		tex_asset.load();
+		TextureAssetHandle libgdx_logo = TileBeanEngine.assets.add(tex_asset);
 
+		// Create a new game object.
 		Object2D obj = new Object2D();
 		obj_handle = TileBeanEngine.world.add(obj);
 
+		// Add a Sprite component. Sprites can display images and animations.
 		Sprite sprite = new Sprite();
 		sprite.setGraphics(libgdx_logo);
 		TileBeanEngine.world.addComponent(obj_handle, sprite);

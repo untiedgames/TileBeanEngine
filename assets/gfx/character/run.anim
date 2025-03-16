@@ -1,0 +1,8 @@
+fps=10
+is_looping=true
+frame=gfx/character/run/frame0000.png
+frame=gfx/character/run/frame0001.png
+frame=gfx/character/run/frame0002.png
+frame=gfx/character/run/frame0003.png
+frame=gfx/character/run/frame0004.png
+frame=gfx/character/run/frame0005.png

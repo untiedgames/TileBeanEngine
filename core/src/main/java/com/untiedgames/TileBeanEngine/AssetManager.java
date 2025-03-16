@@ -62,11 +62,18 @@ public class AssetManager {
 	}
 
 	// Retrieves a TextureAsset from the collection if present.
-	public Optional<TextureAsset> getTexture(String name) {
+	public Optional<TextureAsset> getTextureAsset(String name) {
 		if (name_map_textures.containsKey(name)) {
 			return collection_textures.get(name_map_textures.get(name));
 		}
 		return Optional.empty();
+	}
+
+	public TextureAssetHandle getTextureAssetHandle(String name) {
+		if (name_map_textures.containsKey(name)) {
+			return name_map_textures.get(name);
+		}
+		return TextureAssetHandle.empty();
 	}
 
 }
