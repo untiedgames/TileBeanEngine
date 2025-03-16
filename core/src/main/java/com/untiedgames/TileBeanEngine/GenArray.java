@@ -33,12 +33,22 @@ public class GenArray<T, U extends GenArrayKey> implements Iterable<GenArrayEntr
 	}
 
 	public boolean expired(U key) {
+		if (key == null) return true;
 		if (key.index >= contents.size()) return true;
 		if (contents.get(key.index).key.generation != key.generation) return true;
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public U add(T item) {
+		if (item == null) {
+			try {
+				return (U)u_class.getMethod("empty").invoke(null);
+			} catch(Exception e) {
+				throw new Error("Invalid \"empty()\" method invoked in GenArray.add"); // Your U class doesn't have the required "empty" method with signature empty()
+			}
+		}
+
 		for (int i = first_free; i < contents.size(); i++) {
 			GenArrayEntry<T, U> entry = contents.get(i);
 			if (!entry.data.isPresent()) {
@@ -57,6 +67,7 @@ public class GenArray<T, U extends GenArrayKey> implements Iterable<GenArrayEntr
 	}
 
 	public void remove(U key) {
+		if (key == null) return;
 		if (key.index >= contents.size()) return; // Invalid
 		GenArrayEntry<T, U> entry = contents.get(key.index);
 		if (key.generation != entry.key.generation) return; // Expired
@@ -70,6 +81,7 @@ public class GenArray<T, U extends GenArrayKey> implements Iterable<GenArrayEntr
 	}
 
 	public Optional<T> get(U key) {
+		if (key == null) return Optional.empty();
 		if (key.index >= contents.size()) return Optional.empty(); // Invalid
 		GenArrayEntry<T, U> entry = contents.get(key.index);
 		if (key.generation != entry.key.generation) return Optional.empty(); // Expired
