@@ -43,6 +43,7 @@ public class DemoAnimation extends Game {
 		// Set the graphics of the sprite based on the current animation.
 		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class.hashCode());
 		sprite.setGraphics(TileBeanEngine.assets.getTextureAssetHandle(animation_names[current_animation.get()]));
+		sprite.is_looping = true;
 	}
 
 	public void update(float delta) {}
