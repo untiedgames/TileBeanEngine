@@ -4,51 +4,65 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.ImGuiViewport;
+import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImBoolean;
+import imgui.type.ImInt;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 
-	int rotation_counter = 0;
+	ImBoolean show_demo_window = new ImBoolean(false); // Whether or not to show the Dear ImGui demo window
+	ImInt current_demo = new ImInt(0);
+	String[] demo_titles = { "Tween & Timer" };
+	Game[] demos = { new DemoTweenAndTimer() };
 
 	class TestGame extends Game {
-		TextureAssetHandle libgdx_logo;
-		Object2DHandle obj_handle;
-		Object2DHandle obj_handle2;
 		
 		public void initialize() {
-			TextureAsset tex = new TextureAsset("libgdx_logo", "libgdx.png");
-			tex.load();
-			libgdx_logo = TileBeanEngine.assets.add(tex);
+			demos[current_demo.get()].initialize();
+		}
 
-			Object2D obj = new Object2D();
-			obj_handle = TileBeanEngine.world.add(obj);
-
-			Sprite sprite = new Sprite();
-			sprite.setGraphics(libgdx_logo);
-			TileBeanEngine.world.addComponent(obj_handle, sprite);
-			
-			TweenRotation tween_rotation = new TweenRotation();
-			TileBeanEngine.world.addComponent(obj_handle, tween_rotation);
-			
-			TimerManager timer_manager = new TimerManager();
-			TileBeanEngine.world.addComponent(obj_handle, timer_manager);
-			timer_manager.start("timer_rotation", 2.0f, -1, false);
+		public void shutdown() {
+			demos[current_demo.get()].shutdown();
+			TileBeanEngine.assets.clear();
+			TileBeanEngine.world.clear();
 		}
 
 		public void update(float delta) {
-			// Check obj_handle's timer. If it's finished, we'll rotate the object using a tween.
-			TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class.hashCode());
-			TimerInstance timer_rotation = timer_manager.get("timer_rotation");
-			if (timer_rotation.isFinished()) {
-				rotation_counter++;
-				TweenRotation tween_rotation = (TweenRotation)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class.hashCode());
-				tween_rotation.start(Tween.TYPE.ELASTICOUT, 2.0f, (float)rotation_counter * (float)Math.PI * .5f);
-				timer_rotation.clearFinished();
-			}
+			demos[current_demo.get()].update(delta);
 		}
 
 		public void runGUI() {
-			ImGui.showDemoWindow();
+			ImGuiIO io = ImGui.getIO();
+			ImGuiViewport main_viewport = ImGui.getMainViewport();
+			ImGui.setNextWindowViewport(main_viewport.getID());
+			ImGui.setNextWindowPos(main_viewport.getPos(), ImGuiCond.Always);
+			ImGui.setNextWindowSize(300, io.getDisplaySizeY(), ImGuiCond.Once);
+			ImGui.setNextWindowSizeConstraints(300, io.getDisplaySizeY(), 500, io.getDisplaySizeY());
+			ImGui.begin("TileBeanEngine Demo", null, ImGuiWindowFlags.NoDocking);
+			ImGui.textWrapped("Welcome to TileBeanEngine! You're running the engine JAR, which also functions as a little demo suite. Use the dropdown below to change demos.");
+			
+			ImGui.checkbox("Show ImGui demo window", show_demo_window);
+			if (ImGui.isItemHovered()) {
+				ImGui.setTooltip("If checked, the Dear ImGui demo window will be displayed. You can use the demo window to learn how to use Dear ImGui, and see what it's capable of.");
+			}
+			
+			int last_demo = current_demo.get();
+			if (ImGui.combo("Current Demo", current_demo, demo_titles)) {
+				demos[last_demo].shutdown();
+				demos[current_demo.get()].initialize();
+			} else {
+				ImGui.separator();
+				demos[current_demo.get()].runGUI();
+			}
+			ImGui.end();
+
+			if (show_demo_window.get()) {
+				ImGui.showDemoWindow();
+			}
 		}
 
 	}

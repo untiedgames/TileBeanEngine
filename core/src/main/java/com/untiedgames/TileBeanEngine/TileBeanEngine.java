@@ -56,6 +56,7 @@ public class TileBeanEngine {
 	}
 
 	public static void shutdown() {
+		assets.clear();
 		spritebatch.dispose();
 		imgui_gl3.shutdown();
 		imgui_glfw.shutdown();
