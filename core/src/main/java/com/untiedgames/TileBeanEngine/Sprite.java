@@ -19,6 +19,10 @@ public class Sprite extends Component {
 	// Animation controls //
 	////////////////////////
 	
+	public TextureAssetHandle getGraphics() {
+		return texture_handle;
+	}
+
 	public void setGraphics(TextureAssetHandle handle) {
 		this.texture_handle = handle;
 		current_frame = 0;
@@ -48,6 +52,17 @@ public class Sprite extends Component {
 		current_frame = frame;
 		if (current_frame < 0) current_frame = 0;
 		is_playing = false;
+	}
+
+	// Returns the float representation of the current frame. Cast to int (round down) to get the index of the frame which will be displayed.
+	public float getCurrentFrame() {
+		return current_frame;
+	}
+
+	public int getTotalFrames() {
+		Optional<TextureAsset> opt_texture_asset = TileBeanEngine.assets.tryGet(texture_handle);
+		if (!opt_texture_asset.isPresent()) return 0; // Texture has been removed or wasn't set
+		return opt_texture_asset.get().getTotalFrames();
 	}
 
 	/////////////////////
