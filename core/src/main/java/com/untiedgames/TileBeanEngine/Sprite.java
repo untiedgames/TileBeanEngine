@@ -24,6 +24,11 @@ public class Sprite extends Component {
 	}
 
 	public void setGraphics(TextureAssetHandle handle) {
+		if (handle == null) {
+			texture_handle = TextureAssetHandle.empty();
+			return;
+		}
+		
 		this.texture_handle = handle;
 		current_frame = 0;
 		Optional<TextureAsset> opt_texture_asset = TileBeanEngine.assets.tryGet(texture_handle);
