@@ -102,6 +102,12 @@ public class TimerInstance extends Component {
 		return remaining;
 	}
 
+	// Returns a percentage between 0.0 and 1.0 representing how close the timer is to finishing.
+	float getProgress() {
+		if (duration == 0.0f) return 1;
+		return ((duration - remaining) / duration);
+	}
+
 	int getRepeatCount() {
 		return repeat_count;
 	}
