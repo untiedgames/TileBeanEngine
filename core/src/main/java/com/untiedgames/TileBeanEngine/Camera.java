@@ -1,24 +1,24 @@
 package com.untiedgames.TileBeanEngine;
+import java.util.Optional;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 
-public class Camera {
+public class Camera extends Component {
 
-	public float x = 0;
-	public float y = 0;
-	public float z = 1;
-	public float rotation = 0;
-	
 	private int width = 0;
 	private int height = 0;
 	private OrthographicCamera internal_camera;
-	private ScreenViewport internal_viewport;
 
 	public Camera(int width, int height) {
 		this.width = width;
 		this.height = height;
 		internal_camera = new OrthographicCamera(width, height);
-		internal_viewport = new ScreenViewport(internal_camera);
+	}
+
+	public void initialize() {
+		TileBeanEngine.world.get(getOwner()).z = 1;
 	}
 
 	public void setSize(int width, int height) {
@@ -29,8 +29,31 @@ public class Camera {
 		internal_camera.update();
 	}
 
-	public void setActive() {
-		TileBeanEngine.getSpriteBatch().setProjectionMatrix(internal_camera.combined);
+	public int getWidth() {
+		return width;
 	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setActive() {
+		SpriteBatch spritebatch = TileBeanEngine.getSpriteBatch();
+		spritebatch.setProjectionMatrix(internal_camera.combined);
+
+		Optional<Object2D> opt = TileBeanEngine.world.tryGet(getOwner());
+		if (opt.isPresent()) {
+			Object2D obj = opt.get();
+			if (obj.z != 0.0f) {
+				Matrix4 m = new Matrix4();
+				m.scale(obj.z, -obj.z, 0);
+				if (obj.rotation != 0.0f) m.rotate(0, 0, 1, obj.rotation * 180.0f / (float)Math.PI);
+				m.translate(-obj.x, -obj.y, 0);
+				spritebatch.setTransformMatrix(m);
+			}
+		}
+	}
+
+	public void update(float delta) {}
 
 }

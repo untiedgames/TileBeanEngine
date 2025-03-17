@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import imgui.ImGui;
@@ -17,6 +18,7 @@ import imgui.glfw.ImGuiImplGlfw;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -30,16 +32,20 @@ public class TileBeanEngine {
 	public static World world; // Contains all game objects and their components.
 	public static Input input; // Handles input to the game.
 
-	public static Color bg_color = new Color(0.15f, 0.15f, 0.2f, 1f);
-	public static Color letterbox_color = new Color(0, 0, 0, 1f);
+	public static Color bg_color = new Color(0.15f, 0.15f, 0.2f, 1f); // The background color of the game world.
+	public static Color letterbox_color = new Color(0, 0, 0, 1f); // The color of the letterbox (bars on either side of the window).
+
+	private static float time = 0; // The time in seconds since the application started.
 	
 	// Rendering variables
 
 	private static SpriteBatch spritebatch;
 	private static OrthographicCamera internal_camera;
-	private static Camera camera;
-	private static int render_target_width = 1920;
-	private static int render_target_height = 1080;
+	private static Object2DHandle camera_handle;
+	private static int render_target_width = 1;
+	private static int render_target_height = 1;
+	static final int default_render_target_width = 1920;
+	static final int default_render_target_height = 1080;
 	private static FrameBuffer render_target;
 	
 	// Variables required for Dear ImGui
@@ -56,10 +62,10 @@ public class TileBeanEngine {
 		assets = new AssetManager();
 		world = new World();
 		input = new Input();
-		camera = new Camera(render_target_width, render_target_height);
 		spritebatch = new SpriteBatch();
-		render_target = new FrameBuffer(Format.RGBA8888, render_target_width, render_target_height, false);
-		internal_camera = new OrthographicCamera(render_target_width, render_target_height);
+		
+		setupCamera();
+		setResolution(default_render_target_width, default_render_target_height);
 		
 		// Dear Imgui setup
 
@@ -86,12 +92,56 @@ public class TileBeanEngine {
 		Callbacks.glfwFreeCallbacks(window_handle);
 	}
 
-	public static void onResize(int width, int height) {
-		//camera.setSize(1920, 1080);
+	public static void onResize(int width, int height) {}
+
+	public static void setResolution(int width, int height) {
+		if (render_target_width == width && render_target_height == height) return;
+		if (width <= 0 || height <= 0) return;
+		if (width >= 4096 || height >= 4096) return; // Finding out the max texture size is outside the scope of this project, so we'll just say 4096 is a reasonable max.
+		render_target_width = width;
+		render_target_height = height;
+		
+		if (render_target != null) render_target.dispose();
+		render_target = new FrameBuffer(Format.RGB888, render_target_width, render_target_height, false);
+
+		if (internal_camera == null) internal_camera = new OrthographicCamera(render_target_width, render_target_height);
+		else {
+			internal_camera.viewportWidth = render_target_width;
+			internal_camera.viewportHeight = render_target_height;
+			internal_camera.update();
+		}
+
+		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
+		if (opt_cam.isPresent()) {
+			((Camera)opt_cam.get()).setSize(render_target_width, render_target_height);
+		}
 	}
 
 	public static SpriteBatch getSpriteBatch() {
 		return spritebatch;
+	}
+
+	public static Object2DHandle getCameraHandle() {
+		return camera_handle;
+	}
+
+	static void setupCamera() {
+		Object2D obj = new Object2D();
+		camera_handle = TileBeanEngine.world.add(obj);
+		Camera cam = new Camera(render_target_width, render_target_height);
+		world.addComponent(camera_handle, cam);
+	}
+
+	public static void setCamera(Object2DHandle handle) {
+		camera_handle = handle;
+		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
+		if (!opt_cam.isPresent()) {
+			System.err.println("Warning: No camera component is present on handle passed to setCamera.");
+		}
+	}
+
+	public static float getTime() {
+		return time;
 	}
 
 	public static void run() {
@@ -111,6 +161,7 @@ public class TileBeanEngine {
 
 		// Game loop (logic)
 
+		time += 1.0f / 60.0f;
 		input.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
 
 		game.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
@@ -123,7 +174,10 @@ public class TileBeanEngine {
 
 		// Game loop (drawing)
 
-		camera.setActive();
+		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
+		if (opt_cam.isPresent()) {
+			((Camera)opt_cam.get()).setActive();
+		}
 		render_target.begin();
 		ScreenUtils.clear(bg_color);
 		spritebatch.begin();
@@ -156,12 +210,13 @@ public class TileBeanEngine {
 		internal_camera.viewportHeight = win_size_y;
 		internal_camera.update();
 		spritebatch.setProjectionMatrix(internal_camera.combined);
+		spritebatch.setTransformMatrix(new Matrix4());
 		spritebatch.begin();
 		spritebatch.setColor(1, 1, 1, 1);
 		Texture rt_tex = render_target.getColorBufferTexture();
 		float rt_w = scale_w * render_target_width;
 		float rt_h = scale_h * render_target_height;
-		spritebatch.draw(rt_tex, -rt_w * .5f, -rt_h * .5f, rt_w, rt_h, 0, 0, 1920, 1080, false, true);
+		spritebatch.draw(rt_tex, -rt_w * .5f, -rt_h * .5f, rt_w, rt_h, 0, 0, render_target_width, render_target_height, false, true);
 		spritebatch.end();
 
 		// Run the GUI and then render it

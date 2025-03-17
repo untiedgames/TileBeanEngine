@@ -62,11 +62,13 @@ public class World {
 	}
 
 	// Removes everything from the world.
+	// (This includes the camera, but a new one will be created automatically.)
 	public void clear() {
 		contents.clear();
 		components.clear();
 		object_component_types.clear();
 		object_components.clear();
+		TileBeanEngine.setupCamera();
 	}
 
 	// Returns true if the object that the handle refers to exists, false otherwise.
