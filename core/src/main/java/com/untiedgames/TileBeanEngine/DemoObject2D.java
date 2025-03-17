@@ -58,6 +58,9 @@ public class DemoObject2D extends Game {
 			obj.x = loc[0];
 			obj.y = loc[1];
 		}
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The location of the object in the game world. This corresponds to the center of the object.\nTileBeanEngine uses a Y-down coordinate system.");
+		}
 
 		if (ImGui.inputFloat("Z (Depth)", im_z)) {
 			obj.z = im_z.get();
@@ -77,12 +80,18 @@ public class DemoObject2D extends Game {
 			obj.scale_x = scale[0];
 			obj.scale_y = scale[1];
 		}
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The scale of the object. The default scale (100%) is {1.0, 1.0}. Negative scales are allowed, and can be used to \"flip\" objects.");
+		}
 
 		if (ImGui.colorPicker4("Color", color)) {
 			obj.r = color[0];
 			obj.g = color[1];
 			obj.b = color[2];
 			obj.a = color[3];
+		}
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The color tint of the object. The colors of the texture the object displays will be multiplied by this color.");
 		}
 		
 	}
