@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 
+/**
+ * A Camera represents a view of the game world. You can move it, zoom it, and rotate it using the properties of the Object2D that owns it.
+*/
 public class Camera extends Component {
 
 	private int width = 0;

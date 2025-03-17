@@ -1,7 +1,9 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.Optional;
 
-// GenArrayEntry represents an entry in a GenArray (generational array).
+/**
+ * GenArrayEntry represents an entry in a GenArray (generational array).
+ */
 public class GenArrayEntry<T, U extends GenArrayKey> {
 	
 	U key;

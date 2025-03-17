@@ -6,9 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 
-// MusicAsset is an asset type which can hold longer audio data.
-// LibGDX differentiates between "sound" and "music" based on file size, which is unusual but we're going to roll with it.
-// The file size limit for a libGDX Sound is 1 MB (1000000 b), whereas a libGDX Music has no file size limit.
+/**
+ * MusicAsset is an asset type which can hold longer audio data.
+ * LibGDX differentiates between "sound" and "music" based on file size, which is unusual but we're going to roll with it.
+ * The file size limit for a libGDX Sound is 1 MB (1000000 b), whereas a libGDX Music has no file size limit.
+ */
 public class MusicAsset extends Asset {
 
 	private Music music;
@@ -25,7 +27,11 @@ public class MusicAsset extends Asset {
 		super(name, path, file_mode);
 	}
 
-	// Loads the MusicAsset from its path.
+	/**
+	 * Loads the MusicAsset from its path.
+	 * Returns true on success, false otherwise.
+	 * If it cannot be loaded, an error message will be printed in the console.
+	 */
 	public boolean load() {
 		if (music != null) return true; // Asset is already loaded
 		try {
@@ -38,13 +44,19 @@ public class MusicAsset extends Asset {
 		}
 	}
 
-	// Unloads the MusicAsset, performing any destruction of resources required.
+	/**
+	 * Unloads the MusicAsset, performing any destruction of resources required.
+	 */
 	public void unload() {
-		music.dispose();
-		music = null;
+		if (music != null) {
+			music.dispose();
+			music = null;
+		}
 	}
 
-	// Returns the libGDX Music instance that this MusicAsset owns.
+	/**
+	 * Returns the libGDX Music instance that this MusicAsset owns.
+	 */
 	public Optional<Music> getMusic() {
 		return Optional.of(music);
 	}

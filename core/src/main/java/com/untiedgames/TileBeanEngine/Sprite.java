@@ -4,8 +4,10 @@ import java.util.Optional;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-// Sprite is the main way to display things in TileBeanEngine.
-// It provides both update and draw methods, which can be overridden in derived classes.
+/**
+ * Sprite is the main way to display things in TileBeanEngine.
+ * It provides both update and draw methods, which can be overridden in derived classes.
+ */
 public class Sprite extends Component {
 
 	private TextureAssetHandle texture_handle = TextureAssetHandle.empty();
@@ -19,10 +21,16 @@ public class Sprite extends Component {
 	// Animation controls //
 	////////////////////////
 	
+	/**
+	 * Returns a handle to the TextureAsset that this Sprite is displaying.
+	 */
 	public TextureAssetHandle getGraphics() {
 		return texture_handle;
 	}
 
+	/**
+	 * Sets the TextureAsset that this Sprite will display.
+	 */
 	public void setGraphics(TextureAssetHandle handle) {
 		if (handle == null) {
 			texture_handle = TextureAssetHandle.empty();
@@ -35,10 +43,16 @@ public class Sprite extends Component {
 		if (opt_texture_asset.isPresent()) is_looping = opt_texture_asset.get().isLooping();
 	}
 
+	/**
+	 * Changes the animation state of the Sprite to "playing."
+	 */
 	public void play() {
 		is_playing = true;
 	}
 
+	/**
+	 * Changes the animation state of the Sprite to "playing" and sets the current animation frame.
+	 */
 	public void gotoAndPlay(int frame) {
 		current_frame = frame;
 		if (current_frame < 0) current_frame = 0;
@@ -49,17 +63,25 @@ public class Sprite extends Component {
 		return is_playing;
 	}
 
+	/**
+	 * Changes the animation state of the Sprite to "stopped."
+	 */
 	public void stop() {
 		is_playing = false;
 	}
 
+	/**
+	 * Changes the animation state of the Sprite to "stopped and sets the current animation frame."
+	 */
 	public void gotoAndStop(int frame) {
 		current_frame = frame;
 		if (current_frame < 0) current_frame = 0;
 		is_playing = false;
 	}
 
-	// Returns the float representation of the current frame. Cast to int (round down) to get the index of the frame which will be displayed.
+	/**
+	 * Returns the float representation of the current frame. Cast to int (round down) to get the index of the frame which will be displayed.
+	 */
 	public float getCurrentFrame() {
 		return current_frame;
 	}
@@ -74,8 +96,10 @@ public class Sprite extends Component {
 	// Update and draw //
 	/////////////////////
 
-	// Override me to do custom logic!
-	// Be sure to call super.update in your override method if you want this Sprite to animate.
+	/**
+	 * Override me to do custom logic!
+	 * Be sure to call super.update in your override method if you want this Sprite to animate.
+	 */
 	public void update(float delta) {
 		if (!is_playing || play_speed == 0.0f) return; // Nothing to do
 
@@ -115,14 +139,18 @@ public class Sprite extends Component {
 		else if (current_frame > total_frames - .00001f) current_frame = total_frames - .00001f;
 	}
 
-	// Override me to do custom drawing!
-	// Be sure to call drawInternal or super.draw in your override method if you want to draw this Sprite.
+	/**
+	 * Override me to do custom drawing!
+	 * Be sure to call drawInternal or super.draw in your override method if you want to draw this Sprite.
+	 */
 	public void draw(SpriteBatch spritebatch) {
 		drawInternal(spritebatch);
 	}
 
-	// Draws the sprite's graphics.
-	// In a custom draw method, you can call this method to draw the sprite's graphics at any time.
+	/**
+	 * Draws the sprite's graphics.
+	 * In a custom draw method, you can call this method to draw the sprite's graphics at any time.
+	 */
 	protected final void drawInternal(SpriteBatch spritebatch) {
 		Optional<TextureAsset> opt_texture_asset = TileBeanEngine.assets.tryGet(texture_handle);
 		if (opt_texture_asset.isPresent()) {

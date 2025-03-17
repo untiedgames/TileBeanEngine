@@ -3,6 +3,10 @@ package com.untiedgames.TileBeanEngine;
 import java.util.HashMap;
 import java.util.Optional;
 
+/*
+ * AssetManager holds all the graphics, sounds, and music for the game.
+ * You can add new assets to it and retrieve them at any time.
+*/
 public class AssetManager {
 
 	private GenArray<TextureAsset, TextureAssetHandle> collection_textures = new GenArray<>(TextureAssetHandle.class);
@@ -14,7 +18,9 @@ public class AssetManager {
 	private GenArray<MusicAsset, MusicAssetHandle> collection_music = new GenArray<>(MusicAssetHandle.class);
 	private HashMap<String, MusicAssetHandle> name_map_music = new HashMap<>();
 
-	// Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	/**
+	 * Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	 */
 	public TextureAssetHandle add(TextureAsset asset) {
 		if (asset == null) return TextureAssetHandle.empty();
 		if (asset.handle != null) {
@@ -27,7 +33,9 @@ public class AssetManager {
 		return ret;
 	}
 
-	// Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	/**
+	 * Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	 */
 	public SoundAssetHandle add(SoundAsset asset) {
 		if (asset == null) return SoundAssetHandle.empty();
 		if (asset.handle != null) {
@@ -40,7 +48,9 @@ public class AssetManager {
 		return ret;
 	}
 
-	// Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	/**
+	 * Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	 */
 	public MusicAssetHandle add(MusicAsset asset) {
 		if (asset == null) return MusicAssetHandle.empty();
 		if (asset.handle != null) {
@@ -53,7 +63,9 @@ public class AssetManager {
 		return ret;
 	}
 
-	// Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	/**
+	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	 */
 	public void remove(TextureAssetHandle handle) {
 		if (!handle.isEmpty() || collection_textures.expired(handle)) return;
 		Optional<TextureAsset> opt = collection_textures.get(handle);
@@ -66,7 +78,9 @@ public class AssetManager {
 		collection_textures.remove(handle);
 	}
 
-	// Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	/**
+	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	 */
 	public void remove(SoundAssetHandle handle) {
 		if (!handle.isEmpty() || collection_sounds.expired(handle)) return;
 		Optional<SoundAsset> opt = collection_sounds.get(handle);
@@ -79,7 +93,9 @@ public class AssetManager {
 		collection_sounds.remove(handle);
 	}
 
-	// Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	/**
+	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	 */
 	public void remove(MusicAssetHandle handle) {
 		if (!handle.isEmpty() || collection_music.expired(handle)) return;
 		Optional<MusicAsset> opt = collection_music.get(handle);
@@ -92,7 +108,9 @@ public class AssetManager {
 		collection_music.remove(handle);
 	}
 
-	// Removes all assets from the asset manager and unloads them.
+	/**
+	 * Removes all assets from the asset manager and unloads them.
+	 */
 	public void clear() {
 		for(GenArrayEntry<TextureAsset, TextureAssetHandle> entry : collection_textures) {
 			if (entry.hasValue()) {
@@ -116,37 +134,51 @@ public class AssetManager {
 		name_map_textures.clear();
 	}
 
-	// Retrieves an asset from the collection if present.
+	/**
+	 * Retrieves an asset from the collection if present.
+	 */
 	public Optional<TextureAsset> tryGet(TextureAssetHandle handle) {
 		return collection_textures.get(handle);
 	}
 
-	// Retrieves an asset from the collection if present.
+	/**
+	 * Retrieves an asset from the collection if present.
+	 */
 	public Optional<SoundAsset> tryGet(SoundAssetHandle handle) {
 		return collection_sounds.get(handle);
 	}
 
-	// Retrieves an asset from the collection if present.
+	/**
+	 * Retrieves an asset from the collection if present.
+	 */
 	public Optional<MusicAsset> tryGet(MusicAssetHandle handle) {
 		return collection_music.get(handle);
 	}
 
-	// The less-safe version of tryGet. Use this when you expect the asset to be there.
+	/**
+	 * The less-safe version of tryGet. Use this when you expect the asset to be there.
+	 */
 	public TextureAsset get(TextureAssetHandle handle) {
 		return collection_textures.get(handle).get();
 	}
 	
-	// The less-safe version of tryGet. Use this when you expect the asset to be there.
+	/**
+	 * The less-safe version of tryGet. Use this when you expect the asset to be there.
+	 */
 	public SoundAsset get(SoundAssetHandle handle) {
 		return collection_sounds.get(handle).get();
 	}
 
-	// The less-safe version of tryGet. Use this when you expect the asset to be there.
+	/**
+	 * The less-safe version of tryGet. Use this when you expect the asset to be there.
+	 */
 	public MusicAsset get(MusicAssetHandle handle) {
 		return collection_music.get(handle).get();
 	}
 
-	// Retrieves a TextureAsset with the associated user-specified name from the collection if present.
+	/**
+	 * Retrieves a TextureAsset with the associated user-specified name from the collection if present.
+	 */
 	public Optional<TextureAsset> getTextureAsset(String name) {
 		if (name_map_textures.containsKey(name)) {
 			return collection_textures.get(name_map_textures.get(name));
@@ -154,7 +186,9 @@ public class AssetManager {
 		return Optional.empty();
 	}
 
-	// Retrieves a SoundAsset with the associated user-specified name from the collection if present.
+	/**
+	 * Retrieves a SoundAsset with the associated user-specified name from the collection if present.
+	 */
 	public Optional<SoundAsset> getSoundAsset(String name) {
 		if (name_map_sounds.containsKey(name)) {
 			return collection_sounds.get(name_map_sounds.get(name));
@@ -162,7 +196,9 @@ public class AssetManager {
 		return Optional.empty();
 	}
 
-	// Retrieves a MusicAsset with the associated user-specified name from the collection if present.
+	/**
+	 * Retrieves a MusicAsset with the associated user-specified name from the collection if present.
+	 */
 	public Optional<MusicAsset> getMusicAsset(String name) {
 		if (name_map_music.containsKey(name)) {
 			return collection_music.get(name_map_music.get(name));
@@ -170,7 +206,9 @@ public class AssetManager {
 		return Optional.empty();
 	}
 
-	// Returns the TextureAssetHandle associated with the given user-specified name if present.
+	/**
+	 * Returns the TextureAssetHandle associated with the given user-specified name if present.
+	 */
 	public TextureAssetHandle getTextureAssetHandle(String name) {
 		if (name_map_textures.containsKey(name)) {
 			return name_map_textures.get(name);
@@ -178,7 +216,9 @@ public class AssetManager {
 		return TextureAssetHandle.empty();
 	}
 
-	// Returns the SoundAssetHandle associated with the given user-specified name if present.
+	/**
+	 * Returns the SoundAssetHandle associated with the given user-specified name if present.
+	 */
 	public SoundAssetHandle getSoundAssetHandle(String name) {
 		if (name_map_sounds.containsKey(name)) {
 			return name_map_sounds.get(name);
@@ -186,7 +226,9 @@ public class AssetManager {
 		return SoundAssetHandle.empty();
 	}
 
-	// Returns the MusicAssetHandle associated with the given user-specified name if present.
+	/**
+	 * Returns the MusicAssetHandle associated with the given user-specified name if present.
+	 */
 	public MusicAssetHandle getMusicAssetHandle(String name) {
 		if (name_map_music.containsKey(name)) {
 			return name_map_music.get(name);

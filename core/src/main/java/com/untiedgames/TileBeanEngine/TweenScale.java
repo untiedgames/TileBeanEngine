@@ -1,7 +1,9 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.Optional;
 
-// TweenScale represents a change in scale of a game object over time.
+/**
+ * TweenScale represents a change in scale of a game object over time.
+ */
 public class TweenScale extends Tween {
 
 	public TweenScale() {

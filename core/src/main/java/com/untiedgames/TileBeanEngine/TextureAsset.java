@@ -7,9 +7,11 @@ import java.util.Optional;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
-// TextureAsset is an asset which can hold images as libGDX Textures.
-// It can hold one image, or many images to represent an animation.
-// This is a little simplified compared to a real-world implementation, which might support animations packed into spritesheets.
+/**
+ * TextureAsset is an asset which can hold images as libGDX Textures.
+ * It can hold one image, or many images to represent an animation.
+ * This is a little simplified compared to a real-world implementation, which might support animations packed into spritesheets.
+ */
 public class TextureAsset extends Asset {
 
 	private ArrayList<Texture> textures;
@@ -29,7 +31,11 @@ public class TextureAsset extends Asset {
 		textures = new ArrayList<>();
 	}
 
-	// Loads the TextureAsset from its path.
+	/**
+	 * Loads the TextureAsset from its path. Supports .png and .anim files.
+	 * Returns true on success, false otherwise.
+	 * If it cannot be loaded, an error message will be printed in the console.
+	 */
 	public boolean load() {
 		if (!textures.isEmpty()) return true; // Asset is already loaded
 		try {
@@ -84,7 +90,9 @@ public class TextureAsset extends Asset {
 		return false;
 	}
 
-	// Unloads the TextureAsset, performing any destruction of resources required.
+	/**
+	 * Unloads the TextureAsset, performing any destruction of resources required.
+	 */
 	public void unload() {
 		for (Texture texture : textures) {
 			texture.dispose();
@@ -96,12 +104,16 @@ public class TextureAsset extends Asset {
 		return textures.size();
 	}
 
-	// Convenience method equivalent to getTexture(0).
+	/**
+	 * Convenience method equivalent to getTexture(0).
+	 */
 	public Optional<Texture> getTexture() {
 		return getTexture(0);
 	}
 
-	// Returns the texture at the given frame index, if present.
+	/**
+	 * Returns the texture at the given frame index, if present.
+	 */
 	public Optional<Texture> getTexture(int frame) {
 		if (textures.isEmpty()) return Optional.empty();
 		if (frame < 0 || frame >= textures.size()) return Optional.empty();

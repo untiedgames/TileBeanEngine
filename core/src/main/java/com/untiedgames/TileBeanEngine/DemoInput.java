@@ -1,6 +1,5 @@
 package com.untiedgames.TileBeanEngine;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 import imgui.ImGui;

@@ -1,8 +1,10 @@
 package com.untiedgames.TileBeanEngine;
 
-// Object2D is the "entity" of the entity-component system in TileBeanEngine.
-// It represents an object in the game world which has a location (x, y), depth (z), rotation, scale (scale_x, scale_y), and color (r, g, b, a).
-// (In a traditional ECS, the variables of this class might be in a "Transforms" component instead, but I want to make things a little simpler.)
+/**
+ * Object2D is the "entity" of the entity-component system in TileBeanEngine.
+ * It represents an object in the game world which has a location (x, y), depth (z), rotation, scale (scale_x, scale_y), and color (r, g, b, a).
+ * (In a traditional ECS, the variables of this class might be in a "Transforms" component instead, but I want to make things a little simpler.)
+ */
 public class Object2D {
 
 	Object2DHandle handle;

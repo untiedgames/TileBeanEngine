@@ -1,7 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 
 public class Input {

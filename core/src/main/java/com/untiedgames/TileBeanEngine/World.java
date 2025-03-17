@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.HashSet;
 
-// The World class is an entity-component system (ECS) which contains all objects in the game world (entities) and their specialized parts (components).
+/**
+ * The World class is an entity-component system (ECS) which contains all objects in the game world (entities) and their specialized parts (components).
+ */
 public class World {
 
 	private WorldKey wk;
@@ -24,7 +26,9 @@ public class World {
 		object_components = new HashMap<>();
 	}
 
-	// Adds an object to the world.
+	/**
+	 * Adds an object to the world.
+	 */
 	public Object2DHandle add(Object2D obj) {
 		if (obj == null) return Object2DHandle.empty();
 		if (obj.handle != null) {
@@ -38,7 +42,9 @@ public class World {
 		return ret;
 	}
 
-	// Removes an object from the world.
+	/**
+	 * Removes an object from the world.
+	 */
 	public void remove(Object2DHandle handle) {
 		if (!handle.isEmpty() || contents.expired(handle)) return;
 		Optional<Object2D> opt = contents.get(handle);
@@ -61,8 +67,10 @@ public class World {
 		object_components.remove(handle);
 	}
 
-	// Removes everything from the world.
-	// (This includes the camera, but a new one will be created automatically.)
+	/**
+	 * Removes everything from the world.
+	 * (This includes the camera, but a new one will be created automatically. If you're holding a handle to the previous camera, it will have been invalidated.)
+	 */
 	public void clear() {
 		contents.clear();
 		components.clear();
@@ -71,23 +79,31 @@ public class World {
 		TileBeanEngine.setupCamera();
 	}
 
-	// Returns true if the object that the handle refers to exists, false otherwise.
+	/**
+	 * Returns true if the object that the handle refers to exists, false otherwise.
+	 */
 	public boolean exists(Object2DHandle handle) {
 		return !contents.expired(handle);
 	}
 
-	// Retrieves an object from the world, if present.
+	/**
+	 * Retrieves an object from the world, if present.
+	 */
 	public Optional<Object2D> tryGet(Object2DHandle handle) {
 		return contents.get(handle);
 	}
 
-	// The less-safe version of tryGet. Use this when you expect the object to be there.
+	/**
+	 * The less-safe version of tryGet. Use this when you expect the object to be there.
+	 */
 	public Object2D get(Object2DHandle handle) {
 		return contents.get(handle).get();
 	}
 
-	// Adds a component to an object.
-	// If the component already has an owner or if the object already has a component of the same type, nothing happens.
+	/**
+	 * Adds a component to an object.
+	 * If the component already has an owner or if the object already has a component of the same type, nothing happens.
+	 */
 	public void addComponent(Object2DHandle handle, Component component) {
 		if (!handle.isEmpty() || contents.expired(handle)) return; // Invalid or removed handle
 		if (component.getOwner().isEmpty()) return; // Component is already added
@@ -128,8 +144,10 @@ public class World {
 		component.initialize();
 	}
 
-	// Removes a component from an object.
-	// If the object does not have a component with the specified class hash code, nothing happens.
+	/**
+	 * Removes a component from an object.
+	 * If the object does not have a component with the specified class hash code, nothing happens.
+	 */
 	public void removeComponent(Object2DHandle handle, int hash) {
 		if (!handle.isEmpty() || contents.expired(handle)) return; // Invalid or removed handle
 
@@ -153,7 +171,9 @@ public class World {
 		}
 	}
 
-	// Retrieves a component of an object with the given class hash code, if present.
+	/**
+	 * Retrieves a component of an object with the given class hash code, if present.
+	 */
 	public Optional<Component> tryGetComponent(Object2DHandle handle, int hash) {
 		if (!handle.isEmpty() || contents.expired(handle)) return Optional.empty(); // Invalid or removed handle
 
@@ -166,7 +186,9 @@ public class World {
 		return Optional.empty();
 	}
 
-	// The less-safe version of tryGetComponent. Use this when you expect the component to be there.
+	/**
+	 * The less-safe version of tryGetComponent. Use this when you expect the component to be there.
+	 */
 	public Component getComponent(Object2DHandle handle, int hash) {
 		if (!handle.isEmpty() || contents.expired(handle)) return null; // Invalid or removed handle
 
@@ -179,7 +201,9 @@ public class World {
 		return null;
 	}
 
-	// Returns an array of all components owned by the given object.
+	/**
+	 * Returns an array of all components owned by the given object.
+	 */
 	public Component[] getComponents(Object2DHandle handle) {
 		if (!handle.isEmpty() || contents.expired(handle)) return null; // Invalid or removed handle
 
@@ -190,9 +214,11 @@ public class World {
 		return new Component[]{};
 	}
 
-	// Returns a set of all components that are of the class with the given class hash code, including derived classes.
-	// For example, if you call getComponentsOfClass(SomeClassDerivedFromSprite.class.hashCode()), you will get all components which are SomeClassDerivedFromSprite,
-	// whereas if you call getComponentsOfClass(Sprite.class.hashCode()) you will get all components of type Sprite and of type SomeClassDerivedFromSprite.
+	/**
+	 * Returns a set of all components that are of the class with the given class hash code, including derived classes.
+	 * For example, if you call getComponentsOfClass(SomeClassDerivedFromSprite.class.hashCode()), you will get all components which are SomeClassDerivedFromSprite,
+	 * whereas if you call getComponentsOfClass(Sprite.class.hashCode()) you will get all components of type Sprite and of type SomeClassDerivedFromSprite.
+	 */
 	public HashSet<Component> getComponentsOfClass(int hash) {
 		HashSet<Component> ret = new HashSet<Component>();
 		for(Integer key : component_type_info.keySet()) {
@@ -207,8 +233,10 @@ public class World {
 		return ret;
 	}
 
-	// This little class acts as a "key" that Component.setOwner requires.
-	// It's only accessible by World and therefore only World may call Component.setOwner.
+	/**
+	 * This little class acts as a "key" that Component.setOwner requires.
+	 * It's only accessible by World and therefore only World may call Component.setOwner.
+	 */
 	public class WorldKey {
 		
 		private WorldKey() {}

@@ -55,7 +55,9 @@ public class TileBeanEngine {
 	private static ImGuiImplGl3 imgui_gl3;
 	private static InputProcessor temp_input_processor;
 
-	// Starts the engine.
+	/**
+	 * Starts the engine.
+	 */
 	public static void initialize() {
 		// Engine setup
 
@@ -83,6 +85,9 @@ public class TileBeanEngine {
 		imgui_gl3.init("#version 150");
 	}
 
+	/**
+	 * Shuts down the engine.
+	 */
 	public static void shutdown() {
 		assets.clear();
 		spritebatch.dispose();
@@ -94,6 +99,10 @@ public class TileBeanEngine {
 
 	public static void onResize(int width, int height) {}
 
+	/**
+	 * Sets the resolution of the render target and camera.
+	 * (This does not change the window size, but rather how the game looks inside the window.)
+	 */
 	public static void setResolution(int width, int height) {
 		if (render_target_width == width && render_target_height == height) return;
 		if (width <= 0 || height <= 0) return;
@@ -144,6 +153,9 @@ public class TileBeanEngine {
 		return time;
 	}
 
+	/**
+	 * Performs game logic and drawing, and runs the GUI (if any).
+	 */
 	public static void run() {
 		// Reset the libGDX input processor if ImGui had requested input
 		

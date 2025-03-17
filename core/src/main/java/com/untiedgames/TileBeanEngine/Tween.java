@@ -1,8 +1,10 @@
 package com.untiedgames.TileBeanEngine;
 
-// A Tween represents the details of a change in value over time, like "inbetweening" in animation.
-// For example, a Tween can be used to animate an object moving from one point to another, or scaling from one size to another.
-// The tween type represents how the value changes on the way from its initial values to its target values.
+/**
+ * A Tween represents the details of a change in value over time, like "inbetweening" in animation.
+ * For example, a Tween can be used to animate an object moving from one point to another, or scaling from one size to another.
+ * The tween type represents how the value changes on the way from its initial values to its target values.
+ */
 public abstract class Tween extends Component {
 
 	public enum TYPE {
@@ -40,8 +42,10 @@ public abstract class Tween extends Component {
 		return time;
 	}
 
-	// Starts the tween using the given type, time, and target values.
-	// If the tween is already running, this will override the previous tween animation.
+	/**
+	 * Starts the tween using the given type, time, and target values.
+	 * If the tween is already running, this will override the previous tween animation.
+	 */
 	public void start(TYPE type, float time, float... target_values) {
 		this.type = type;
 		this.time = time;
@@ -64,8 +68,10 @@ public abstract class Tween extends Component {
 		setValues(result_values);
 	}
 
-	// Given initial and target values and a result array, calculates the result values for the given tween type and the elapsed progress through the tween (t).
-	// The value for t should be between 0 and 1, where 0 represents the initial values and 1 represents the target values.
+	/**
+	 * Given initial and target values and a result array, calculates the result values for the given tween type and the elapsed progress through the tween (t).
+	 * The value for t should be between 0 and 1, where 0 represents the initial values and 1 represents the target values.
+	 */
 	public static void process(TYPE type, float t, float[] initial_values, float[] target_values, float[] result) {
 		switch(type) {
 			case LINEAR:

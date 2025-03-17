@@ -3,6 +3,9 @@ package com.untiedgames.TileBeanEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
+/*
+ * An Asset holds data used in the game, which could be an image, animation, sound, or more.
+ */
 public abstract class Asset {
 
 	public enum FILEMODE {
@@ -27,13 +30,19 @@ public abstract class Asset {
 		return handle;
 	}
 
-	// Loads the asset from its path.
+	/**
+	 * Loads the asset from its path.
+	 */
 	public abstract boolean load();
 
-	// Unloads the asset, performing any destruction of resources required.
+	/**
+	 *  Unloads the asset, performing any destruction of resources required.
+	 */
 	public abstract void unload();
 
-	// Helper function to create a file handle to the given path using the given file mode.
+	/**
+	 * Helper function to create a file handle to the given path using the given file mode.
+	 */
 	protected static FileHandle makeFileHandle(String path, FILEMODE file_mode) {
 		FileHandle file = null;
 		switch(file_mode) {
@@ -50,8 +59,10 @@ public abstract class Asset {
 		return file;
 	}
 
-	// Returns the all-lowercase file extension of a given path, or empty string if no extension is present.
-	// For example, getExtension("image.PNG") returns "png" (without the dot).
+	/**
+	 * Returns the all-lowercase file extension of a given path, or empty string if no extension is present.
+	 * For example, getExtension("image.PNG") returns "png" (without the dot).
+	 */
 	public static String getExtension(String path) {
 		int index = path.lastIndexOf('.');
 		if (index == -1) return "";

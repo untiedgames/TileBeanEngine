@@ -1,7 +1,9 @@
 package com.untiedgames.TileBeanEngine;
 import java.util.Optional;
 
-// TweenColor represents a change in color of a game object over time.
+/**
+ * TweenColor represents a change in color of a game object over time.
+ */
 public class TweenColor extends Tween {
 
 	public TweenColor() {
