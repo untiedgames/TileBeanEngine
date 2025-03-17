@@ -27,7 +27,7 @@ public class World {
 	}
 
 	/**
-	 * Adds an object to the world.
+	 * Adds an object to the world and returns a handle to it.
 	 */
 	public Object2DHandle add(Object2D obj) {
 		if (obj == null) return Object2DHandle.empty();
