@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * The World class is an entity-component system (ECS) which contains all objects in the game world (entities) and their specialized parts (components).
@@ -16,6 +17,7 @@ public class World {
 	HashMap<Integer, ArrayList<Integer>> component_type_info; // Map of class hash codes to lists of hash codes of all classes along inheritance path to Component
 	HashMap<Object2DHandle, ArrayList<Integer>> object_component_types; // Map of entities to hash codes of classes of components that they own
 	HashMap<Object2DHandle, ArrayList<Component>> object_components; // Map of entities to components that they own
+	HashMap<String, Object2DHandle> names; // Map of entity names to entity handles
 
 	public World() {
 		wk = new WorldKey();
@@ -24,12 +26,22 @@ public class World {
 		component_type_info = new HashMap<>();
 		object_component_types = new HashMap<>();
 		object_components = new HashMap<>();
+		names = new HashMap<>();
 	}
 
 	/**
 	 * Adds an object to the world and returns a handle to it.
 	 */
 	public Object2DHandle add(Object2D obj) {
+		return add(obj, null);
+	}
+
+	/**
+	 * Adds an object to the world and returns a handle to it.
+	 * The given name will be associated with the object, and can be used to retrieve it later as long as it's in the world.
+	 * If the given name is already in use, the object it refers to will be updated.
+	 */
+	public Object2DHandle add(Object2D obj, String name) {
 		if (obj == null) return Object2DHandle.empty();
 		if (obj.handle != null) {
 			if (obj.handle.isEmpty()) return obj.handle; // Object has been added to the world already, simply return its existing handle
@@ -39,6 +51,9 @@ public class World {
 		obj.handle = ret;
 		object_component_types.put(ret, new ArrayList<Integer>());
 		object_components.put(ret, new ArrayList<Component>());
+		if (name != null) {
+			if (!name.isEmpty()) names.put(name, ret);
+		}
 		return ret;
 	}
 
@@ -47,6 +62,12 @@ public class World {
 	 */
 	public void remove(Object2DHandle handle) {
 		if (!handle.isEmpty() || contents.expired(handle)) return;
+
+		String name = getName(handle);
+		if (!name.isEmpty()) {
+			names.remove(name);
+		}
+
 		Optional<Object2D> opt = contents.get(handle);
 		if (opt.isPresent()) {
 			Object2D obj = opt.get();
@@ -98,6 +119,26 @@ public class World {
 	 */
 	public Object2D get(Object2DHandle handle) {
 		return contents.get(handle).get();
+	}
+
+	/**
+	 * Retrieves an object handle associated with the given name, if present.
+	 */
+	public Object2DHandle getHandle(String name) {
+		if (names.containsKey(name)) {
+			return names.get(name);
+		}
+		return Object2DHandle.empty();
+	}
+
+	/**
+	 * Returns the name associated with the given handle, or empty string if not found.
+	 */
+	public String getName(Object2DHandle handle) {
+		for (Map.Entry<String, Object2DHandle> entry : names.entrySet()) {
+			if (entry.getValue().equals(handle)) return entry.getKey();
+		}
+		return "";
 	}
 
 	/**

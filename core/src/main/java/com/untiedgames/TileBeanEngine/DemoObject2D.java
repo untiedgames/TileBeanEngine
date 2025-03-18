@@ -17,7 +17,7 @@ public class DemoObject2D extends Game {
 		// Create a new game object, which the user can control via ImGui.
 		Object2D obj = new Object2D();
 		obj.z = 1;
-		obj_handle = TileBeanEngine.world.add(obj);
+		obj_handle = TileBeanEngine.world.add(obj, "test_object"); // Here we give the object an optional custom name "test_object". The name can be used to retrieve it later.
 
 		// Add a Sprite component. Sprites can display images and animations.
 		Sprite sprite = new Sprite();
@@ -47,7 +47,16 @@ public class DemoObject2D extends Game {
 	public void runGUI() {
 		ImGui.textWrapped("This is a demonstration of creating and manipulating an Object2D.\nYou can set the properties of the lighter object here.");
 		
+		// Since this is a demo, we'll show how to retrieve a handle by name. Naming objects is optional.
+		Object2DHandle obj_handle_by_name = TileBeanEngine.world.getHandle("test_object");
+		
+		// Let's prove that the handle we already have and the handle we retrieved by name are the same!
+		if (!obj_handle.equals(obj_handle_by_name)) throw new Error("This error should never happen.");
+		
+		// Retrieve the object using a handle.
 		Object2D obj = TileBeanEngine.world.get(obj_handle);
+		// Note: If we want to be safer, we should use tryGet instead of get. Since we know for sure this object exists, we can use get.
+
 		float[] loc = { obj.x, obj.y };
 		ImFloat im_z = new ImFloat(obj.z);
 		ImFloat im_rotation = new ImFloat(obj.rotation);
