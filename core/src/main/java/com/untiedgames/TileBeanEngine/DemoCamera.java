@@ -1,8 +1,11 @@
 package com.untiedgames.TileBeanEngine;
 
+import com.badlogic.gdx.Gdx;
+
 import imgui.ImGui;
 import imgui.type.ImBoolean;
 import imgui.type.ImFloat;
+import imgui.type.ImInt;
 
 public class DemoCamera extends Game {
 
@@ -28,6 +31,7 @@ public class DemoCamera extends Game {
 		TileBeanEngine.assets.clear();
 		TileBeanEngine.world.clear();
 		TileBeanEngine.setResolution(TileBeanEngine.default_render_target_width, TileBeanEngine.default_render_target_height);
+		TileBeanEngine.setRenderFPS(Gdx.graphics.getDisplayMode().refreshRate + 1);
 	}
 
 	public void update(float delta) {
@@ -95,6 +99,16 @@ public class DemoCamera extends Game {
 		}
 		if (ImGui.isItemHovered()) {
 			ImGui.setTooltip("The resolution of the game world.\nThe default resolution is 1920x1080.\nThis does not affect the window size, rather it refers to the texture that the game renders to.");
+		}
+
+		ImInt fps = new ImInt(TileBeanEngine.getRenderFPS());
+		if (ImGui.inputInt("Render FPS", fps)) {
+			if (fps.get() >= 1.0) {
+				TileBeanEngine.setRenderFPS(fps.get());
+			}
+		}
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The target frames per second (FPS) that the game should display at. By default, this is set to the refresh rate of your monitor plus one.\nWhen \"auto-move camera\" is checked, note how the motion continues at the same rate even when a low FPS is set.\nThis is because the camera is moving based on the delta time (the time elapsed between frames) and is therefore independent of FPS.");
 		}
 		
 	}

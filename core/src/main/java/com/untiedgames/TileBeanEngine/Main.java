@@ -42,6 +42,7 @@ public class Main extends ApplicationAdapter {
 			ImGui.setNextWindowPos(main_viewport.getPos(), ImGuiCond.Always);
 			ImGui.setNextWindowSize(300, io.getDisplaySizeY(), ImGuiCond.Once);
 			ImGui.setNextWindowSizeConstraints(300, io.getDisplaySizeY(), 500, io.getDisplaySizeY());
+			
 			ImGui.begin("TileBeanEngine Demo", null, ImGuiWindowFlags.NoDocking);
 			ImGui.textWrapped("Welcome to TileBeanEngine! You're running the engine JAR, which also functions as a little demo suite. Use the dropdown below to change demos.");
 			
@@ -58,6 +59,12 @@ public class Main extends ApplicationAdapter {
 				ImGui.separator();
 				demos[current_demo.get()].runGUI();
 			}
+
+			ImGui.separator();
+
+			ImGui.text("FPS: " + TileBeanEngine.getFPS());
+			TileBeanEngine.displayFPSGraph();
+
 			ImGui.end();
 
 			if (show_demo_window.get()) {

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import imgui.ImGui;
 import imgui.ImGuiIO;
+import imgui.ImVec2;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
@@ -36,7 +37,12 @@ public class TileBeanEngine {
 	public static Color letterbox_color = new Color(0, 0, 0, 1f); // The color of the letterbox (bars on either side of the window).
 
 	private static float time = 0; // The time in seconds since the application started.
-	
+	private static float delta_accumulator = 0;
+
+	public static double speed_multiplier = 1.0; // Acts as a fast-forward or slowdown modifier for the game.
+	public static double logic_fps = 1.0 / 60.0; // The granularity of how often game logic is performed. For example, if the game is running at 60FPS and logic_fps is 1/120, you can expect logic to be performed twice per frame. Note: This is not equivalent to display FPS.
+	private static int render_fps = 60; // The target frames per second for displaying the game. The default will be set to your monitor's refresh rate plus one.
+
 	// Rendering variables
 
 	private static SpriteBatch spritebatch;
@@ -47,6 +53,13 @@ public class TileBeanEngine {
 	static final int default_render_target_width = 1920;
 	static final int default_render_target_height = 1080;
 	private static FrameBuffer render_target;
+
+	// FPS counter
+	
+	private static final int tick_count = 300;
+	private static float[] ticks = new float[tick_count];
+	private static int tick_index = 0;
+	private static float tick_sum = 0;
 	
 	// Variables required for Dear ImGui
 
@@ -68,6 +81,9 @@ public class TileBeanEngine {
 		
 		setupCamera();
 		setResolution(default_render_target_width, default_render_target_height);
+		setRenderFPS(Gdx.graphics.getDisplayMode().refreshRate + 1);
+		for (int i = 0; i < tick_count; i++) ticks[i] = 60;
+		tick_sum = tick_count * 60;
 		
 		// Dear Imgui setup
 
@@ -126,14 +142,50 @@ public class TileBeanEngine {
 		}
 	}
 
+	/**
+	 * Returns the target render frames per second (FPS). This is not necessarily equivalent to the actual, current FPS of the game.
+	 */
+	public static int getRenderFPS() {
+		return render_fps;
+	}
+
+	/**
+	 * Sets the render frames per second (FPS).
+	 */
+	public static void setRenderFPS(int render_fps) {
+		TileBeanEngine.render_fps = render_fps;
+		Gdx.graphics.setForegroundFPS(render_fps);
+	}
+
+	/**
+	 * Returns the actual, current FPS of the game.
+	 */
+	public static int getFPS() {
+		return (int)Math.round(tick_sum / (float)tick_count);
+	}
+
+	/**
+	 * Displays a frames per second (FPS) graph using Dear ImGui.
+	 */
+	public static void displayFPSGraph() {
+		float average = 0.0f;
+		for (int i = 0; i < tick_count; i++) {
+			average += ticks[i];
+		}
+		average /= (float)tick_count;
+		average = 1.0f / average;
+		average *= 1000.0f;
+		ImGui.plotLines("###fps_graph", ticks, tick_count, tick_index, "\n\n\nms / frame: " + String.format("%.2f", average), 0, 60.0f, new ImVec2(ImGui.getWindowSize().x, 60.0f));
+	}
+
+	/**
+	 * Retrieves the libGDX SpriteBatch, which can be used for custom drawing.
+	 */
 	public static SpriteBatch getSpriteBatch() {
 		return spritebatch;
 	}
 
-	public static Object2DHandle getCameraHandle() {
-		return camera_handle;
-	}
-
+	// Used for initialization.
 	static void setupCamera() {
 		Object2D obj = new Object2D();
 		camera_handle = TileBeanEngine.world.add(obj);
@@ -141,6 +193,17 @@ public class TileBeanEngine {
 		world.addComponent(camera_handle, cam);
 	}
 
+	/**
+	 * Returns a handle to the current camera.
+	 */
+	public static Object2DHandle getCameraHandle() {
+		return camera_handle;
+	}
+
+	/**
+	 * Sets the current camera to the specified handle.
+	 * If the handle does not have a Camera component, a warning will be printed in the console.
+	 */
 	public static void setCamera(Object2DHandle handle) {
 		camera_handle = handle;
 		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
@@ -149,6 +212,9 @@ public class TileBeanEngine {
 		}
 	}
 
+	/**
+	 * Returns the time since the application started, in seconds.
+	 */
 	public static float getTime() {
 		return time;
 	}
@@ -172,18 +238,41 @@ public class TileBeanEngine {
 		ImGuiIO io = ImGui.getIO();
 
 		// Game loop (logic)
+		
+		float total_delta = Gdx.graphics.getDeltaTime();
+		delta_accumulator += total_delta;
+		delta_accumulator *= speed_multiplier;
 
-		time += 1.0f / 60.0f;
-		input.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
+		if (delta_accumulator >= 5) delta_accumulator = 0; // Detect and discard significant lag frames (5+ seconds)
 
-		game.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
+		while (delta_accumulator > 0.0) {
+			double delta = Math.min(delta_accumulator, logic_fps);
+			
+			time += (float)delta;
 
-		for (ArrayList<Component> list : world.components.values()) {
-			for (Component c : list) {
-				c.update(1.0f / 60.0f); //TODO: Need an accumulator + proper game loop
+			input.update((float)delta);
+			game.update((float)delta);
+
+			for (ArrayList<Component> list : world.components.values()) {
+				for (Component c : list) {
+					c.update((float)delta);
+				}
 			}
+
+			delta_accumulator -= delta;
+			if (delta_accumulator < 0.001) delta_accumulator = 0;
 		}
 
+		// FPS counter
+		
+		if (total_delta != 0.0f) {
+			float tick = 1.0f / (float)total_delta;
+			tick_sum -= ticks[tick_index];
+			tick_sum += tick;
+			ticks[tick_index] = tick;
+			if (++tick_index == tick_count) tick_index = 0;
+		}
+		
 		// Game loop (drawing)
 
 		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
