@@ -169,12 +169,14 @@ public class World {
 
 			// Construct a new list of type info.
 			// For example, the type info list for Sprite should look like:
-			// { Sprite.class.hashCode(), Component.class.hashCode() }
+			// { Sprite.class.hashCode(), Drawable.class.hashCode(), Component.class.hashCode() }
+			//         Sprite ------> is a -------> Drawable -----> is a -------> Component
 			ArrayList<Integer> type_info = new ArrayList<>();
 			Class<?> c = component.getClass();
 			while (true) {
-				//System.out.println("Adding class " + c.getName() + " to type info " + component.getClass().getName()); // Debug
+				//System.out.println("Adding class " + c.getName() + " to type info " + component.getClass().getName() + " with hash " + c.hashCode()); // Debug
 				type_info.add(c.hashCode());
+				if (!components.containsKey(c.hashCode())) components.put(c.hashCode(), new ArrayList<Component>()); // Be safe and create all component lists in the inheritance chain
 				if (c.hashCode() == Component.class.hashCode()) break;
 				c = c.getSuperclass();
 			}
@@ -265,9 +267,11 @@ public class World {
 		for(Integer key : component_type_info.keySet()) {
 			ArrayList<Integer> type_info = component_type_info.get(key);
 			if (type_info.contains(hash)) {
-				ArrayList<Component> list = components.get(key);
-				for (Component c : list) {
-					ret.add(c);
+				if (components.containsKey(key)) { // This check is performed because there's no guarantee all component types have been instantiated at least once to create their lists
+					ArrayList<Component> list = components.get(key);
+					for (Component c : list) {
+						ret.add(c);
+					}
 				}
 			}
 		}
