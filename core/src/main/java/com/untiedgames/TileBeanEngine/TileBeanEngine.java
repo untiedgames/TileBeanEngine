@@ -282,12 +282,12 @@ public class TileBeanEngine {
 		render_target.begin();
 		ScreenUtils.clear(bg_color);
 		spritebatch.begin();
-		HashSet<Component> sprites_set = world.getComponentsOfClass(Sprite.class.hashCode());
-		ArrayList<Sprite> sprites = new ArrayList<>();
-		for (Component c : sprites_set) sprites.add((Sprite)c);
-		Collections.sort(sprites);
-		for (Sprite s : sprites) {
-			s.draw(spritebatch);
+		HashSet<Component> drawables_set = world.getComponentsOfClass(Drawable.class.hashCode());
+		ArrayList<Drawable> drawables = new ArrayList<>();
+		for (Component c : drawables_set) drawables.add((Drawable)c);
+		Collections.sort(drawables);
+		for (Drawable d : drawables) {
+			d.draw(spritebatch);
 		}
 		spritebatch.end();
 		render_target.end();

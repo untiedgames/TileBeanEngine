@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Sprite is the main way to display things in TileBeanEngine.
  * It provides both update and draw methods, which can be overridden in derived classes.
  */
-public class Sprite extends Component {
+public class Sprite extends Drawable {
 
 	private TextureAssetHandle texture_handle = TextureAssetHandle.empty();
 	private boolean is_playing = false;
