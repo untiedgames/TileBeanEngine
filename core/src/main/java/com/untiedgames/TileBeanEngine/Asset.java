@@ -31,7 +31,12 @@ public abstract class Asset {
 	}
 
 	/**
-	 * Loads the asset from its path.
+	 * Returns true if the asset has been loaded, false otherwise.
+	 */
+	public abstract boolean isLoaded();
+
+	/**
+	 * Loads the asset from its path. Returns true on success, false otherwise.
 	 */
 	public abstract boolean load();
 

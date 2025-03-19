@@ -27,6 +27,10 @@ public class MusicAsset extends Asset {
 		super(name, path, file_mode);
 	}
 
+	public boolean isLoaded() {
+		return music != null;
+	}
+
 	/**
 	 * Loads the MusicAsset from its path.
 	 * Returns true on success, false otherwise.

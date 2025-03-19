@@ -31,6 +31,10 @@ public class TextureAsset extends Asset {
 		textures = new ArrayList<>();
 	}
 
+	public boolean isLoaded() {
+		return !textures.isEmpty();
+	}
+
 	/**
 	 * Loads the TextureAsset from its path. Supports .png and .anim files.
 	 * Returns true on success, false otherwise.

@@ -27,6 +27,10 @@ public class SoundAsset extends Asset {
 		super(name, path, file_mode);
 	}
 
+	public boolean isLoaded() {
+		return sound != null;
+	}
+
 	/**
 	 * Loads the SoundAsset from its path.
 	 * Returns true on success, false otherwise.
