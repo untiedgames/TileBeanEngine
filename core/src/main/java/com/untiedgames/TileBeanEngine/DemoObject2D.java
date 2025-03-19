@@ -41,7 +41,7 @@ public class DemoObject2D extends Game {
 	}
 
 	public void update(float delta) {
-		TileBeanEngine.world.get(obj2_handle).rotation += delta;	
+		TileBeanEngine.world.get(obj2_handle).rotation += delta;
 	}
 
 	public void runGUI() {
