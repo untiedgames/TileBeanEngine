@@ -3,7 +3,7 @@ package com.untiedgames.TileBeanEngine;
 /**
  * Object2D is the "entity" of the entity-component system in TileBeanEngine.
  * It represents an object in the game world which has a location (x, y), depth (z), rotation, scale (scale_x, scale_y), and color (r, g, b, a).
- * (In a traditional ECS, the variables of this class might be in a "Transforms" component instead, but I want to make things a little simpler.)
+ * (In a traditional ECS, the variables of this class might be in other components instead, but I want to make things a little simpler.)
  */
 public class Object2D {
 
@@ -19,6 +19,7 @@ public class Object2D {
 	public float g = 1; // The green component of the object's color. (Range: 0.0 .. 1.0)
 	public float b = 1; // The blue component of the object's color. (Range: 0.0 .. 1.0)
 	public float a = 1; // The alpha (transparency) component of the object's color. (Range: 0.0 .. 1.0)
+	public boolean is_visible = true; // Whether or not the object is visible when drawn.
 
 	public Object2DHandle getHandle() {
 		return handle;

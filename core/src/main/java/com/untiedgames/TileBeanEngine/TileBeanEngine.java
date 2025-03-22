@@ -1,11 +1,13 @@
 package com.untiedgames.TileBeanEngine;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
@@ -46,6 +48,7 @@ public class TileBeanEngine {
 	// Rendering variables
 
 	private static SpriteBatch spritebatch;
+	private static ShapeRenderer shaperenderer;
 	private static OrthographicCamera internal_camera;
 	private static Object2DHandle camera_handle;
 	private static int render_target_width = 1;
@@ -78,6 +81,8 @@ public class TileBeanEngine {
 		world = new World();
 		input = new Input();
 		spritebatch = new SpriteBatch();
+		shaperenderer = new ShapeRenderer();
+		shaperenderer.setAutoShapeType(true);
 		
 		setupCamera();
 		setResolution(default_render_target_width, default_render_target_height);
@@ -107,6 +112,7 @@ public class TileBeanEngine {
 	public static void shutdown() {
 		assets.clear();
 		spritebatch.dispose();
+		shaperenderer.dispose();
 		imgui_gl3.shutdown();
 		imgui_glfw.shutdown();
 		ImGui.destroyContext();
@@ -183,6 +189,13 @@ public class TileBeanEngine {
 	 */
 	public static SpriteBatch getSpriteBatch() {
 		return spritebatch;
+	}
+
+	/**
+	 * Retrieves the libGDX ShapeRenderer, which can be used for custom shape drawing.
+	 */
+	public static ShapeRenderer getShapeRenderer() {
+		return shaperenderer;
 	}
 
 	// Used for initialization.
@@ -282,14 +295,21 @@ public class TileBeanEngine {
 		render_target.begin();
 		ScreenUtils.clear(bg_color);
 		spritebatch.begin();
+		
 		HashSet<Component> drawables_set = world.getComponentsOfClass(Drawable.class.hashCode());
 		ArrayList<Drawable> drawables = new ArrayList<>();
 		for (Component c : drawables_set) drawables.add((Drawable)c);
 		Collections.sort(drawables);
 		for (Drawable d : drawables) {
+			Object2DHandle obj_handle = d.getOwner();
+			Optional<Object2D> obj = world.tryGet(obj_handle);
+			if (obj.isPresent()) {
+				if (!obj.get().is_visible) continue;
+			} else continue;
 			d.draw(spritebatch);
 		}
 		spritebatch.end();
+		shaperenderer.end();
 		render_target.end();
 
 		// Present the render target to the screen (Letterboxed)

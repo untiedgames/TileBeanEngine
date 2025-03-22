@@ -3,6 +3,7 @@ import java.util.Optional;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 
 /**
@@ -43,6 +44,9 @@ public class Camera extends Component {
 	public void setActive() {
 		SpriteBatch spritebatch = TileBeanEngine.getSpriteBatch();
 		spritebatch.setProjectionMatrix(internal_camera.combined);
+		
+		ShapeRenderer shaperenderer = TileBeanEngine.getShapeRenderer();
+		shaperenderer.setProjectionMatrix(internal_camera.combined);
 
 		Optional<Object2D> opt = TileBeanEngine.world.tryGet(getOwner());
 		if (opt.isPresent()) {
@@ -53,6 +57,7 @@ public class Camera extends Component {
 				if (obj.rotation != 0.0f) m.rotate(0, 0, 1, obj.rotation * 180.0f / (float)Math.PI);
 				m.translate(-obj.x, -obj.y, 0);
 				spritebatch.setTransformMatrix(m);
+				shaperenderer.setTransformMatrix(m);
 			}
 		}
 	}
