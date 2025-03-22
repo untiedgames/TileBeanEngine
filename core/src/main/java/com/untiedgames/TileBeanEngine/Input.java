@@ -32,7 +32,8 @@ public class Input {
 		private boolean left_button_pressed = false;
 		private boolean middle_button_pressed = false;
 		private boolean right_button_pressed = false;
-		private int scroll = 0;
+		private float scroll_x = 0;
+		private float scroll_y = 0;
 
 		public int getRawX() {
 			return raw_x;
@@ -62,8 +63,12 @@ public class Input {
 			return right_button_pressed;
 		}
 
-		public int getScroll() {
-			return scroll;
+		public float getScrollX() {
+			return scroll_x;
+		}
+
+		public float getScrollY() {
+			return scroll_y;
 		}
 
 	}
@@ -152,7 +157,8 @@ public class Input {
 		state_mouse_prev.raw_y = state_mouse.raw_y;
 		state_mouse_prev.world_x = state_mouse.world_x;
 		state_mouse_prev.world_y = state_mouse.world_y;
-		state_mouse_prev.scroll = state_mouse.scroll;
+		state_mouse_prev.scroll_x = state_mouse.scroll_x;
+		state_mouse_prev.scroll_y = state_mouse.scroll_y;
 	}
 
 	public class InputAdapter implements InputProcessor {
@@ -198,6 +204,8 @@ public class Input {
 		}
 
 		public boolean scrolled(float amount_x, float amount_y) {
+			input.state_mouse.scroll_x += amount_x;
+			input.state_mouse.scroll_y += amount_y;
 			return false;
 		}
 
