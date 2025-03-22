@@ -52,6 +52,30 @@ public class Tilemap extends Drawable {
 		this.tileset_handle = handle;
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getTileWidth() {
+		Optional<TilesetAsset> opt_tileset = TileBeanEngine.assets.tryGet(tileset_handle);
+		if (!opt_tileset.isPresent()) return 1;
+		TilesetAsset tileset = opt_tileset.get();
+		if (!tileset.isLoaded()) return 1;
+		return tileset.getTileWidth();
+	}
+
+	public int getTileHeight() {
+		Optional<TilesetAsset> opt_tileset = TileBeanEngine.assets.tryGet(tileset_handle);
+		if (!opt_tileset.isPresent()) return 1;
+		TilesetAsset tileset = opt_tileset.get();
+		if (!tileset.isLoaded()) return 1;
+		return tileset.getTileHeight();
+	}
+
 	/**
 	 * Places a tile with the given ID at the given position in tiles.
 	 * If the position is outside the bounds of the Tilemap, nothing happens.
