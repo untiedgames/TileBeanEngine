@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.untiedgames.TileBeanEngine.TilesetAsset.TileInfo;
 
@@ -114,9 +115,11 @@ public class Tilemap extends Drawable {
 		Optional<Object2D> opt_cam = TileBeanEngine.world.tryGet(cam_handle);
 		
 		int left = 0, right = width, top = 0, bottom = height;
+		float cam_z = 1;
 
 		if (opt_cam.isPresent()) {
 			Object2D cam = opt_cam.get();
+			cam_z = cam.z;
 			Optional<Component> opt_cam_component = TileBeanEngine.world.tryGetComponent(cam_handle, Camera.class.hashCode());
 			if (opt_cam_component.isPresent()) {
 				Camera cam_component = (Camera)opt_cam_component.get();
@@ -181,6 +184,7 @@ public class Tilemap extends Drawable {
 			shaperenderer.setColor(1, 0, 0, 1);
 			shaperenderer.setTransformMatrix(spritebatch.getTransformMatrix());
 			shaperenderer.begin();
+			shaperenderer.set(ShapeType.Filled);
 
 			for (int i = 0; i <= collision_verts.size() - 4; i += 2) {
 				float v0 = collision_verts.get(i);
@@ -190,7 +194,7 @@ public class Tilemap extends Drawable {
 				if (v0 == Float.MAX_VALUE || v1 == Float.MAX_VALUE || v2 == Float.MAX_VALUE || v3 == Float.MAX_VALUE ) {
 					continue;
 				}
-				shaperenderer.line(v0, v1, v2, v3);
+				shaperenderer.rectLine(v0, v1, v2, v3, 3.0f / cam_z);
 			}
 
 			shaperenderer.end();
