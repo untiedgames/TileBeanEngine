@@ -1,6 +1,7 @@
 package com.untiedgames.TileBeanEngine;
 
 import com.badlogic.gdx.audio.Sound;
+import com.untiedgames.TileBeanEngine.Input.MouseState;
 
 import imgui.ImGui;
 
@@ -118,7 +119,7 @@ public class DemoInput extends Game {
 	}
 
 	public void runGUI() {
-		ImGui.textWrapped("This is a demonstration of handling input from the player, and a small demo of sound playback.\nPress left or right arrows to move, and press spacebar to \"WOW!\"\n\nThe longer you hold spacebar, the louder the \"WOW\" will be. You can hold it up to 1 second to reach 100% volume.");
+		ImGui.textWrapped("This is a demonstration of handling input from the player, and a small demo of sound playback.\nPress left or right arrows to move, and press spacebar to \"WOW!\"\n\nThe longer you hold spacebar, the louder the \"WOW\" will be. You can hold it up to 1 second to reach 100% volume.\n\nAdditionally, this demo shows the raw mouse position and the mouse position in the game world.");
 		
 		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class.hashCode());
 		Input.InputState space_state = TileBeanEngine.input.getKeyState(Input.Keys.SPACE);
@@ -132,6 +133,20 @@ public class DemoInput extends Game {
 
 			ImGui.text("Spacebar hold time: " + String.format("%.2f", volume) + " seconds");
 		}
+
+		MouseState mouse_state = TileBeanEngine.input.getMouseState();
+		
+		ImGui.text("Mouse raw location: " + mouse_state.getRawX() + ", " + mouse_state.getRawY());
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The raw mouse location is relative to the top-left of the window.");
+		}
+
+		// These are floats but I'm casting them to int just so they display nicer
+		ImGui.text("Mouse world location: " + (int)mouse_state.getWorldX() + ", " + (int)mouse_state.getWorldY());
+		if (ImGui.isItemHovered()) {
+			ImGui.setTooltip("The world mouse location is relative to the origin of the game world, and respects the camera position, rotation, and zoom.\nIn this demo, the camera is stationary at {0, 0} so the center of the window will have a mouse world location of {0, 0}.");
+		}
+
 	}
 
 }

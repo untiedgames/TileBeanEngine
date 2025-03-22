@@ -148,6 +148,22 @@ public class TileBeanEngine {
 		}
 	}
 
+	public static float getWindowX() {
+		return ImGui.getMainViewport().getPosX();
+	}
+
+	public static float getWindowY() {
+		return ImGui.getMainViewport().getPosY();
+	}
+
+	public static float getWindowWidth() {
+		return ImGui.getIO().getDisplaySizeX();
+	}
+
+	public static float getWindowHeight() {
+		return ImGui.getIO().getDisplaySizeY();
+	}
+
 	/**
 	 * Returns the target render frames per second (FPS). This is not necessarily equivalent to the actual, current FPS of the game.
 	 */
