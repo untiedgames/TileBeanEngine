@@ -1,7 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -15,9 +14,9 @@ import imgui.type.ImInt;
 public class Main extends ApplicationAdapter {
 
 	ImBoolean show_demo_window = new ImBoolean(false); // Whether or not to show the Dear ImGui demo window
-	ImInt current_demo = new ImInt(0);
-	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera" };
-	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera() };
+	ImInt current_demo = new ImInt(5);
+	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera", "Tilemap" };
+	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera(), new DemoTilemap() };
 
 	class TestGame extends Game {
 		
