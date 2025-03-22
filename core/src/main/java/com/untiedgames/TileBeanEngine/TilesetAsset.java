@@ -2,6 +2,7 @@ package com.untiedgames.TileBeanEngine;
 
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -14,44 +15,14 @@ import com.badlogic.gdx.graphics.TextureData;
  */
 public class TilesetAsset extends Asset {
 
-	/**
-	 * This enum represents tile collision shapes.
-	 * Their nomenclature is based on platformer games.
-	 * For example, for 60-degree slopes:
-	 * 
-	 *                             /|\
-	 * SLOPE_FLOOR_LEFT_60 -----> / | \ <---- SLOPE_FLOOR_RIGHT_60
-	 *                           /__|__\
-	 *                           \  |  /
-	 * SLOPE_CEIL_LEFT_60 ------> \ | / <---- SLOPE_FLOOR_RIGHT_60
-	 *                             \|/
-	 * 
-	 * See TileType enum comments for further reference.
-	 * (This diagram is best viewed in the comments, not the tooltip.)
-	 */
-	public enum TILETYPE {
-		EMPTY,					// No collision shape.
-		FULL,					// Box collision shape of size { tile_width, tile_height }.
-		SLOPE_FLOOR_LEFT_30,	// 30-degree sloped triangle collision shape with the collision resolution normal facing up-left.
-		SLOPE_FLOOR_RIGHT_30,	// 30-degree sloped triangle collision shape with the collision resolution normal facing up-right.
-		SLOPE_CEIL_LEFT_30,		// 30-degree sloped triangle collision shape with the collision resolution normal facing down-left.
-		SLOPE_CEIL_RIGHT_30,	// 30-degree sloped triangle collision shape with the collision resolution normal facing down-right.
-		SLOPE_FLOOR_LEFT_45,	// 45-degree sloped triangle collision shape with the collision resolution normal facing up-left.
-		SLOPE_FLOOR_RIGHT_45,	// 45-degree sloped triangle collision shape with the collision resolution normal facing up-right.
-		SLOPE_CEIL_LEFT_45,		// 45-degree sloped triangle collision shape with the collision resolution normal facing down-left.
-		SLOPE_CEIL_RIGHT_45,	// 45-degree sloped triangle collision shape with the collision resolution normal facing down-right.
-		SLOPE_FLOOR_LEFT_60,	// 60-degree sloped triangle collision shape with the collision resolution normal facing up-left.
-		SLOPE_FLOOR_RIGHT_60,	// 60-degree sloped triangle collision shape with the collision resolution normal facing up-right.
-		SLOPE_CEIL_LEFT_60,		// 60-degree sloped triangle collision shape with the collision resolution normal facing down-left.
-		SLOPE_CEIL_RIGHT_60		// 60-degree sloped triangle collision shape with the collision resolution normal facing down-right.
-	}
+	
 
 	public class TileInfo {
 
 		private int id = Integer.MAX_VALUE; // The ID of the tile. The top-left tile of the tileset has ID 0, the one to its right has ID 1, and so on. Integer.MAX_VALUE represents an unassigned tile.
 		private int x = 0; // The X coordinate (in tiles) of this tile on the tileset texture.
 		private int y = 0; // The Y coordinate (in tiles) of this tile on the tileset texture.
-		private TILETYPE tile_type = TILETYPE.EMPTY;
+		private CollisionShape.TYPE tile_type = CollisionShape.TYPE.EMPTY;
 		
 		public int getID() {
 			return id;
@@ -65,12 +36,12 @@ public class TilesetAsset extends Asset {
 			return y;
 		}
 
-		public TILETYPE getTileType() {
+		public CollisionShape.TYPE getTileType() {
 			return tile_type;
 		}
 
 		public boolean isEmpty() {
-			return id == Integer.MAX_VALUE || tile_type == TILETYPE.EMPTY;
+			return id == Integer.MAX_VALUE || tile_type == CollisionShape.TYPE.EMPTY;
 		}
 
 		public boolean isUnassigned() {
@@ -157,13 +128,11 @@ public class TilesetAsset extends Asset {
 				}
 			}
 			texture_asset = new TextureAsset(texture_path);
-			
-			
 		}
 
 		if (texture_asset.isLoaded()) return true; // Asset is already loaded
 		if (!texture_asset.load()) return false;
-		
+
 		// Create TileInfo for each tile.
 		// Here, we'll also assign collision shapes to the tiles.
 		// If there's a collision data file, any tiles which have a mapping assigned in that file will use that mapping.
@@ -193,12 +162,42 @@ public class TilesetAsset extends Asset {
 						}
 					}
 				}
-				if (has_any_pixel) tile.tile_type = TILETYPE.FULL;
+				if (has_any_pixel) tile.tile_type = CollisionShape.TYPE.FULL;
 				
 				tiles.put(id_ctr++, tile);
 			}
 		}
 		if (texdat.disposePixmap()) pixmap.dispose();
+
+		try {
+			String collision_path = path.substring(0, path.lastIndexOf('.')) + "_collision.txt";
+			FileHandle file = Asset.makeFileHandle(collision_path, file_mode);
+			if (file.exists()) {
+				String data = file.readString();
+				Scanner sc = new Scanner(data);
+				if (data.indexOf('\r') != -1) sc.useDelimiter("\r\n");
+				else sc.useDelimiter("\n");
+				while (sc.hasNext()) {
+					String line = sc.next();
+					Scanner sc2 = new Scanner(line);
+					while(sc2.hasNext()) {
+						int x = Integer.parseInt(sc2.next());
+						int y = Integer.parseInt(sc2.next());
+						sc2.next(); // toss '='
+						String value = sc2.next();
+						TileInfo tile = getTileInfo(x / tile_width, y / tile_height);
+						tile.tile_type = CollisionShape.TYPE.valueOf(value);
+					}
+					sc2.close();
+				}
+				sc.close();
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to load or parse collision file for tileset: \"" + path + "\"");
+			System.err.println(e.getMessage());
+			return false;
+		}
+
 		return true;
 	}
 
