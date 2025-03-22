@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector2;
 
 public class Input {
@@ -29,11 +30,11 @@ public class Input {
 		private int raw_y = 0;
 		private float world_x = 0;
 		private float world_y = 0;
+		private float scroll_x = 0;
+		private float scroll_y = 0;
 		private boolean left_button_pressed = false;
 		private boolean middle_button_pressed = false;
 		private boolean right_button_pressed = false;
-		private float scroll_x = 0;
-		private float scroll_y = 0;
 
 		public int getRawX() {
 			return raw_x;
@@ -79,6 +80,8 @@ public class Input {
 	private InputState[] states_keyboard_prev = new InputState[Keys.MAX_KEYCODE];
 	private MouseState state_mouse = new MouseState();
 	private MouseState state_mouse_prev = new MouseState();
+
+	private boolean first_frame = true;
 
 	public Input() {
 		Gdx.input.setInputProcessor(new InputAdapter(this));
@@ -146,6 +149,19 @@ public class Input {
 				}
 			}
 		}
+
+		if (first_frame) {
+			first_frame = false;
+			state_mouse_prev.raw_x = state_mouse.raw_x;
+			state_mouse_prev.raw_y = state_mouse.raw_y;
+			state_mouse_prev.world_x = state_mouse.world_x;
+			state_mouse_prev.world_y = state_mouse.world_y;
+			state_mouse_prev.scroll_x = state_mouse.scroll_x;
+			state_mouse_prev.scroll_y = state_mouse.scroll_y;
+			state_mouse_prev.left_button_pressed = state_mouse.left_button_pressed;
+			state_mouse_prev.middle_button_pressed = state_mouse.middle_button_pressed;
+			state_mouse_prev.right_button_pressed = state_mouse.right_button_pressed;
+		}
 	}
 
 	public void nextFrame() {
@@ -159,6 +175,9 @@ public class Input {
 		state_mouse_prev.world_y = state_mouse.world_y;
 		state_mouse_prev.scroll_x = state_mouse.scroll_x;
 		state_mouse_prev.scroll_y = state_mouse.scroll_y;
+		state_mouse_prev.left_button_pressed = state_mouse.left_button_pressed;
+		state_mouse_prev.middle_button_pressed = state_mouse.middle_button_pressed;
+		state_mouse_prev.right_button_pressed = state_mouse.right_button_pressed;
 	}
 
 	public class InputAdapter implements InputProcessor {
@@ -188,6 +207,19 @@ public class Input {
 		}
 
 		public boolean touchDown(int x, int y, int pointer, int button) {
+			switch(button) {
+				case Buttons.LEFT:
+					input.state_mouse.left_button_pressed = true;
+					break;
+				case Buttons.MIDDLE:
+					input.state_mouse.middle_button_pressed = true;
+					break;
+				case Buttons.RIGHT:
+					input.state_mouse.right_button_pressed = true;
+					break;
+				default:
+					break;
+			}
 			return false;
 		}
 
@@ -196,6 +228,19 @@ public class Input {
 		}
 
 		public boolean touchUp(int x, int y, int pointer, int button) {
+			switch(button) {
+				case Buttons.LEFT:
+					input.state_mouse.left_button_pressed = false;
+					break;
+				case Buttons.MIDDLE:
+					input.state_mouse.middle_button_pressed = false;
+					break;
+				case Buttons.RIGHT:
+					input.state_mouse.right_button_pressed = false;
+					break;
+				default:
+					break;
+			}
 			return false;
 		}
 
