@@ -1,6 +1,32 @@
 package com.untiedgames.TileBeanEngine;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class TBEMath {
+
+	///////////////////////////
+	// Useful math functions //
+	///////////////////////////
+
+	/**
+	 * Returns the distance between the two given points.
+	 */
+	public static float dist(float x1, float y1, float x2, float y2) {
+		return (float)Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	}
+
+	/**
+	 * Calculates the rotation of the given point about the given anchor point, and returns the result. (Rotation is in radians.)
+	 */
+	public static Vector2 rotateAboutPoint(float point_x, float point_y, float anchor_x, float anchor_y, float rotation) {
+		float dx = anchor_x - point_x;
+		float dy = anchor_y - point_y;
+		double n = Math.sqrt(dx * dx + dy * dy);
+		rotation += Math.atan2(dy, dx);
+		point_x = (float)(anchor_x - n * Math.cos(-rotation));
+		point_y = (float)(anchor_y + n * Math.sin(-rotation));
+		return new Vector2(point_x, point_y);
+	}
 
 	/////////////////////////////
 	// Interpolation functions //
