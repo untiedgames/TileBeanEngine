@@ -1,8 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 
-import com.badlogic.gdx.Gdx;
 import com.untiedgames.TileBeanEngine.Input.MouseState;
-import com.untiedgames.TileBeanEngine.TilesetAsset.TileInfo;
 
 import imgui.ImGui;
 import imgui.type.ImBoolean;

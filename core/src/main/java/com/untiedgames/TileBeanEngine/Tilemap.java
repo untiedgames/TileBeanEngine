@@ -35,6 +35,15 @@ public class Tilemap extends Drawable {
 	}
 
 	/**
+	 * Sets the contents of the entire Tilemap. If the array passed to this function is not the same size as the Tilemap, nothing happens.
+	 */
+	public void setContents(int[] contents) {
+		if (contents == null) return;
+		if (contents.length != width * height) return;
+		this.contents = contents;
+	}
+
+	/**
 	 * Returns a handle to the TilesetAsset that this Tilemap uses.
 	 */
 	public TilesetAssetHandle getTileset() {

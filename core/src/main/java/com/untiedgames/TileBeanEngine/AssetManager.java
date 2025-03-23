@@ -14,6 +14,9 @@ public class AssetManager {
 	
 	private GenArray<TilesetAsset, TilesetAssetHandle> collection_tilesets = new GenArray<>(TilesetAssetHandle.class);
 	private HashMap<String, TilesetAssetHandle> name_map_tilesets = new HashMap<>();
+
+	private GenArray<TilemapAsset, TilemapAssetHandle> collection_tilemaps = new GenArray<>(TilemapAssetHandle.class);
+	private HashMap<String, TilemapAssetHandle> name_map_tilemaps = new HashMap<>();
 	
 	private GenArray<SoundAsset, SoundAssetHandle> collection_sounds = new GenArray<>(SoundAssetHandle.class);
 	private HashMap<String, SoundAssetHandle> name_map_sounds = new HashMap<>();
@@ -48,6 +51,21 @@ public class AssetManager {
 		TilesetAssetHandle ret = collection_tilesets.add(asset);
 		asset.handle = ret;
 		name_map_tilesets.put(asset.name, ret);
+		return ret;
+	}
+
+	/**
+	 * Adds an asset to the asset manager. (Does not load the asset. Do that manually.)
+	 */
+	public TilemapAssetHandle add(TilemapAsset asset) {
+		if (asset == null) return TilemapAssetHandle.empty();
+		if (asset.handle != null) {
+			if (asset.handle.isEmpty()) return (TilemapAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
+			else return TilemapAssetHandle.empty();
+		}
+		TilemapAssetHandle ret = collection_tilemaps.add(asset);
+		asset.handle = ret;
+		name_map_tilemaps.put(asset.name, ret);
 		return ret;
 	}
 
@@ -114,6 +132,21 @@ public class AssetManager {
 	/**
 	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
 	 */
+	public void remove(TilemapAssetHandle handle) {
+		if (!handle.isEmpty() || collection_tilemaps.expired(handle)) return;
+		Optional<TilemapAsset> opt = collection_tilemaps.get(handle);
+		if (opt.isPresent()) {
+			TilemapAsset asset = opt.get();
+			asset.handle = null;
+			asset.unload();
+			name_map_tilemaps.remove(asset.name);
+		}
+		collection_tilemaps.remove(handle);
+	}
+
+	/**
+	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
+	 */
 	public void remove(SoundAssetHandle handle) {
 		if (!handle.isEmpty() || collection_sounds.expired(handle)) return;
 		Optional<SoundAsset> opt = collection_sounds.get(handle);
@@ -157,6 +190,12 @@ public class AssetManager {
 				opt.get().unload();
 			}
 		}
+		for(GenArrayEntry<TilemapAsset, TilemapAssetHandle> entry : collection_tilemaps) {
+			if (entry.hasValue()) {
+				Optional<TilemapAsset> opt = entry.getData();
+				opt.get().unload();
+			}
+		}
 		for(GenArrayEntry<SoundAsset, SoundAssetHandle> entry : collection_sounds) {
 			if (entry.hasValue()) {
 				Optional<SoundAsset> opt = entry.getData();
@@ -173,6 +212,8 @@ public class AssetManager {
 		name_map_textures.clear();
 		collection_tilesets.clear();
 		name_map_tilesets.clear();
+		collection_tilemaps.clear();
+		name_map_tilemaps.clear();
 		collection_sounds.clear();
 		name_map_sounds.clear();
 		collection_music.clear();
@@ -191,6 +232,13 @@ public class AssetManager {
 	 */
 	public Optional<TilesetAsset> tryGet(TilesetAssetHandle handle) {
 		return collection_tilesets.get(handle);
+	}
+
+	/**
+	 * Retrieves an asset from the collection if present.
+	 */
+	public Optional<TilemapAsset> tryGet(TilemapAssetHandle handle) {
+		return collection_tilemaps.get(handle);
 	}
 
 	/**
@@ -219,6 +267,13 @@ public class AssetManager {
 	 */
 	public TilesetAsset get(TilesetAssetHandle handle) {
 		return collection_tilesets.get(handle).get();
+	}
+
+	/**
+	 * The less-safe version of tryGet. Use this when you expect the asset to be there.
+	 */
+	public TilemapAsset get(TilemapAssetHandle handle) {
+		return collection_tilemaps.get(handle).get();
 	}
 	
 	/**
@@ -251,6 +306,16 @@ public class AssetManager {
 	public Optional<TilesetAsset> getTilesetAsset(String name) {
 		if (name_map_tilesets.containsKey(name)) {
 			return collection_tilesets.get(name_map_tilesets.get(name));
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Retrieves a TilemapAsset with the associated user-specified name from the collection if present.
+	 */
+	public Optional<TilemapAsset> getTilemapAsset(String name) {
+		if (name_map_tilemaps.containsKey(name)) {
+			return collection_tilemaps.get(name_map_tilemaps.get(name));
 		}
 		return Optional.empty();
 	}
@@ -293,6 +358,16 @@ public class AssetManager {
 			return name_map_tilesets.get(name);
 		}
 		return TilesetAssetHandle.empty();
+	}
+
+	/**
+	 * Returns the TilemapAssetHandle associated with the given user-specified name if present.
+	 */
+	public TilemapAssetHandle getTilemapAssetHandle(String name) {
+		if (name_map_tilemaps.containsKey(name)) {
+			return name_map_tilemaps.get(name);
+		}
+		return TilemapAssetHandle.empty();
 	}
 
 	/**
