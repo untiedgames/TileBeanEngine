@@ -196,21 +196,23 @@ public class World {
 
 		if (object_component_types.containsKey(handle)) {
 			ArrayList<Integer> obj_types = object_component_types.get(handle);
-			obj_types.remove((Integer)hash);
+			if (obj_types.contains((Integer)hash)) {
+				obj_types.remove((Integer)hash);
 
-			ArrayList<Component> obj_comps = object_components.get(handle);
-			Component c = null;
-			for (int i = 0; i < obj_comps.size(); i++) {
-				c = obj_comps.get(i);
-				if (c.getClass().hashCode() == hash) {
-					obj_comps.remove(i);
-					break;
+				ArrayList<Component> obj_comps = object_components.get(handle);
+				Component c = null;
+				for (int i = 0; i < obj_comps.size(); i++) {
+					c = obj_comps.get(i);
+					if (c.getClass().hashCode() == hash) {
+						obj_comps.remove(i);
+						break;
+					}
 				}
+
+				components.get(hash).remove(c);
+
+				c.setOwner(Object2DHandle.empty(), wk);
 			}
-
-			components.get(hash).remove(c);
-
-			c.setOwner(Object2DHandle.empty(), wk);
 		}
 	}
 
