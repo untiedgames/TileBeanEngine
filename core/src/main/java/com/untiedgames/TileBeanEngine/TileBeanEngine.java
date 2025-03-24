@@ -1,7 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,6 +43,8 @@ public class TileBeanEngine {
 	public static double speed_multiplier = 1.0; // Acts as a fast-forward or slowdown modifier for the game.
 	public static double logic_fps = 1.0 / 60.0; // The granularity of how often game logic is performed. For example, if the game is running at 60FPS and logic_fps is 1/120, you can expect logic to be performed twice per frame. Note: This is not equivalent to display FPS.
 	private static int render_fps = 60; // The target frames per second for displaying the game. The default will be set to your monitor's refresh rate plus one.
+
+	public static boolean show_colliders = false;
 
 	// Rendering variables
 
@@ -325,7 +326,19 @@ public class TileBeanEngine {
 			d.draw(spritebatch);
 		}
 		spritebatch.end();
-		shaperenderer.end();
+
+		if (show_colliders) {
+			shaperenderer.begin();
+			shaperenderer.setColor(1, 0, 0, 1);
+			HashSet<Component> colliders = world.getComponentsOfClass(Collider.class.hashCode());
+			for (Component c : colliders) {
+				Collider collider = (Collider)c;
+				float[] verts = collider.getTransformedVertices();
+				shaperenderer.polygon(verts);
+			}
+			shaperenderer.end();
+		}
+		
 		render_target.end();
 
 		// Present the render target to the screen (Letterboxed)

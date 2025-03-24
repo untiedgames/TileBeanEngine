@@ -2,12 +2,10 @@ package com.untiedgames.TileBeanEngine;
 
 import java.util.Optional;
 
-import com.untiedgames.TileBeanEngine.Input.MouseState;
-
 import imgui.ImGui;
 import imgui.type.ImBoolean;
 
-public class DemoCollision extends Game {
+public class DemoTilemapLoading extends Game {
 
 	Object2DHandle obj_tilemap_handle;
 
@@ -20,7 +18,7 @@ public class DemoCollision extends Game {
 		// Load a tilemap asset.
 		TilemapAsset tilemap_asset = new TilemapAsset("tilemap", "map/test_map.tmx");
 		tilemap_asset.load();
-		TilemapAssetHandle tilemap_handle = TileBeanEngine.assets.add(tilemap_asset);
+		TileBeanEngine.assets.add(tilemap_asset);
 		
 		// Create a new game object.
 		Object2D obj = new Object2D();
@@ -33,6 +31,7 @@ public class DemoCollision extends Game {
 		tilemap.setTileset(tileset_handle);
 		TileBeanEngine.world.addComponent(obj_tilemap_handle, tilemap);
 
+		// Set the camera for the demo.
 		Object2D cam = TileBeanEngine.world.get(TileBeanEngine.getCameraHandle());
 		cam.x = 240;
 		cam.y = 135;
@@ -44,19 +43,10 @@ public class DemoCollision extends Game {
 		TileBeanEngine.world.clear();
 	}
 
-	public void update(float delta) {
-		Object2DHandle camera_handle = TileBeanEngine.getCameraHandle();
-		Object2D obj_cam = TileBeanEngine.world.get(camera_handle);
-		Camera cam = (Camera)TileBeanEngine.world.getComponent(camera_handle, Camera.class.hashCode());
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
-		
-		MouseState mouse_state = TileBeanEngine.input.getMouseState();
-		
-
-	}
+	public void update(float delta) {}
 
 	public void runGUI() {
-		ImGui.textWrapped("This is a demonstration of collision.");
+		ImGui.textWrapped("This is a demonstration of loading a Tilemap from a Tiled *.tmx file.");
 
 		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
 		
