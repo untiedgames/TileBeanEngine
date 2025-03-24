@@ -89,7 +89,7 @@ public class DemoTilemap extends Game {
 	}
 
 	public void runGUI() {
-		ImGui.textWrapped("This is a demonstration of creating and drawing a Tilemap.\n\nUse middle mouse to pan the camera and the mouse wheel to zoom in and out.\n\nUse the right mouse button to select a tile, and use the left mouse button to place the selected tile.");
+		ImGui.textWrapped("This is a demonstration of creating and drawing a Tilemap.\nIf a tileset asset has a collision metadata file, it can be loaded automatically.\n\nUse middle mouse to pan the camera and the mouse wheel to zoom in and out.\n\nUse the right mouse button to select a tile, and use the left mouse button to place the selected tile.");
 
 		if (selected_tile == Integer.MAX_VALUE) {
 			ImGui.text("No tile selected.");
