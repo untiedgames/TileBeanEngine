@@ -28,6 +28,28 @@ public class TBEMath {
 		return new Vector2(point_x, point_y);
 	}
 
+	public static float toDegrees(float angle) {
+		return angle * 180.0f / (float)Math.PI;
+	}
+
+	public static float toRadians(float angle) {
+		return angle * (float)Math.PI / 180.0f;
+	}
+
+	public static float normalizeAngle(float angle) {
+		while (angle < 0) angle += 2.0f * (float)Math.PI;
+		while (angle >= 2.0f * (float)Math.PI) angle -= 2.0f * (float)Math.PI;
+		return angle;
+	}
+
+	public static float dotProduct(float x1, float y1, float x2, float y2) {
+		return x1 * x2 + y1 * y2;
+	}
+
+	public static float dotProduct(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return x1 * x2 + y1 * y2 + z1 * z2;
+	}
+
 	/////////////////////////////
 	// Interpolation functions //
 	/////////////////////////////
