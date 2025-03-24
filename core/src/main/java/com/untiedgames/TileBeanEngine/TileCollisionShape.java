@@ -1,6 +1,6 @@
 package com.untiedgames.TileBeanEngine;
 
-public class CollisionShape {
+public class TileCollisionShape {
 
 	/**
 	 * This enum represents tile collision shapes.
@@ -61,7 +61,7 @@ public class CollisionShape {
 	 * For example: {0, 0} is the upper-left corner, and {1, 1} is the bottom-right corner.
 	 * The vertices must be specified in winding order, preferably clockwise.
 	 */
-	public CollisionShape(float... verts) {
+	public TileCollisionShape(float... verts) {
 		this.verts = verts;
 	}
 

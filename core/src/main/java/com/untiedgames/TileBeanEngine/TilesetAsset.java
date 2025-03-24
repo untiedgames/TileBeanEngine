@@ -22,7 +22,7 @@ public class TilesetAsset extends Asset {
 		private int id = Integer.MAX_VALUE; // The ID of the tile. The top-left tile of the tileset has ID 0, the one to its right has ID 1, and so on. Integer.MAX_VALUE represents an unassigned tile.
 		private int x = 0; // The X coordinate (in tiles) of this tile on the tileset texture.
 		private int y = 0; // The Y coordinate (in tiles) of this tile on the tileset texture.
-		private CollisionShape.TYPE tile_type = CollisionShape.TYPE.EMPTY;
+		private TileCollisionShape.TYPE tile_type = TileCollisionShape.TYPE.EMPTY;
 		
 		public int getID() {
 			return id;
@@ -36,12 +36,12 @@ public class TilesetAsset extends Asset {
 			return y;
 		}
 
-		public CollisionShape.TYPE getTileType() {
+		public TileCollisionShape.TYPE getTileType() {
 			return tile_type;
 		}
 
 		public boolean isEmpty() {
-			return id == Integer.MAX_VALUE || tile_type == CollisionShape.TYPE.EMPTY;
+			return id == Integer.MAX_VALUE || tile_type == TileCollisionShape.TYPE.EMPTY;
 		}
 
 		public boolean isUnassigned() {
@@ -162,7 +162,7 @@ public class TilesetAsset extends Asset {
 						}
 					}
 				}
-				if (has_any_pixel) tile.tile_type = CollisionShape.TYPE.FULL;
+				if (has_any_pixel) tile.tile_type = TileCollisionShape.TYPE.FULL;
 				
 				tiles.put(id_ctr++, tile);
 			}
@@ -186,7 +186,7 @@ public class TilesetAsset extends Asset {
 						sc2.next(); // toss '='
 						String value = sc2.next();
 						TileInfo tile = getTileInfo(x / tile_width, y / tile_height);
-						tile.tile_type = CollisionShape.TYPE.valueOf(value);
+						tile.tile_type = TileCollisionShape.TYPE.valueOf(value);
 					}
 					sc2.close();
 				}

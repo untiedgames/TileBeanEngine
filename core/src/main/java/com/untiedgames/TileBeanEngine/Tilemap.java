@@ -167,7 +167,7 @@ public class Tilemap extends Drawable {
 				spritebatch.draw(texture, x * tile_width, y * tile_height, tile_width, tile_height, tile.getX() * tile_width, tile.getY() * tile_height, tile_width, tile_height, false, true);
 
 				if (show_collision) {
-					CollisionShape shape = PrimitiveCollisionShape.get(tile.getTileType());
+					TileCollisionShape shape = PrimitiveTileCollisionShape.get(tile.getTileType());
 					if (shape != null) {
 						for (int i = 0; i < shape.count() + 2; i++) {
 							// The vertices are packed in the collision shape in x, y, x, y... order, so we have to alternate width and height here
