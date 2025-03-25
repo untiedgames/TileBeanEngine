@@ -18,9 +18,9 @@ public class DemoObject2D extends Game {
 	
 	public void initialize() {
 		// Load a texture asset.
-		TextureAsset tex_asset = new TextureAsset("libgdx_logo", "gfx/libgdx.png");
+		TextureAsset tex_asset = new TextureAsset("tilebeanengine_logo", "gfx/tilebeanengine_logo.png");
 		tex_asset.load();
-		TextureAssetHandle libgdx_logo = TileBeanEngine.assets.add(tex_asset);
+		TextureAssetHandle tilebeanengine_logo = TileBeanEngine.assets.add(tex_asset);
 		
 		// Create a new game object, which the user can control via ImGui.
 		Object2D obj = new Object2D();
@@ -29,7 +29,7 @@ public class DemoObject2D extends Game {
 
 		// Add a Sprite component. Sprites can display images and animations.
 		Sprite sprite = new Sprite();
-		sprite.setGraphics(libgdx_logo);
+		sprite.setGraphics(tilebeanengine_logo);
 		TileBeanEngine.world.addComponent(obj_handle, sprite);
 
 		// Create a second game object, which the user can't control. Initially, it will be behind the user-controlled object above.
@@ -39,7 +39,7 @@ public class DemoObject2D extends Game {
 		obj2.b = .5f;
 		obj2_handle = TileBeanEngine.world.add(obj2);
 		Sprite sprite2 = new Sprite();
-		sprite2.setGraphics(libgdx_logo);
+		sprite2.setGraphics(tilebeanengine_logo);
 		TileBeanEngine.world.addComponent(obj2_handle, sprite2);
 	}
 

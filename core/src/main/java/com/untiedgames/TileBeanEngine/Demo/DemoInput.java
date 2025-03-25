@@ -11,8 +11,6 @@ import com.untiedgames.TileBeanEngine.AssetSystem.SoundAsset;
 import com.untiedgames.TileBeanEngine.AssetSystem.SoundAssetHandle;
 import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
 import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
-import com.untiedgames.TileBeanEngine.Input.InputState;
-import com.untiedgames.TileBeanEngine.Input.Keys;
 import com.untiedgames.TileBeanEngine.Input.MouseState;
 
 import imgui.ImGui;

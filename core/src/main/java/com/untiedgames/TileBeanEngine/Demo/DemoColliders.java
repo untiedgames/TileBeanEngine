@@ -4,7 +4,6 @@ import com.untiedgames.TileBeanEngine.Collider;
 import com.untiedgames.TileBeanEngine.Collision;
 import com.untiedgames.TileBeanEngine.CollisionInfo;
 import com.untiedgames.TileBeanEngine.Game;
-import com.untiedgames.TileBeanEngine.Input;
 import com.untiedgames.TileBeanEngine.Object2D;
 import com.untiedgames.TileBeanEngine.Object2DHandle;
 import com.untiedgames.TileBeanEngine.Sprite;

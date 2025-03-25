@@ -15,7 +15,6 @@ import com.untiedgames.TileBeanEngine.TweenRotation;
 import com.untiedgames.TileBeanEngine.TweenScale;
 import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
 import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
-import com.untiedgames.TileBeanEngine.Tween.TYPE;
 
 import imgui.ImGui;
 import imgui.type.ImInt;
@@ -37,9 +36,9 @@ public class DemoTweenAndTimer extends Game {
 	
 	public void initialize() {
 		// Load a texture asset.
-		TextureAsset tex_asset = new TextureAsset("libgdx_logo", "gfx/libgdx.png");
+		TextureAsset tex_asset = new TextureAsset("tilebeanengine_logo", "gfx/tilebeanengine_logo.png");
 		tex_asset.load();
-		TextureAssetHandle libgdx_logo = TileBeanEngine.assets.add(tex_asset);
+		TextureAssetHandle tilebeanengine_logo = TileBeanEngine.assets.add(tex_asset);
 
 		// Create a new game object.
 		Object2D obj = new Object2D();
@@ -47,7 +46,7 @@ public class DemoTweenAndTimer extends Game {
 
 		// Add a Sprite component. Sprites can display images and animations.
 		Sprite sprite = new Sprite();
-		sprite.setGraphics(libgdx_logo);
+		sprite.setGraphics(tilebeanengine_logo);
 		TileBeanEngine.world.addComponent(obj_handle, sprite);
 		
 		// Create a timer manager, which can manage one or more timers.

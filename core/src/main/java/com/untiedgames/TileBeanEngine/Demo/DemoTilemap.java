@@ -4,7 +4,6 @@ import com.untiedgames.TileBeanEngine.Camera;
 import com.untiedgames.TileBeanEngine.Game;
 import com.untiedgames.TileBeanEngine.Grid;
 import com.untiedgames.TileBeanEngine.GridHighlight;
-import com.untiedgames.TileBeanEngine.Input;
 import com.untiedgames.TileBeanEngine.Object2D;
 import com.untiedgames.TileBeanEngine.Object2DHandle;
 import com.untiedgames.TileBeanEngine.TileBeanEngine;
