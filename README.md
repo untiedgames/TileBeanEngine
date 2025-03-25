@@ -4,6 +4,9 @@
 
 TileBeanEngine is a basic Java game engine designed for learning.
 This engine is intended to be a slight step up in difficulty compared to what one might learn in school, and is closer to a real-world engine experience.
+It's built on top of [libGDX](https://github.com/libgdx/libgdx) and has [Dear ImGui](https://github.com/ocornut/imgui) support via [ImGui Java](https://github.com/SpaiR/imgui-java).
+
+Despite being built using libGDX, TileBeanEngine intentionally utilizes its types and patterns as little as possible, to deliver a more "platform-agnostic" view of a game engine.
 
 ## Features
 
