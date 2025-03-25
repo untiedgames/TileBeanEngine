@@ -139,18 +139,18 @@ public class Tilemap extends Drawable {
 			}
 		}
 
-		Matrix4 original_matrix = spritebatch.getTransformMatrix();
+		Matrix4 original_matrix = spritebatch.getTransformMatrix().cpy();
 		Matrix4 m = new Matrix4();
 		m.scale(obj.scale_x, obj.scale_y, 0);
 		m.translate(obj.x, obj.y, 0);
 		if (obj.rotation != 0.0f) m.rotate(0, 0, 1, obj.rotation * 180.0f / (float)Math.PI);
-		spritebatch.setTransformMatrix(original_matrix.mul(m));
+		Matrix4 transform_matrix = original_matrix.cpy().mul(m);
+		spritebatch.setTransformMatrix(transform_matrix);
 
 		spritebatch.setColor(obj.r, obj.g, obj.b, obj.a);
 
 		ShapeRenderer shaperenderer = TileBeanEngine.getShapeRenderer();
 		ArrayList<Float> collision_verts = null;
-		int collision_vert_ctr = 0;
 		if (show_collision) {
 			collision_verts = new ArrayList<>();
 		}
@@ -191,7 +191,7 @@ public class Tilemap extends Drawable {
 			// Draw the collision shapes using the vertices which we calculated earlier
 			spritebatch.end();
 			shaperenderer.setColor(1, 0, 0, 1);
-			shaperenderer.setTransformMatrix(spritebatch.getTransformMatrix());
+			shaperenderer.setTransformMatrix(transform_matrix);
 			shaperenderer.begin();
 			shaperenderer.set(ShapeType.Filled);
 
