@@ -1,6 +1,8 @@
 package com.untiedgames.TileBeanEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.untiedgames.TileBeanEngine.Demo.DemoAnimation;
 import com.untiedgames.TileBeanEngine.Demo.DemoCamera;
 import com.untiedgames.TileBeanEngine.Demo.DemoColliders;
@@ -26,11 +28,16 @@ public class Main extends ApplicationAdapter {
 	ImInt current_demo = new ImInt(4);
 	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera", "Tilemap Basics", "Tilemap Loading (*.tmx)", "Colliders", "Tilemap Collision" };
 	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera(), new DemoTilemap(), new DemoTilemapLoading(), new DemoColliders(), new DemoTilemapCollision() };
+	String version_str;
 
 	class TestGame extends Game {
 		
 		public void initialize() {
 			demos[current_demo.get()].initialize();
+			FileHandle f = Gdx.files.internal("version.txt");
+			if (f.exists()) {
+				version_str = " v" + f.readString();
+			}
 		}
 
 		public void shutdown() {
@@ -51,7 +58,7 @@ public class Main extends ApplicationAdapter {
 			ImGui.setNextWindowSize(300, io.getDisplaySizeY(), ImGuiCond.Once);
 			ImGui.setNextWindowSizeConstraints(300, io.getDisplaySizeY(), 500, io.getDisplaySizeY());
 			
-			ImGui.begin("TileBeanEngine Demo", null, ImGuiWindowFlags.NoDocking);
+			ImGui.begin("TileBeanEngine Demo" + version_str, null, ImGuiWindowFlags.NoDocking);
 			ImGui.textWrapped("Welcome to TileBeanEngine! You're running the engine JAR, which also functions as a little demo suite. Use the dropdown below to change demos.");
 			
 			ImGui.checkbox("Show ImGui demo window", show_demo_window);

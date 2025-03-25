@@ -51,6 +51,13 @@ configure(subprojects) {
   }
   processResources.dependsOn 'generateAssetList'
 
+  tasks.register('generateVersionFile') {
+    File version_file = new File("${project.rootDir}/assets/version.txt")
+    version_file.delete()
+    version_file.append("$projectVersion")
+  }
+  processResources.dependsOn 'generateVersionFile'
+
   compileJava {
     options.incremental = true
   }
