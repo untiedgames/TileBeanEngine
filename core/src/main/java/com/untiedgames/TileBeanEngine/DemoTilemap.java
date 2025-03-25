@@ -64,6 +64,7 @@ public class DemoTilemap extends Game {
 		MouseState mouse_state_prev = TileBeanEngine.input.getMouseStatePrev();
 
 		if (mouse_state.isMiddleButtonPressed()) {
+			// Pan the camera
 			float window_width = TileBeanEngine.getWindowWidth();
 			float window_height = TileBeanEngine.getWindowHeight();
 			float sc = 1;
@@ -75,17 +76,30 @@ public class DemoTilemap extends Game {
 			obj_cam.y -= (dy / obj_cam.z) / sc;
 		}
 
+		int selected_tile_x = (int)Math.floor(mouse_state.getWorldX() / tilemap.getTileWidth());
+		int selected_tile_y = (int)Math.floor(mouse_state.getWorldY() / tilemap.getTileHeight());
+
 		if (mouse_state.isRightButtonPressed()) {
-			selected_tile = tilemap.getTileID((int)(mouse_state.getWorldX() / tilemap.getTileWidth()), (int)(mouse_state.getWorldY() / tilemap.getTileHeight()));
+			// Pick a tile
+			selected_tile = tilemap.getTileID(selected_tile_x, selected_tile_y);
 		}
 
 		if (mouse_state.isLeftButtonPressed()) {
-			tilemap.placeTile(selected_tile, (int)(mouse_state.getWorldX() / tilemap.getTileWidth()), (int)(mouse_state.getWorldY() / tilemap.getTileHeight()));
+			// Place a tile
+			tilemap.placeTile(selected_tile, selected_tile_x, selected_tile_y);
 		}
 
+		// Zoom the camera
 		float scroll = mouse_state.getScrollY() - mouse_state_prev.getScrollY();
 		obj_cam.z -= scroll;
 		if (obj_cam.z <= 1) obj_cam.z = 1;
+
+		// Highlight the grid cell the mouse is over
+		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class.hashCode());
+		grid.highlights.clear();
+		GridHighlight highlight = new GridHighlight(selected_tile_x, selected_tile_y);
+		highlight.line_thickness = 2;
+		grid.highlights.add(highlight);
 	}
 
 	public void runGUI() {
