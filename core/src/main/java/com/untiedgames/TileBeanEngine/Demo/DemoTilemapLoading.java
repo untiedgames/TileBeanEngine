@@ -20,7 +20,7 @@ public class DemoTilemapLoading extends Game {
 
 	public void initialize() {
 		// Load a tileset asset.
-		TilesetAsset tileset_asset = new TilesetAsset("tileset", "map/grasslands_tileset.tsx");
+		TilesetAsset tileset_asset = new TilesetAsset("tileset", "map/grasslands_tileset/grasslands_tileset.tsx");
 		tileset_asset.load();
 		TilesetAssetHandle tileset_handle = TileBeanEngine.assets.add(tileset_asset);
 

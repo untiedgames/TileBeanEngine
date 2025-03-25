@@ -120,6 +120,7 @@ public class TilesetAsset extends Asset {
 			}
 
 			if (texture_path.contains("..")) {
+				if (file_mode == FILEMODE.INTERNAL) System.err.println("Warning: Relative paths are not officially supported in libGDX using the \"internal\" loading mode. This may not work.");
 				// Path in tsx file is a relative path, so try to construct a valid path using the path to the tsx file as a base.
 				try {
 					texture_path = path.substring(0, path.lastIndexOf("/") + 1) + texture_path;
@@ -127,6 +128,8 @@ public class TilesetAsset extends Asset {
 					System.err.println("Failed to construct path from relative path in *.tsx file: \"" + path + "\"\nPath: \"" + texture_path + "\"");
 					return false;
 				}
+			} else {
+				if (file_mode == FILEMODE.INTERNAL) texture_path = path.substring(0, path.lastIndexOf('/') + 1) + texture_path; // Assume the texture is in the same directory.
 			}
 			texture_asset = new TextureAsset(texture_path);
 		}

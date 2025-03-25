@@ -42,7 +42,7 @@ public class DemoTilemapCollision extends Game {
 		TileBeanEngine.show_colliders = true; // Start the demo with colliders visible.
 
 		// Load a tileset asset.
-		TilesetAsset tileset_asset = new TilesetAsset("tileset", "map/grasslands_tileset.tsx");
+		TilesetAsset tileset_asset = new TilesetAsset("tileset", "map/grasslands_tileset/grasslands_tileset.tsx");
 		tileset_asset.load();
 		TilesetAssetHandle tileset_handle = TileBeanEngine.assets.add(tileset_asset);
 
@@ -159,7 +159,7 @@ public class DemoTilemapCollision extends Game {
 	}
 
 	public void runGUI() {
-		ImGui.textWrapped("This is a demonstration of Collider vs. Tilemap collision.\nUse the keyboard's left/right/up/down arrows to move the Collider. (*If you interact with the GUI you may need to click back into the game area before it accepts keyboard input again.)");
+		ImGui.textWrapped("This is a demonstration of Collider vs. Tilemap collision.\nUse the keyboard's left/right/up/down arrows to move the Collider.\n(*If you interact with the GUI you may need to click back into the game area before it accepts keyboard input again.)");
 
 		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
 		
