@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 
 public class Grid extends Drawable {
 
@@ -43,6 +44,16 @@ public class Grid extends Drawable {
 		shaperenderer.setColor(obj.r, obj.g, obj.b, obj.a);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+		Matrix4 original_matrix = shaperenderer.getTransformMatrix().cpy();
+		Matrix4 m = new Matrix4();
+		m.scale(obj.scale_x, obj.scale_y, 0);
+		m.translate(obj.x, obj.y, 0);
+		if (obj.rotation != 0.0f) m.rotate(0, 0, 1, obj.rotation * 180.0f / (float)Math.PI);
+		Matrix4 transform_matrix = original_matrix.cpy().mul(m);
+		shaperenderer.setTransformMatrix(transform_matrix);
+		shaperenderer.setColor(obj.r, obj.g, obj.b, obj.a);
+
 		shaperenderer.begin();
 		
 		float line_length_horiz = width * cell_width;
@@ -89,6 +100,7 @@ public class Grid extends Drawable {
 		}
 
 		shaperenderer.end();
+		shaperenderer.setTransformMatrix(original_matrix);
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		spritebatch.begin();
 	}
