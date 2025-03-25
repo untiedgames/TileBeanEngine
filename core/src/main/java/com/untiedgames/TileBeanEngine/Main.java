@@ -14,9 +14,9 @@ import imgui.type.ImInt;
 public class Main extends ApplicationAdapter {
 
 	ImBoolean show_demo_window = new ImBoolean(false); // Whether or not to show the Dear ImGui demo window
-	ImInt current_demo = new ImInt(7);
-	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera", "Tilemap Basics", "Tilemap Loading (*.tmx)", "Colliders" };
-	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera(), new DemoTilemap(), new DemoTilemapLoading(), new DemoColliders() };
+	ImInt current_demo = new ImInt(8);
+	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera", "Tilemap Basics", "Tilemap Loading (*.tmx)", "Colliders", "Tilemap Collision" };
+	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera(), new DemoTilemap(), new DemoTilemapLoading(), new DemoColliders(), new DemoTilemapCollision() };
 
 	class TestGame extends Game {
 		

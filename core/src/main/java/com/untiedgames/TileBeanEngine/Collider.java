@@ -83,7 +83,7 @@ public class Collider extends Component {
 	 */
 	public float[] getTransformedVertices() {
 		Optional<Object2D> opt_obj = TileBeanEngine.world.tryGet(getOwner());
-		if (!opt_obj.isPresent()) return new float[0];
+		if (!opt_obj.isPresent()) return vertices.clone();
 		Object2D obj = opt_obj.get();
 
 		// Get the parent object's transformation matrix, so we can calculate where our Collider's vertices are in that space.

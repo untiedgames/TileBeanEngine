@@ -1,10 +1,10 @@
 package com.untiedgames.TileBeanEngine;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.untiedgames.TileBeanEngine.TilesetAsset.TileInfo;
 
 public class Collision {
 
@@ -14,7 +14,7 @@ public class Collision {
 	}
 
 	/**
-	 * Detect a potential collision between two colliders.
+	 * Detect a potential collision between two Colliders.
 	 * Returns a CollisionInfo containing the collision result. If there was no collision, it will indicate that via CollisionInfo.exists.
 	 */
 	public static CollisionInfo detect(Collider first, Collider second) {
@@ -38,10 +38,6 @@ public class Collision {
 			- "Know" ahead of time when a collider is an axis-aligned bounding box (AABB), which enables simpler calculations
 
 		*/
-
-		Optional<Object2D> opt_obj_first = TileBeanEngine.world.tryGet(first.getOwner());
-		Optional<Object2D> opt_obj_second = TileBeanEngine.world.tryGet(second.getOwner());
-		if (!opt_obj_first.isPresent() || !opt_obj_second.isPresent()) return ret;
 
 		// First, we'll get the transformation matrix for each object, and use it to calculate where the collider's vertices are in that space.
 
@@ -172,8 +168,87 @@ public class Collision {
 		return ret;
 	}
 
-	public static CollisionInfo detect(Collider collider, Tilemap tilemap) {
-		return null;
+	private static Collider temp_collider = new Collider(); // We'll use this during tilemap collision.
+
+	/**
+	 * Detect potential collisions between a Collider and a Tilemap.
+	 * Collider vs. Tilemap collision does NOT support rotated Tilemaps, for simplicity.
+	 * Because a Tilemap has multiple tiles, it represents (effectively) a collection of colliders.
+	 * Therefore, an array is returned as there may be more than one collision detected.
+	 * The user can then process the array and react to the tiles that have been collided with.
+	 */
+	public static TileCollisionInfo[] detect(Collider collider, Tilemap tilemap) {
+		Optional<Object2D> opt_obj_tilemap = TileBeanEngine.world.tryGet(tilemap.getOwner());
+		if (!opt_obj_tilemap.isPresent()) return new TileCollisionInfo[0];
+		Object2D obj_tilemap = opt_obj_tilemap.get();
+		Optional<TilesetAsset> opt_tileset_asset = TileBeanEngine.assets.tryGet(tilemap.getTileset());
+		if (!opt_tileset_asset.isPresent()) return new TileCollisionInfo[0];
+		TilesetAsset tileset_asset = opt_tileset_asset.get();
+		
+		// First, we'll get the transformed vertices of the collider and determine its bounding box.
+
+		float[] verts = collider.getTransformedVertices();
+		
+		float left = Float.MAX_VALUE;
+		float right = -Float.MAX_VALUE;
+		float top = Float.MAX_VALUE;
+		float bottom = -Float.MAX_VALUE;
+		for (int i = 0; i < verts.length; i += 2) {
+			if (verts[i] < left) left = verts[i];
+			if (verts[i] > right) right = verts[i];
+			if (verts[i + 1] < top) top = verts[i + 1];
+			if (verts[i + 1] > bottom) bottom = verts[i + 1];
+		}
+
+		// Now that we have a bounding box, we can use it to determine which tiles we're over.
+		
+		// Account for the Tilemap's position (and scale)
+		float tilemap_scaled_x = obj_tilemap.x * obj_tilemap.scale_x;
+		float tilemap_scaled_y = obj_tilemap.y * obj_tilemap.scale_y;
+		left -= tilemap_scaled_x;
+		right -= tilemap_scaled_x;
+		top -= tilemap_scaled_y;
+		bottom -= tilemap_scaled_y;
+
+		// Account for the Tilemap's scale
+		float tile_width = (float)tilemap.getTileWidth() * obj_tilemap.scale_x;
+		float tile_height = (float)tilemap.getTileHeight() * obj_tilemap.scale_y;
+
+		// Note: Rotated Tilemaps are not supported by this implementation of collision, so we don't account for rotation here.
+
+		ArrayList<TileCollisionInfo> ret = new ArrayList<>();
+		int y_start = Math.max(0, (int)(top / tile_height));
+		int y_end = Math.min(tilemap.getHeight() - 1, (int)(bottom / tile_height));
+		int x_start = Math.max(0, (int)(left / tile_width));
+		int x_end = Math.min(tilemap.getWidth() - 1, (int)(right / tile_width));
+		for (int y = y_start; y <= y_end; y++) {
+			for (int x = x_start; x <= x_end; x++) {
+				int id = tilemap.getTileID(x, y);
+				if (id == Integer.MAX_VALUE) continue; // Unassigned tile, nothing to do
+				TileInfo tile = tileset_asset.getTileInfo(id);
+				TileCollisionShape shape = PrimitiveTileCollisionShape.get(tile.getTileType());
+				if (temp_collider.vertices.length != shape.count()) temp_collider.vertices = new float[shape.count()];
+				for (int i = 0; i < shape.count(); i++) {
+					if (i % 2 == 0) temp_collider.vertices[i] = tilemap_scaled_x + (x + shape.get(i)) * tile_width;
+					else temp_collider.vertices[i] = tilemap_scaled_y + (y + shape.get(i)) * tile_height;
+				}
+				CollisionInfo info = detect(collider, temp_collider);
+				if (info.exists) {
+					TileCollisionInfo tile_collision_info = new TileCollisionInfo();
+					tile_collision_info.collider = collider;
+					tile_collision_info.tile_id = tile.getID();
+					tile_collision_info.tile_x = x;
+					tile_collision_info.tile_y = y;
+					tile_collision_info.penetration_x = info.penetration_x;
+					tile_collision_info.penetration_y = info.penetration_y;
+					tile_collision_info.axis_x = info.axis_x;
+					tile_collision_info.axis_y = info.axis_y;
+					ret.add(tile_collision_info);
+				}
+			}
+		}
+
+		return ret.toArray(new TileCollisionInfo[0]);
 	}
 
 	public static void resolve(CollisionInfo info) {
@@ -202,6 +277,28 @@ public class Collision {
 				obj.x += info.penetration_x * modifier;
 				obj.y += info.penetration_y * modifier;
 			}
+		}
+	}
+
+	public static void resolve(TileCollisionInfo[] info_list) {
+		if (info_list.length == 0) return; // There is no collision to resolve.
+
+		Optional<Object2D> opt_obj = TileBeanEngine.world.tryGet(info_list[0].collider.getOwner());
+		if (opt_obj.isPresent()) {
+			Object2D obj = opt_obj.get();
+			
+			// Determine the MAXIMUM resolution and resolve it.
+			// We're going to separate it into the maximum of both the X and Y components, rather than use the maximum magnitude of each penetration vector.
+			// The reason we use the maximum resolution and split the components is because doing so yields more favorable results in practice for platformer games.
+			float max_x = 0;
+			float max_y = 0;
+			for (int i = 0; i < info_list.length; i++) {
+				TileCollisionInfo info = info_list[i];
+				if (Math.abs(info.penetration_x) > Math.abs(max_x)) max_x = info.penetration_x;
+				if (Math.abs(info.penetration_y) > Math.abs(max_y)) max_y = info.penetration_y;
+			}
+			obj.x -= max_x;
+			obj.y -= max_y;
 		}
 	}
 
