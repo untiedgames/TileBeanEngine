@@ -1,7 +1,8 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.untiedgames.TileBeanEngine.GenArrayKey;
 
 /*
  * An Asset holds data used in the game, which could be an image, animation, sound, or more.

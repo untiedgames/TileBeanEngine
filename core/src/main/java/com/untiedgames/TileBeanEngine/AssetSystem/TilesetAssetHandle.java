@@ -1,4 +1,6 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
+
+import com.untiedgames.TileBeanEngine.GenArrayKey;
 
 /**
  * A TilesestAssetHandle is a way to access tileset assets in the asset manager.

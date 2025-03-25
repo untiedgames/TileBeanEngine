@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.untiedgames.TileBeanEngine.AssetSystem.AssetManager;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -147,6 +148,22 @@ public class TileBeanEngine {
 		if (opt_cam.isPresent()) {
 			((Camera)opt_cam.get()).setSize(render_target_width, render_target_height);
 		}
+	}
+
+	public static int getResolutionX() {
+		return render_target_width;
+	}
+
+	public static int getResolutionY() {
+		return render_target_height;
+	}
+
+	public static int getDefaultResolutionX() {
+		return default_render_target_width;
+	}
+
+	public static int getDefaultResolutionY() {
+		return default_render_target_height;
 	}
 
 	public static float getWindowX() {

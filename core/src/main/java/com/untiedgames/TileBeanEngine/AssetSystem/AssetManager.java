@@ -1,7 +1,10 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
 
 import java.util.HashMap;
 import java.util.Optional;
+
+import com.untiedgames.TileBeanEngine.GenArray;
+import com.untiedgames.TileBeanEngine.GenArrayEntry;
 
 /*
  * AssetManager holds all the graphics, sounds, and music for the game.

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.badlogic.gdx.math.Vector2;
-import com.untiedgames.TileBeanEngine.TilesetAsset.TileInfo;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAsset.TileInfo;
 
 public class Collision {
 

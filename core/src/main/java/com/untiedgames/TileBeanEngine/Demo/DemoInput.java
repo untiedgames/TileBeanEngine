@@ -1,6 +1,18 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.Demo;
 
 import com.badlogic.gdx.audio.Sound;
+import com.untiedgames.TileBeanEngine.Game;
+import com.untiedgames.TileBeanEngine.Input;
+import com.untiedgames.TileBeanEngine.Object2D;
+import com.untiedgames.TileBeanEngine.Object2DHandle;
+import com.untiedgames.TileBeanEngine.Sprite;
+import com.untiedgames.TileBeanEngine.TileBeanEngine;
+import com.untiedgames.TileBeanEngine.AssetSystem.SoundAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.SoundAssetHandle;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
+import com.untiedgames.TileBeanEngine.Input.InputState;
+import com.untiedgames.TileBeanEngine.Input.Keys;
 import com.untiedgames.TileBeanEngine.Input.MouseState;
 
 import imgui.ImGui;

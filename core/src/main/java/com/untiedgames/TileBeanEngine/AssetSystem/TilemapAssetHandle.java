@@ -1,4 +1,6 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
+
+import com.untiedgames.TileBeanEngine.GenArrayKey;
 
 /** A TilemapAssetHandle is a way to access sound assets in the asset manager.
  * If an asset is removed from the asset manager, any handles that once referred to it become invalid.

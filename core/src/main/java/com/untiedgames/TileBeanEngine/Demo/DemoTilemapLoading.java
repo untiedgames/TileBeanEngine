@@ -1,6 +1,15 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.Demo;
 
 import java.util.Optional;
+
+import com.untiedgames.TileBeanEngine.Game;
+import com.untiedgames.TileBeanEngine.Object2D;
+import com.untiedgames.TileBeanEngine.Object2DHandle;
+import com.untiedgames.TileBeanEngine.TileBeanEngine;
+import com.untiedgames.TileBeanEngine.Tilemap;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilemapAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAssetHandle;
 
 import imgui.ImGui;
 import imgui.type.ImBoolean;

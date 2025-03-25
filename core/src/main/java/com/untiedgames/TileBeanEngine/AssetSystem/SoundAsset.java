@@ -1,46 +1,48 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
 
 import java.util.Optional;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 
 /**
- * MusicAsset is an asset type which can hold longer audio data.
+ * SoundAsset is an asset type which can hold short audio data.
  * LibGDX differentiates between "sound" and "music" based on file size, which is unusual but we're going to roll with it.
  * The file size limit for a libGDX Sound is 1 MB (1000000 b), whereas a libGDX Music has no file size limit.
  */
-public class MusicAsset extends Asset {
+public class SoundAsset extends Asset {
 
-	private Music music;
+	private Sound sound;
 	
-	public MusicAsset(String name_and_path) {
+	public SoundAsset(String name_and_path) {
 		this(name_and_path, name_and_path, FILEMODE.INTERNAL);
 	}
 
-	public MusicAsset(String name, String path) {
+	public SoundAsset(String name, String path) {
 		this(name, path, FILEMODE.INTERNAL);
 	}
 
-	public MusicAsset(String name, String path, FILEMODE file_mode) {
+	public SoundAsset(String name, String path, FILEMODE file_mode) {
 		super(name, path, file_mode);
 	}
 
 	public boolean isLoaded() {
-		return music != null;
+		return sound != null;
 	}
 
 	/**
-	 * Loads the MusicAsset from its path.
+	 * Loads the SoundAsset from its path.
 	 * Returns true on success, false otherwise.
 	 * If it cannot be loaded, an error message will be printed in the console.
 	 */
 	public boolean load() {
-		if (music != null) return true; // Asset is already loaded
+		if (sound != null) return true; // Asset is already loaded
 		try {
 			FileHandle file = makeFileHandle(path, file_mode);
-			music = Gdx.audio.newMusic(file);
+			if (file.file().length() < 1000000) {
+				sound = Gdx.audio.newSound(file);
+			} else return false; // libGDX Sound class only supports file sizes under 1 MB
 			return true;
 		} catch (Exception e) {
 			System.err.println("Failed to load sound asset \"" + path + "\", file mode " + file_mode.toString() + "\nDetails: " + e.getMessage());
@@ -49,20 +51,20 @@ public class MusicAsset extends Asset {
 	}
 
 	/**
-	 * Unloads the MusicAsset, performing any destruction of resources required.
+	 * Unloads the SoundAsset, performing any destruction of resources required.
 	 */
 	public void unload() {
-		if (music != null) {
-			music.dispose();
-			music = null;
+		if (sound != null) {
+			sound.dispose();
+			sound = null;
 		}
 	}
 
 	/**
-	 * Returns the libGDX Music instance that this MusicAsset owns.
+	 * Returns the libGDX Sound instance that this SoundAsset owns.
 	 */
-	public Optional<Music> getMusic() {
-		return Optional.of(music);
+	public Optional<Sound> getSound() {
+		return Optional.of(sound);
 	}
 
 }

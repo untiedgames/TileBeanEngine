@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
-import com.untiedgames.TileBeanEngine.TilesetAsset.TileInfo;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAssetHandle;
+import com.untiedgames.TileBeanEngine.AssetSystem.TilesetAsset.TileInfo;
 
 public class Tilemap extends Drawable {
 

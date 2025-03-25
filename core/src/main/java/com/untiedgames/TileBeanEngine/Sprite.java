@@ -3,6 +3,8 @@ import java.util.Optional;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
 
 /**
  * Sprite is the main way to display things in TileBeanEngine.

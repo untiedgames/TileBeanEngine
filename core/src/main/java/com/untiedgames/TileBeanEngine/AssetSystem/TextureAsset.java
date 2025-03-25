@@ -1,4 +1,4 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
 
 import java.util.ArrayList;
 import java.util.Scanner;

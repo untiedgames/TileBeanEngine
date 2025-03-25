@@ -1,6 +1,14 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.Demo;
 
 import com.badlogic.gdx.Gdx;
+import com.untiedgames.TileBeanEngine.Camera;
+import com.untiedgames.TileBeanEngine.Game;
+import com.untiedgames.TileBeanEngine.Object2D;
+import com.untiedgames.TileBeanEngine.Object2DHandle;
+import com.untiedgames.TileBeanEngine.Sprite;
+import com.untiedgames.TileBeanEngine.TileBeanEngine;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
 
 import imgui.ImGui;
 import imgui.type.ImBoolean;
@@ -30,7 +38,7 @@ public class DemoCamera extends Game {
 	public void shutdown() {
 		TileBeanEngine.assets.clear();
 		TileBeanEngine.world.clear();
-		TileBeanEngine.setResolution(TileBeanEngine.default_render_target_width, TileBeanEngine.default_render_target_height);
+		TileBeanEngine.setResolution(TileBeanEngine.getDefaultResolutionX(), TileBeanEngine.getDefaultResolutionY());
 		TileBeanEngine.setRenderFPS(Gdx.graphics.getDisplayMode().refreshRate + 1);
 	}
 

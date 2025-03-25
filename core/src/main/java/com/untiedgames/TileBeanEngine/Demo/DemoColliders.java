@@ -1,5 +1,17 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.Demo;
 
+import com.untiedgames.TileBeanEngine.Collider;
+import com.untiedgames.TileBeanEngine.Collision;
+import com.untiedgames.TileBeanEngine.CollisionInfo;
+import com.untiedgames.TileBeanEngine.Game;
+import com.untiedgames.TileBeanEngine.Input;
+import com.untiedgames.TileBeanEngine.Object2D;
+import com.untiedgames.TileBeanEngine.Object2DHandle;
+import com.untiedgames.TileBeanEngine.Sprite;
+import com.untiedgames.TileBeanEngine.TBEMath;
+import com.untiedgames.TileBeanEngine.TileBeanEngine;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
 import com.untiedgames.TileBeanEngine.Collision.RESPONSE;
 import com.untiedgames.TileBeanEngine.Input.MouseState;
 

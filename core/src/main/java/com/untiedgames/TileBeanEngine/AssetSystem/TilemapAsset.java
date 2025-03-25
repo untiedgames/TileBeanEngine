@@ -1,10 +1,11 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
 
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.untiedgames.TileBeanEngine.Tilemap;
 
 /**
  * TilemapAsset is an asset which can hold level data loaded from a Tiled *.tmx file.

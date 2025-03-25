@@ -1,4 +1,4 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.AssetSystem;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
+import com.untiedgames.TileBeanEngine.TileCollisionShape;
 
 /**
  * TilesetAsset is an asset which can hold a tileset.

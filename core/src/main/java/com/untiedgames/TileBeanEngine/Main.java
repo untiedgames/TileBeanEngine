@@ -1,6 +1,15 @@
 package com.untiedgames.TileBeanEngine;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.untiedgames.TileBeanEngine.Demo.DemoAnimation;
+import com.untiedgames.TileBeanEngine.Demo.DemoCamera;
+import com.untiedgames.TileBeanEngine.Demo.DemoColliders;
+import com.untiedgames.TileBeanEngine.Demo.DemoInput;
+import com.untiedgames.TileBeanEngine.Demo.DemoObject2D;
+import com.untiedgames.TileBeanEngine.Demo.DemoTilemap;
+import com.untiedgames.TileBeanEngine.Demo.DemoTilemapCollision;
+import com.untiedgames.TileBeanEngine.Demo.DemoTilemapLoading;
+import com.untiedgames.TileBeanEngine.Demo.DemoTweenAndTimer;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;

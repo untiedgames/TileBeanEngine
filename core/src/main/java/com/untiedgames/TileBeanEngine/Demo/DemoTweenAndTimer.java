@@ -1,4 +1,21 @@
-package com.untiedgames.TileBeanEngine;
+package com.untiedgames.TileBeanEngine.Demo;
+
+import com.untiedgames.TileBeanEngine.Component;
+import com.untiedgames.TileBeanEngine.Game;
+import com.untiedgames.TileBeanEngine.Object2D;
+import com.untiedgames.TileBeanEngine.Object2DHandle;
+import com.untiedgames.TileBeanEngine.Sprite;
+import com.untiedgames.TileBeanEngine.TileBeanEngine;
+import com.untiedgames.TileBeanEngine.TimerInstance;
+import com.untiedgames.TileBeanEngine.TimerManager;
+import com.untiedgames.TileBeanEngine.Tween;
+import com.untiedgames.TileBeanEngine.TweenColor;
+import com.untiedgames.TileBeanEngine.TweenLocation;
+import com.untiedgames.TileBeanEngine.TweenRotation;
+import com.untiedgames.TileBeanEngine.TweenScale;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAsset;
+import com.untiedgames.TileBeanEngine.AssetSystem.TextureAssetHandle;
+import com.untiedgames.TileBeanEngine.Tween.TYPE;
 
 import imgui.ImGui;
 import imgui.type.ImInt;
