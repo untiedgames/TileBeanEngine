@@ -21,7 +21,7 @@ This engine is intended to be a slight step up in difficulty compared to what on
 
 ## Examples
 
-```
+```java
 // Load an animation.
 TextureAsset anim = new TextureAsset("gfx/character/idle.anim");
 anim.load();
@@ -38,7 +38,7 @@ sprite.play();
 TileBeanEngine.world.addComponent(obj_handle, sprite);
 ```
 
-```
+```java
 // Create a new game object.
 Object2D obj = new Object2D();
 Object2DHandle obj_handle = TileBeanEngine.world.add(obj);
@@ -59,7 +59,7 @@ if (timer.isFinished()) {
 }
 ```
 
-```
+```java
 // Create two new game objects.
 Object2D obj = new Object2D();
 Object2DHandle obj_handle = TileBeanEngine.world.add(obj);
