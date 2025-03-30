@@ -67,7 +67,7 @@ public class DemoTweenAndTimer extends Game {
 	private void initializeTween() {
 		// We don't keep track of the last tween mode, so remove any tween component that the object possibly had.
 		for (Component c : TileBeanEngine.world.getComponents(obj_handle)) {
-			if (c instanceof Tween) TileBeanEngine.world.removeComponent(obj_handle, c.getClass().hashCode());
+			if (c instanceof Tween) TileBeanEngine.world.removeComponent(obj_handle, c.getClass());
 		}
 
 		// Reset the object to its initial state
@@ -107,27 +107,27 @@ public class DemoTweenAndTimer extends Game {
 
 	public void update(float delta) {
 		// Check obj_handle's timer. If it's finished, we'll rotate the object using a tween.
-		TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class.hashCode());
+		TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class);
 		TimerInstance timer = timer_manager.get("timer");
 		if (timer.isFinished()) {
 			tween_counter++;
 			switch(mode) {
 				case LOCATION:
-					TweenLocation tween_location = (TweenLocation)TileBeanEngine.world.getComponent(obj_handle, TweenLocation.class.hashCode());
+					TweenLocation tween_location = (TweenLocation)TileBeanEngine.world.getComponent(obj_handle, TweenLocation.class);
 					if (tween_counter % 2 == 0) tween_location.start(tween_type, 2.0f, -200, -200);
 					else tween_location.start(tween_type, 2.0f, 200, 200);
 					break;
 				case ROTATION:
-					TweenRotation tween_rotation = (TweenRotation)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class.hashCode());
+					TweenRotation tween_rotation = (TweenRotation)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class);
 					tween_rotation.start(tween_type, 2.0f, (float)tween_counter * (float)Math.PI * .5f);
 					break;
 				case SCALE:
-					TweenScale tween_scale = (TweenScale)TileBeanEngine.world.getComponent(obj_handle, TweenScale.class.hashCode());
+					TweenScale tween_scale = (TweenScale)TileBeanEngine.world.getComponent(obj_handle, TweenScale.class);
 					if (tween_counter % 2 == 0) tween_scale.start(tween_type, 2.0f, 1, 1);
 					else tween_scale.start(tween_type, 2.0f, 4, 4);
 					break;
 				case COLOR:
-					TweenColor tween_color = (TweenColor)TileBeanEngine.world.getComponent(obj_handle, TweenColor.class.hashCode());
+					TweenColor tween_color = (TweenColor)TileBeanEngine.world.getComponent(obj_handle, TweenColor.class);
 					if (tween_counter % 2 == 0) tween_color.start(Tween.TYPE.EASEOUT, 2.0f, 1, 1, 1, 1);
 					else tween_color.start(tween_type, 2.0f, (float)Math.sin(tween_counter * .1f), (float)Math.sin(tween_counter * .2f), (float)Math.sin(tween_counter * .3f), 1);
 					break;
@@ -163,22 +163,22 @@ public class DemoTweenAndTimer extends Game {
 			Tween tween = null;
 			switch(mode) {
 				case LOCATION:
-					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenLocation.class.hashCode());
+					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenLocation.class);
 					break;
 				case ROTATION:
-					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class.hashCode());
+					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenRotation.class);
 					break;
 				case SCALE:
-					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenScale.class.hashCode());
+					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenScale.class);
 					break;
 				case COLOR:
-					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenColor.class.hashCode());
+					tween = (Tween)TileBeanEngine.world.getComponent(obj_handle, TweenColor.class);
 					break;
 			}
 			tween.type = tween_type;
 		}
 
-		TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class.hashCode());
+		TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class);
 		TimerInstance timer = timer_manager.get("timer");
 		ImGui.text("Timer progress:");
 		ImGui.sameLine();

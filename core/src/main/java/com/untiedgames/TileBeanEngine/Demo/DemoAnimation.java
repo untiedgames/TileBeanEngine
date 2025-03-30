@@ -48,7 +48,7 @@ public class DemoAnimation extends Game {
 
 	private void initializeAnimation() {
 		// Set the graphics of the sprite based on the current animation.
-		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class.hashCode());
+		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class);
 		sprite.setGraphics(TileBeanEngine.assets.getTextureAssetHandle(animation_names[current_animation.get()]));
 		sprite.is_looping = true;
 	}
@@ -62,7 +62,7 @@ public class DemoAnimation extends Game {
 			initializeAnimation();
 		}
 
-		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class.hashCode());
+		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class);
 		
 		if (ImGui.button("Play")) {
 			sprite.play();

@@ -136,7 +136,7 @@ public class Input {
 		if (opt_obj_camera.isPresent()) {
 			Object2D obj_camera = opt_obj_camera.get();
 			if (obj_camera.z != 0.0f) {
-				Optional<Component> opt_cam = TileBeanEngine.world.tryGetComponent(camera_handle, Camera.class.hashCode());
+				Optional<Component> opt_cam = TileBeanEngine.world.tryGetComponent(camera_handle, Camera.class);
 				if (opt_cam.isPresent()) {
 					Camera cam = (Camera)opt_cam.get();
 					if (window_width < window_height) sc = (window_width / (float)cam.getWidth());

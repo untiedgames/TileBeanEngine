@@ -57,7 +57,7 @@ public class DemoTilemapLoading extends Game {
 	public void runGUI() {
 		ImGui.textWrapped("This is a demonstration of loading a Tilemap from a Tiled *.tmx file.");
 
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
+		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class);
 		
 		ImBoolean show_collision = new ImBoolean(tilemap.show_collision);
 		if (ImGui.checkbox("Show Collision", show_collision)) {

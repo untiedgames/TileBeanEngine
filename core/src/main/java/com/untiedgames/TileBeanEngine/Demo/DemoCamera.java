@@ -58,7 +58,7 @@ public class DemoCamera extends Game {
 		
 		Object2DHandle camera_handle = TileBeanEngine.getCameraHandle();
 		Object2D obj = TileBeanEngine.world.get(camera_handle);
-		Camera cam = (Camera)TileBeanEngine.world.getComponent(camera_handle, Camera.class.hashCode());
+		Camera cam = (Camera)TileBeanEngine.world.getComponent(camera_handle, Camera.class);
 		
 		if (ImGui.checkbox("Auto-move camera", auto_move)) {
 			obj.x = 0;

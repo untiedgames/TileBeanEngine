@@ -137,7 +137,7 @@ public class TileBeanEngine {
 		
 		if (render_target != null) render_target.dispose();
 		render_target = new FrameBuffer(Format.RGB888, render_target_width, render_target_height, false);
-		render_target.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		render_target.getColorBufferTexture().setFilter(TextureFilter.Linear, TextureFilter.Nearest);
 
 		if (internal_camera == null) internal_camera = new OrthographicCamera(render_target_width, render_target_height);
 		else {
@@ -146,7 +146,7 @@ public class TileBeanEngine {
 			internal_camera.update();
 		}
 
-		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
+		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class);
 		if (opt_cam.isPresent()) {
 			((Camera)opt_cam.get()).setSize(render_target_width, render_target_height);
 		}
@@ -255,7 +255,7 @@ public class TileBeanEngine {
 	 */
 	public static void setCamera(Object2DHandle handle) {
 		camera_handle = handle;
-		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
+		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class);
 		if (!opt_cam.isPresent()) {
 			System.err.println("Warning: No camera component is present on handle passed to setCamera.");
 		}
@@ -324,7 +324,7 @@ public class TileBeanEngine {
 		
 		// Game loop (drawing)
 
-		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class.hashCode());
+		Optional<Component> opt_cam = world.tryGetComponent(camera_handle, Camera.class);
 		if (opt_cam.isPresent()) {
 			((Camera)opt_cam.get()).setActive();
 		}
@@ -332,7 +332,7 @@ public class TileBeanEngine {
 		ScreenUtils.clear(bg_color);
 		spritebatch.begin();
 		
-		HashSet<Component> drawables_set = world.getComponentsOfClass(Drawable.class.hashCode());
+		HashSet<Component> drawables_set = world.getComponentsOfClass(Drawable.class);
 		ArrayList<Drawable> drawables = new ArrayList<>();
 		for (Component c : drawables_set) drawables.add((Drawable)c);
 		Collections.sort(drawables);
@@ -349,7 +349,7 @@ public class TileBeanEngine {
 		if (show_colliders) {
 			shaperenderer.begin();
 			shaperenderer.setColor(1, 0, 0, 1);
-			HashSet<Component> colliders = world.getComponentsOfClass(Collider.class.hashCode());
+			HashSet<Component> colliders = world.getComponentsOfClass(Collider.class);
 			for (Component c : colliders) {
 				Collider collider = (Collider)c;
 				float[] verts = collider.getTransformedVertices();

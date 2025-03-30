@@ -131,7 +131,7 @@ public class Tilemap extends Drawable {
 		if (opt_cam.isPresent()) {
 			Object2D cam = opt_cam.get();
 			cam_z = cam.z;
-			Optional<Component> opt_cam_component = TileBeanEngine.world.tryGetComponent(cam_handle, Camera.class.hashCode());
+			Optional<Component> opt_cam_component = TileBeanEngine.world.tryGetComponent(cam_handle, Camera.class);
 			if (opt_cam_component.isPresent()) {
 				Camera cam_component = (Camera)opt_cam_component.get();
 				left = (Math.round(cam.x) - cam_component.getWidth() / 2) / tile_width;

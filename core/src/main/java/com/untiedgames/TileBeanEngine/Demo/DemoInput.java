@@ -63,7 +63,7 @@ public class DemoInput extends Game {
 
 	public void update(float delta) {
 		Object2D obj = TileBeanEngine.world.get(obj_handle);
-		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class.hashCode());
+		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class);
 
 		boolean moved = false;
 		boolean can_move = !sprite.getGraphics().equals(tex_asset_char_wow); // If the character is doing the "wow" animation, he can't move.
@@ -131,7 +131,7 @@ public class DemoInput extends Game {
 	public void runGUI() {
 		ImGui.textWrapped("This is a demonstration of handling input from the player, and a small demo of sound playback.\nPress left or right arrows to move, and press spacebar to \"WOW!\"\n\nThe longer you hold spacebar, the louder the \"WOW\" will be. You can hold it up to 1 second to reach 100% volume.\n\nAdditionally, this demo shows the raw mouse position and the mouse position in the game world.");
 		
-		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class.hashCode());
+		Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_handle, Sprite.class);
 		Input.InputState space_state = TileBeanEngine.input.getKeyState(Input.Keys.SPACE);
 		if (space_state.isPressed() || sprite.getGraphics().equals(tex_asset_char_wow)) {
 			ImGui.text("Volume");

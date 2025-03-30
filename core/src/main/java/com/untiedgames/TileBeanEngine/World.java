@@ -191,8 +191,9 @@ public class World {
 	 * Removes a component from an object.
 	 * If the object does not have a component with the specified class hash code, nothing happens.
 	 */
-	public void removeComponent(Object2DHandle handle, int hash) {
+	public void removeComponent(Object2DHandle handle, Class<?> class_type) {
 		if (!handle.isEmpty() || contents.expired(handle)) return; // Invalid or removed handle
+		int hash = class_type.hashCode();
 
 		if (object_component_types.containsKey(handle)) {
 			ArrayList<Integer> obj_types = object_component_types.get(handle);
@@ -219,8 +220,9 @@ public class World {
 	/**
 	 * Retrieves a component of an object with the given class hash code, if present.
 	 */
-	public Optional<Component> tryGetComponent(Object2DHandle handle, int hash) {
+	public Optional<Component> tryGetComponent(Object2DHandle handle, Class<?> class_type) {
 		if (!handle.isEmpty() || contents.expired(handle)) return Optional.empty(); // Invalid or removed handle
+		int hash = class_type.hashCode();
 
 		if (components.containsKey(hash)) {
 			ArrayList<Component> list = components.get(hash);
@@ -234,8 +236,9 @@ public class World {
 	/**
 	 * The less-safe version of tryGetComponent. Use this when you expect the component to be there.
 	 */
-	public Component getComponent(Object2DHandle handle, int hash) {
+	public Component getComponent(Object2DHandle handle, Class<?> class_type) {
 		if (!handle.isEmpty() || contents.expired(handle)) return null; // Invalid or removed handle
+		int hash = class_type.hashCode();
 
 		if (components.containsKey(hash)) {
 			ArrayList<Component> list = components.get(hash);
@@ -264,7 +267,8 @@ public class World {
 	 * For example, if you call getComponentsOfClass(SomeClassDerivedFromSprite.class.hashCode()), you will get all components which are SomeClassDerivedFromSprite,
 	 * whereas if you call getComponentsOfClass(Sprite.class.hashCode()) you will get all components of type Sprite and of type SomeClassDerivedFromSprite.
 	 */
-	public HashSet<Component> getComponentsOfClass(int hash) {
+	public HashSet<Component> getComponentsOfClass(Class<?> class_type) {
+		int hash = class_type.hashCode();
 		HashSet<Component> ret = new HashSet<Component>();
 		for(Integer key : component_type_info.keySet()) {
 			ArrayList<Integer> type_info = component_type_info.get(key);

@@ -91,7 +91,7 @@ public class DemoTilemapCollision extends Game {
 	 * Removes any existing Collider from the second object, and adds a new one based on the demo's current settings.
 	 */
 	private void setupCollision() {
-		TileBeanEngine.world.removeComponent(obj_handle, Collider.class.hashCode());
+		TileBeanEngine.world.removeComponent(obj_handle, Collider.class);
 
 		// Add a Collider component to the second object.
 		Collider c;
@@ -111,9 +111,9 @@ public class DemoTilemapCollision extends Game {
 
 	public void update(float delta) {
 		Object2D obj = TileBeanEngine.world.get(obj_handle);
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
-		Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class.hashCode());
-		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class.hashCode());
+		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class);
+		Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class);
+		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class);
 
 		// Player movement
 		if (TileBeanEngine.input.isKeyDown(Keys.LEFT)) {
@@ -161,7 +161,7 @@ public class DemoTilemapCollision extends Game {
 	public void runGUI() {
 		ImGui.textWrapped("This is a demonstration of Collider vs. Tilemap collision.\nUse the keyboard's left/right/up/down arrows to move the Collider.\n(*If you interact with the GUI you may need to click back into the game area before it accepts keyboard input again.)");
 
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
+		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class);
 		
 		ImBoolean show_collision = new ImBoolean(tilemap.show_collision);
 		if (ImGui.checkbox("Show Tilemap collision", show_collision)) {
@@ -240,10 +240,10 @@ public class DemoTilemapCollision extends Game {
 	 * This function re-does a bit of work done in Collision.detect, just so we can show grid highlights for each tile that the collider is overlapping.
 	 */
 	private void updateGridHighlights() {
-		Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class.hashCode());
+		Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class);
 		Object2D obj_tilemap = TileBeanEngine.world.get(obj_tilemap_handle);
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
-		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class.hashCode());
+		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class);
+		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class);
 
 		float[] verts = collider.getTransformedVertices();
 		

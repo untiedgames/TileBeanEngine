@@ -69,7 +69,7 @@ public class DemoColliders extends Game {
 	 * Removes any existing Collider from the second object, and adds a new one based on the demo's current settings.
 	 */
 	private void setupCollision() {
-		TileBeanEngine.world.removeComponent(obj2_handle, Collider.class.hashCode());
+		TileBeanEngine.world.removeComponent(obj2_handle, Collider.class);
 
 		// Add a Collider component to the second object.
 		Collider c;
@@ -90,8 +90,8 @@ public class DemoColliders extends Game {
 	public void update(float delta) {
 		Object2D obj = TileBeanEngine.world.get(obj_handle);
 		Object2D obj2 = TileBeanEngine.world.get(obj2_handle);
-		Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class.hashCode());
-		Collider collider2 = (Collider)TileBeanEngine.world.getComponent(obj2_handle, Collider.class.hashCode());
+		Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class);
+		Collider collider2 = (Collider)TileBeanEngine.world.getComponent(obj2_handle, Collider.class);
 
 		if (is_rotating.get()) {
 			obj.rotation += .1f * delta;

@@ -67,8 +67,8 @@ public class DemoTilemap extends Game {
 	public void update(float delta) {
 		Object2DHandle camera_handle = TileBeanEngine.getCameraHandle();
 		Object2D obj_cam = TileBeanEngine.world.get(camera_handle);
-		Camera cam = (Camera)TileBeanEngine.world.getComponent(camera_handle, Camera.class.hashCode());
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
+		Camera cam = (Camera)TileBeanEngine.world.getComponent(camera_handle, Camera.class);
+		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class);
 		
 		MouseState mouse_state = TileBeanEngine.input.getMouseState();
 		MouseState mouse_state_prev = TileBeanEngine.input.getMouseStatePrev();
@@ -105,7 +105,7 @@ public class DemoTilemap extends Game {
 		if (obj_cam.z <= 1) obj_cam.z = 1;
 
 		// Highlight the grid cell the mouse is over
-		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class.hashCode());
+		Grid grid = (Grid)TileBeanEngine.world.getComponent(obj_grid_handle, Grid.class);
 		grid.highlights.clear();
 		GridHighlight highlight = new GridHighlight(selected_tile_x, selected_tile_y);
 		highlight.line_thickness = 2;
@@ -122,7 +122,7 @@ public class DemoTilemap extends Game {
 		}
 
 		Object2D obj_grid = TileBeanEngine.world.get(obj_grid_handle);
-		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class.hashCode());
+		Tilemap tilemap = (Tilemap)TileBeanEngine.world.getComponent(obj_tilemap_handle, Tilemap.class);
 
 		ImBoolean is_visible = new ImBoolean(obj_grid.is_visible);
 		if (ImGui.checkbox("Show grid", is_visible)) {
