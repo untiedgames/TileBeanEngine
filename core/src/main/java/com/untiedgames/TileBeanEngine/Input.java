@@ -139,8 +139,12 @@ public class Input {
 				Optional<Component> opt_cam = TileBeanEngine.world.tryGetComponent(camera_handle, Camera.class);
 				if (opt_cam.isPresent()) {
 					Camera cam = (Camera)opt_cam.get();
-					if (window_width < window_height) sc = (window_width / (float)cam.getWidth());
-					else sc = (window_height / (float)cam.getHeight());
+					float cam_w = cam.getWidth();
+					float cam_h = cam.getHeight();
+					float window_aspect_ratio = window_width / window_height;
+					float aspect_ratio = cam_w / cam_h;
+					if (window_aspect_ratio < aspect_ratio) sc = window_width / cam_w;
+					else sc = window_height / cam_h;
 					state_mouse.world_x = ((Gdx.input.getX() - window_width / 2.0f) / obj_camera.z) / sc + obj_camera.x;
 					state_mouse.world_y = ((Gdx.input.getY() - window_height / 2.0f) / obj_camera.z) / sc + obj_camera.y;
 					Vector2 loc = TBEMath.rotateAboutPoint(state_mouse.world_x, state_mouse.world_y, obj_camera.x, obj_camera.y, obj_camera.rotation);
