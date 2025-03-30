@@ -3,6 +3,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -136,6 +137,7 @@ public class TileBeanEngine {
 		
 		if (render_target != null) render_target.dispose();
 		render_target = new FrameBuffer(Format.RGB888, render_target_width, render_target_height, false);
+		render_target.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		if (internal_camera == null) internal_camera = new OrthographicCamera(render_target_width, render_target_height);
 		else {
