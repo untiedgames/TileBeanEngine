@@ -393,4 +393,41 @@ public class AssetManager {
 		return MusicAssetHandle.empty();
 	}
 
+	/**
+	 * Returns true if all assets are loaded, false if not.
+	 */
+	public boolean allAssetsLoaded() {
+		for (GenArrayEntry<TextureAsset, TextureAssetHandle> entry : collection_textures) {
+			if (entry.hasValue()) {
+				if (!entry.getData().get().isLoaded()) return false;
+			}
+		}
+
+		for (GenArrayEntry<TilesetAsset, TilesetAssetHandle> entry : collection_tilesets) {
+			if (entry.hasValue()) {
+				if (!entry.getData().get().isLoaded()) return false;
+			}
+		}
+
+		for (GenArrayEntry<TilemapAsset, TilemapAssetHandle> entry : collection_tilemaps) {
+			if (entry.hasValue()) {
+				if (!entry.getData().get().isLoaded()) return false;
+			}
+		}
+
+		for (GenArrayEntry<SoundAsset, SoundAssetHandle> entry : collection_sounds) {
+			if (entry.hasValue()) {
+				if (!entry.getData().get().isLoaded()) return false;
+			}
+		}
+
+		for (GenArrayEntry<MusicAsset, MusicAssetHandle> entry : collection_music) {
+			if (entry.hasValue()) {
+				if (!entry.getData().get().isLoaded()) return false;
+			}
+		}
+
+		return true;
+	}
+
 }
