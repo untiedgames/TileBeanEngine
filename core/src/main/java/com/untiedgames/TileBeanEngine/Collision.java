@@ -126,7 +126,8 @@ public class Collision {
 			else d = projection2.y - projection1.x;
 
 			float abs_mag = Math.abs(d);
-			if (abs_mag < magnitude) { // We always want to look for the minimum overlap.
+			// We always want to look for the minimum overlap.
+			if (abs_mag < magnitude) {
 				magnitude = abs_mag;
 				ret.penetration_x = -axis.x * d;
 				ret.penetration_y = -axis.y * d;
@@ -156,6 +157,7 @@ public class Collision {
 				else d = projection2.y - projection1.x;
 
 				float abs_mag = Math.abs(d);
+				// We always want to look for the minimum overlap.
 				if (abs_mag < magnitude) {
 					magnitude = abs_mag;
 					ret.penetration_x = -axis.x * d;
@@ -203,7 +205,7 @@ public class Collision {
 
 		// Now that we have a bounding box, we can use it to determine which tiles we're over.
 		
-		// Account for the Tilemap's position (and scale)
+		// Account for the Tilemap's position and scale
 		float tilemap_scaled_x = obj_tilemap.x * obj_tilemap.scale_x;
 		float tilemap_scaled_y = obj_tilemap.y * obj_tilemap.scale_y;
 		left -= tilemap_scaled_x;
@@ -211,11 +213,12 @@ public class Collision {
 		top -= tilemap_scaled_y;
 		bottom -= tilemap_scaled_y;
 
-		// Account for the Tilemap's scale
 		float tile_width = (float)tilemap.getTileWidth() * obj_tilemap.scale_x;
 		float tile_height = (float)tilemap.getTileHeight() * obj_tilemap.scale_y;
 
 		// Note: Rotated Tilemaps are not supported by this implementation of collision, so we don't account for rotation here.
+
+		// Finally, we'll check each tile we're overlapping for any potential collisions.
 
 		ArrayList<TileCollisionInfo> ret = new ArrayList<>();
 		int y_start = Math.max(0, (int)(top / tile_height));
@@ -228,11 +231,17 @@ public class Collision {
 				if (id == Integer.MAX_VALUE) continue; // Unassigned tile, nothing to do
 				TileInfo tile = tileset_asset.getTileInfo(id);
 				TileCollisionShape shape = PrimitiveTileCollisionShape.get(tile.getTileType());
-				if (temp_collider.vertices.length != shape.count()) temp_collider.vertices = new float[shape.count()];
+				if (shape == null) continue; // Primitive not found
+
+				if (temp_collider.vertices.length != shape.count()) {
+					temp_collider.vertices = new float[shape.count()];
+				}
+
 				for (int i = 0; i < shape.count(); i++) {
 					if (i % 2 == 0) temp_collider.vertices[i] = tilemap_scaled_x + (x + shape.get(i)) * tile_width;
 					else temp_collider.vertices[i] = tilemap_scaled_y + (y + shape.get(i)) * tile_height;
 				}
+
 				CollisionInfo info = detect(collider, temp_collider);
 				if (info.exists) {
 					TileCollisionInfo tile_collision_info = new TileCollisionInfo();
@@ -288,15 +297,17 @@ public class Collision {
 		if (opt_obj.isPresent()) {
 			Object2D obj = opt_obj.get();
 			
-			// Determine the MAXIMUM resolution and resolve it.
-			// We're going to separate it into the maximum of both the X and Y components, rather than use the maximum magnitude of each penetration vector.
-			// The reason we use the maximum resolution and split the components is because doing so yields more favorable results in practice for platformer games.
+			// Determine the MAXIMUM (deepest) resolution and resolve it.
+			// The reason we use the maximum resolution is because doing so yields more favorable results in practice for platformer games.
+			// Using the maximum resolution means we can smoothly slide along walls or floors made up of multiple collision boxes with colinear edges.
 			float max_x = 0;
 			float max_y = 0;
 			for (int i = 0; i < info_list.length; i++) {
 				TileCollisionInfo info = info_list[i];
-				if (Math.abs(info.penetration_x) > Math.abs(max_x)) max_x = info.penetration_x;
-				if (Math.abs(info.penetration_y) > Math.abs(max_y)) max_y = info.penetration_y;
+				if (TBEMath.dist(0, 0, info.penetration_x, info.penetration_y) > TBEMath.dist(0, 0, max_x, max_y)) {
+					max_x = info.penetration_x;
+					max_y = info.penetration_y;
+				}
 			}
 			obj.x -= max_x;
 			obj.y -= max_y;
