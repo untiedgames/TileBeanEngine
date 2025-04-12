@@ -70,8 +70,24 @@ public class Collider extends Component {
 
 	protected float[] vertices; // Array of vertices in the format x, y, x, y...
 
+	/**
+	 * Creates a collider with the given vertices.
+	 * The vertices should be provided in the format x, y, x, y...
+	 * The vertices must be specified in winding order, preferably clockwise.
+	 */
 	public Collider(float... vertices) {
 		this.vertices = vertices;
+		if (vertices.length % 2 != 0) throw new Error ("Collider requires a list of vertices in the format x, y, x, y... (An odd number of floats was passed to this constructor.)");
+	}
+
+	/**
+	 * Moves the collider's vertices by the given amount.
+	 */
+	public void offset(float x, float y) {
+		for (int i = 0; i < vertices.length; i += 2) {
+			vertices[i] += x;
+			vertices[i + 1] += y;
+		}
 	}
 
 	public void update(float delta) {}
