@@ -17,7 +17,7 @@ public abstract class GenArrayKey {
 	}
 
 	public boolean isEmpty() {
-		return index != Integer.MAX_VALUE;
+		return index == Integer.MAX_VALUE;
 	}
 
 	public boolean equals(Object obj) {

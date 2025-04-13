@@ -33,7 +33,7 @@ public class AssetManager {
 	public TextureAssetHandle add(TextureAsset asset) {
 		if (asset == null) return TextureAssetHandle.empty();
 		if (asset.handle != null) {
-			if (asset.handle.isEmpty()) return (TextureAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
+			if (!asset.handle.isEmpty()) return (TextureAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
 			else return TextureAssetHandle.empty();
 		}
 		TextureAssetHandle ret = collection_textures.add(asset);
@@ -48,7 +48,7 @@ public class AssetManager {
 	public TilesetAssetHandle add(TilesetAsset asset) {
 		if (asset == null) return TilesetAssetHandle.empty();
 		if (asset.handle != null) {
-			if (asset.handle.isEmpty()) return (TilesetAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
+			if (!asset.handle.isEmpty()) return (TilesetAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
 			else return TilesetAssetHandle.empty();
 		}
 		TilesetAssetHandle ret = collection_tilesets.add(asset);
@@ -63,7 +63,7 @@ public class AssetManager {
 	public TilemapAssetHandle add(TilemapAsset asset) {
 		if (asset == null) return TilemapAssetHandle.empty();
 		if (asset.handle != null) {
-			if (asset.handle.isEmpty()) return (TilemapAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
+			if (!asset.handle.isEmpty()) return (TilemapAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
 			else return TilemapAssetHandle.empty();
 		}
 		TilemapAssetHandle ret = collection_tilemaps.add(asset);
@@ -78,7 +78,7 @@ public class AssetManager {
 	public SoundAssetHandle add(SoundAsset asset) {
 		if (asset == null) return SoundAssetHandle.empty();
 		if (asset.handle != null) {
-			if (asset.handle.isEmpty()) return (SoundAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
+			if (!asset.handle.isEmpty()) return (SoundAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
 			else return SoundAssetHandle.empty();
 		}
 		SoundAssetHandle ret = collection_sounds.add(asset);
@@ -93,7 +93,7 @@ public class AssetManager {
 	public MusicAssetHandle add(MusicAsset asset) {
 		if (asset == null) return MusicAssetHandle.empty();
 		if (asset.handle != null) {
-			if (asset.handle.isEmpty()) return (MusicAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
+			if (!asset.handle.isEmpty()) return (MusicAssetHandle)asset.handle; // Asset has been added to the AssetManager already, simply return its existing handle
 			else return MusicAssetHandle.empty();
 		}
 		MusicAssetHandle ret = collection_music.add(asset);
@@ -106,7 +106,7 @@ public class AssetManager {
 	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
 	 */
 	public void remove(TextureAssetHandle handle) {
-		if (!handle.isEmpty() || collection_textures.expired(handle)) return;
+		if (handle.isEmpty() || collection_textures.expired(handle)) return;
 		Optional<TextureAsset> opt = collection_textures.get(handle);
 		if (opt.isPresent()) {
 			TextureAsset asset = opt.get();
@@ -121,7 +121,7 @@ public class AssetManager {
 	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
 	 */
 	public void remove(TilesetAssetHandle handle) {
-		if (!handle.isEmpty() || collection_tilesets.expired(handle)) return;
+		if (handle.isEmpty() || collection_tilesets.expired(handle)) return;
 		Optional<TilesetAsset> opt = collection_tilesets.get(handle);
 		if (opt.isPresent()) {
 			TilesetAsset asset = opt.get();
@@ -136,7 +136,7 @@ public class AssetManager {
 	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
 	 */
 	public void remove(TilemapAssetHandle handle) {
-		if (!handle.isEmpty() || collection_tilemaps.expired(handle)) return;
+		if (handle.isEmpty() || collection_tilemaps.expired(handle)) return;
 		Optional<TilemapAsset> opt = collection_tilemaps.get(handle);
 		if (opt.isPresent()) {
 			TilemapAsset asset = opt.get();
@@ -151,7 +151,7 @@ public class AssetManager {
 	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
 	 */
 	public void remove(SoundAssetHandle handle) {
-		if (!handle.isEmpty() || collection_sounds.expired(handle)) return;
+		if (handle.isEmpty() || collection_sounds.expired(handle)) return;
 		Optional<SoundAsset> opt = collection_sounds.get(handle);
 		if (opt.isPresent()) {
 			SoundAsset asset = opt.get();
@@ -166,7 +166,7 @@ public class AssetManager {
 	 * Removes an asset from the asset manager. If the asset is loaded, it will be unloaded.
 	 */
 	public void remove(MusicAssetHandle handle) {
-		if (!handle.isEmpty() || collection_music.expired(handle)) return;
+		if (handle.isEmpty() || collection_music.expired(handle)) return;
 		Optional<MusicAsset> opt = collection_music.get(handle);
 		if (opt.isPresent()) {
 			MusicAsset asset = opt.get();
