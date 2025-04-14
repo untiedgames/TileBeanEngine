@@ -97,6 +97,7 @@ public class World {
 		components.clear();
 		object_component_types.clear();
 		object_components.clear();
+		names.clear();
 		TileBeanEngine.setupCamera();
 	}
 
