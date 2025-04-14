@@ -8,6 +8,8 @@ It's built on top of [libGDX](https://github.com/libgdx/libgdx) and has [Dear Im
 
 Despite being built using libGDX, TileBeanEngine intentionally utilizes its types and patterns as little as possible, to deliver a more "platform-agnostic" view of a game engine.
 
+![TileBeanEngine Demo GIF](/gif/tilebeanengine_basic_game_demo.gif)
+
 ## Features
 
 * Well-commented code, explaining the game engine design and structure
@@ -54,7 +56,7 @@ TileBeanEngine.world.addComponent(obj_handle, timer_manager);
 timer_manager.start("timer", 2.0f, -1, false);
 
 // Later, each frame...
-TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class.hashCode());
+TimerManager timer_manager = (TimerManager)TileBeanEngine.world.getComponent(obj_handle, TimerManager.class);
 TimerInstance timer = timer_manager.get("timer");
 if (timer.isFinished()) {
 	// Perform an action
@@ -77,10 +79,10 @@ TileBeanEngine.world.addComponent(obj_handle, c);
 
 // Later, each frame...
 // Retrieve the colliders
-Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class.hashCode());
-Collider collider2 = (Collider)TileBeanEngine.world.getComponent(obj2_handle, Collider.class.hashCode());
+Collider collider = (Collider)TileBeanEngine.world.getComponent(obj_handle, Collider.class);
+Collider collider2 = (Collider)TileBeanEngine.world.getComponent(obj2_handle, Collider.class);
 // Detect collision
 CollisionInfo info = Collision.detect(collider, collider2); // You can examine a CollisionInfo without resolving a collision, or pass it to Collision.resolve to resolve it.
-// Resolve collision
+// Resolve collision (Default: push both objects out of each other)
 Collision.resolve(info);
 ```
