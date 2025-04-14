@@ -3,15 +3,7 @@ package com.untiedgames.TileBeanEngine;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.untiedgames.TileBeanEngine.Demo.DemoAnimation;
-import com.untiedgames.TileBeanEngine.Demo.DemoCamera;
-import com.untiedgames.TileBeanEngine.Demo.DemoColliders;
-import com.untiedgames.TileBeanEngine.Demo.DemoInput;
-import com.untiedgames.TileBeanEngine.Demo.DemoObject2D;
-import com.untiedgames.TileBeanEngine.Demo.DemoTilemap;
-import com.untiedgames.TileBeanEngine.Demo.DemoTilemapCollision;
-import com.untiedgames.TileBeanEngine.Demo.DemoTilemapLoading;
-import com.untiedgames.TileBeanEngine.Demo.DemoTweenAndTimer;
+import com.untiedgames.TileBeanEngine.Demo.*;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -25,9 +17,9 @@ import imgui.type.ImInt;
 public class Main extends ApplicationAdapter {
 
 	ImBoolean show_demo_window = new ImBoolean(false); // Whether or not to show the Dear ImGui demo window
-	ImInt current_demo = new ImInt(4);
-	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera", "Tilemap Basics", "Tilemap Loading (*.tmx)", "Colliders", "Tilemap Collision" };
-	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera(), new DemoTilemap(), new DemoTilemapLoading(), new DemoColliders(), new DemoTilemapCollision() };
+	ImInt current_demo = new ImInt(9);
+	String[] demo_titles = { "Object2D", "Tween & Timer", "Animation", "Input & Sound", "Camera", "Tilemap Basics", "Tilemap Loading (*.tmx)", "Colliders", "Tilemap Collision", "Basic Game Demo" };
+	Game[] demos = { new DemoObject2D(), new DemoTweenAndTimer(), new DemoAnimation(), new DemoInput(), new DemoCamera(), new DemoTilemap(), new DemoTilemapLoading(), new DemoColliders(), new DemoTilemapCollision(), new DemoBasicGame() };
 	String version_str;
 
 	class TestGame extends Game {

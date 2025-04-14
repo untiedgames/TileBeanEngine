@@ -1,0 +1,11 @@
+fps=15
+is_looping=false
+frame=gfx/coin/coin_collected/frame0000.png
+frame=gfx/coin/coin_collected/frame0001.png
+frame=gfx/coin/coin_collected/frame0002.png
+frame=gfx/coin/coin_collected/frame0003.png
+frame=gfx/coin/coin_collected/frame0004.png
+frame=gfx/coin/coin_collected/frame0005.png
+frame=gfx/coin/coin_collected/frame0006.png
+frame=gfx/coin/coin_collected/frame0007.png
+frame=gfx/coin/coin_collected/frame0008.png
