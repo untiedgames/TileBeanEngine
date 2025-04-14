@@ -64,7 +64,34 @@ public class SoundAsset extends Asset {
 	 * Returns the libGDX Sound instance that this SoundAsset owns.
 	 */
 	public Optional<Sound> getSound() {
-		return Optional.of(sound);
+		return Optional.ofNullable(sound);
+	}
+
+	/**
+	 * Plays the sound, if it's loaded successfully.
+	 * Returns the ID of the sound instance. If playback failed or the SoundAsset is not loaded, returns -1.
+	 */
+	public long play() {
+		return play(1, 1, 0, false);
+	}
+
+	/**
+	 * Plays the sound, if it's loaded successfully.
+	 * Volume is in the range of 0 to 1.
+	 * Returns the ID of the sound instance. If playback failed or the SoundAsset is not loaded, returns -1.
+	 */
+	public long play(float volume) {
+		return play(volume, 1, 0, false);
+	}
+
+	/**
+	 * Plays the sound, if it's loaded successfully.
+	 * The parameters must conform to the libGDX expectations.
+	 * Returns the ID of the libGDX sound instance. If playback failed or the SoundAsset is not loaded, returns -1.
+	 */
+	public long play(float volume, float pitch, float pan, boolean is_looping) {
+		if (sound == null) return -1;
+		return sound.play(volume, pitch, pan);
 	}
 
 }

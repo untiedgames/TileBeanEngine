@@ -62,7 +62,49 @@ public class MusicAsset extends Asset {
 	 * Returns the libGDX Music instance that this MusicAsset owns.
 	 */
 	public Optional<Music> getMusic() {
-		return Optional.of(music);
+		return Optional.ofNullable(music);
+	}
+
+	/**
+	 * Plays the music, if it's loaded successfully.
+	 * Music loops by default.
+	 */
+	public void play() {
+		play(1, true);
+	}
+
+	/**
+	 * Plays the music, if it's loaded successfully.
+	 * Volume is in the range of 0 to 1.
+	 * Music loops by default.
+	 */
+	public void play(float volume) {
+		play(volume, true);
+	}
+
+	/**
+	 * Plays the music, if it's loaded successfully.
+	 * Volume is in the range of 0 to 1.
+	 * Music loops by default.
+	 */
+	public void play(float volume, boolean is_looping) {
+		if (music == null) return;
+		music.setVolume(volume);
+		music.setLooping(is_looping);
+		music.play();
+	}
+
+	public boolean isPlaying() {
+		if (music == null) return false;
+		return music.isPlaying();
+	}
+
+	/**
+	 * Sets the volume of the music, if it's currently playing.
+	 */
+	public void setVolume(float volume) {
+		if (music == null) return;
+		if (music.isPlaying()) music.setVolume(volume);
 	}
 
 }
