@@ -1,5 +1,5 @@
 fps=15
-is_looping=true
+is_looping=false
 frame=gfx/wow/appear/frame0000.png
 frame=gfx/wow/appear/frame0001.png
 frame=gfx/wow/appear/frame0002.png

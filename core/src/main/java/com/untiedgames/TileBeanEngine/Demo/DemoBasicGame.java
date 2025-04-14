@@ -99,7 +99,9 @@ public class DemoBasicGame extends Game {
 	
 	// Timer before ending the level if the player wins or loses.
 	float end_level_time = 0;
-	float end_level_time_max = 1.5f;
+	float end_level_time_max = 0;
+	float end_level_time_max_win = 3.0f;
+	float end_level_time_max_loss = 1.5f;
 
 	public void initialize() {
 		////////////////////////
@@ -133,6 +135,14 @@ public class DemoBasicGame extends Game {
 		TextureAsset tex_asset_coin_collected = new TextureAsset("coin_collected", "gfx/coin/coin_collected.anim");
 		tex_asset_coin_collected.load();
 		TileBeanEngine.assets.add(tex_asset_coin_collected);
+
+		TextureAsset tex_asset_wow_appear = new TextureAsset("wow_appear", "gfx/wow/appear.anim");
+		tex_asset_wow_appear.load();
+		TileBeanEngine.assets.add(tex_asset_wow_appear);
+
+		TextureAsset tex_asset_wow_loop = new TextureAsset("wow_loop", "gfx/wow/loop.anim");
+		tex_asset_wow_loop.load();
+		TileBeanEngine.assets.add(tex_asset_wow_loop);
 
 		/////////////////////
 		// Load game audio //
@@ -406,6 +416,7 @@ public class DemoBasicGame extends Game {
 			}
 
 			CollisionInfo player_vs_flag = Collision.detect(collider_player, collider_flag);
+
 			if (player_vs_flag.exists) {
 				if (Math.abs(obj_player.x - obj_flag.x) < 10f) { // The player needs to be close to the flag to win.
 					if (!win_condition) {
@@ -462,6 +473,18 @@ public class DemoBasicGame extends Game {
 						SoundAsset sound_asset_wow = TileBeanEngine.assets.getSoundAsset("sound_wow").get();
 						Sound sound = sound_asset_wow.getSound().get();
 						sfx_wow_id = sound.play();
+
+						// Add a "WOW" speech bubble
+						Object2D obj_wow = new Object2D();
+						obj_wow.x = obj_player.x + 24;
+						obj_wow.y = obj_player.y - 48;
+						obj_wow.z = 99;
+						Object2DHandle obj_wow_handle = TileBeanEngine.world.add(obj_wow, "obj_wow");
+
+						Sprite sprite = new Sprite();
+						sprite.setGraphics(TileBeanEngine.assets.getTextureAssetHandle("wow_appear"));
+						sprite.play();
+						TileBeanEngine.world.addComponent(obj_wow_handle, sprite);
 					}
 				}
 			}
@@ -568,6 +591,20 @@ public class DemoBasicGame extends Game {
 					SoundAsset sound_asset = opt_sound_asset_die.get();
 					sound_asset.play();
 				}
+				end_level_time_max = end_level_time_max_loss;
+			}
+
+			if (win_condition) {
+				Object2DHandle obj_wow_handle = TileBeanEngine.world.getHandle("obj_wow");
+				if (!obj_wow_handle.isEmpty()) {
+					Sprite sprite = (Sprite)TileBeanEngine.world.getComponent(obj_wow_handle, Sprite.class);
+					if (!sprite.isPlaying()) {
+						// Switch the wow sprite to the looping animation
+						sprite.setGraphics(TileBeanEngine.assets.getTextureAssetHandle("wow_loop"));
+						sprite.play();
+					}
+				}
+				end_level_time_max = end_level_time_max_win;
 			}
 
 			if (win_condition || loss_condition) {
