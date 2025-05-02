@@ -88,8 +88,8 @@ public class TBEMath {
 	}
 	
 	public static float elasticOut(float start, float end, float value) {
-		if(value == 0) return 0;
-		if(value == 1) return 1;
+		if(value == 0) return start;
+		if(value == 1) return end;
 		float p = .3f, a = 1, s = p / 4f;
 		return lerp(start, end, a * (float)Math.pow(2, -10 * value) * (float)Math.sin((value - s) * (2f * Math.PI)/p) + 1);
 	}
