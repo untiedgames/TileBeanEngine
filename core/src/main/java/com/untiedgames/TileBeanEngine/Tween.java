@@ -62,8 +62,9 @@ public abstract class Tween extends Component {
 		progress += delta;
 		if (progress >= time) {
 			is_running = false;
+			progress = time;
 		}
-
+		
 		process(type, progress / time, initial_values, target_values, result_values);
 		setValues(result_values);
 	}
