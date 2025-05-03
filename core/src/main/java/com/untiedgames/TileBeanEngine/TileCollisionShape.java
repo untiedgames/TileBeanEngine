@@ -31,6 +31,10 @@ public class TileCollisionShape {
 	public enum TYPE {
 		EMPTY,					// No collision shape.
 		FULL,					// Box collision shape of size { tile_width, tile_height }.
+		HALF_TOP,				// Box collision shape spanning the top half of the tile, with size { tile_width, tile_height / 2 }.
+		HALF_BOTTOM,			// Box collision shape spanning the bottom half of the tile, with size { tile_width, tile_height / 2 }.
+		HALF_LEFT,				// Box collision shape spanning the left half of the tile, with size { tile_width / 2, tile_height }.
+		HALF_RIGHT,				// Box collision shape spanning the right half of the tile, with size { tile_width / 2, tile_height }.
 		SLOPE_FLOOR_LEFT_45,	// 45-degree sloped triangle collision shape with the collision resolution normal facing up-left.
 		SLOPE_FLOOR_RIGHT_45,	// 45-degree sloped triangle collision shape with the collision resolution normal facing up-right.
 		SLOPE_CEIL_LEFT_45,		// 45-degree sloped triangle collision shape with the collision resolution normal facing down-left.
