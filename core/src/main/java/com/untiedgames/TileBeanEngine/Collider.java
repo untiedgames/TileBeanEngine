@@ -69,6 +69,7 @@ public class Collider extends Component {
 	}
 
 	protected float[] vertices; // Array of vertices in the format x, y, x, y...
+	public boolean is_enabled = true;
 
 	/**
 	 * Creates a collider with the given vertices.
@@ -76,6 +77,11 @@ public class Collider extends Component {
 	 * The vertices must be specified in winding order, preferably clockwise.
 	 */
 	public Collider(float... vertices) {
+		setVertices(vertices);
+	}
+
+	// Sets the vertices of this collider to the given array of vertices in the format x, y, x, y...
+	public void setVertices(float... vertices) {
 		this.vertices = vertices;
 		if (vertices.length % 2 != 0) throw new Error ("Collider requires a list of vertices in the format x, y, x, y... (An odd number of floats was passed to this constructor.)");
 	}

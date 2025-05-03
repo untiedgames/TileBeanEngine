@@ -22,7 +22,8 @@ public class Collision {
 		CollisionInfo ret = new CollisionInfo();
 		ret.first = first;
 		ret.second = second;
-
+		if (!first.is_enabled || !second.is_enabled) return ret;
+		
 		/*
 
 		This is a slightly naive implementation of collision: It's competent enough for this demo, but not necessarily performant.
@@ -181,6 +182,8 @@ public class Collision {
 	 * The user can then process the array and react to the tiles that have been collided with.
 	 */
 	public static TileCollisionInfo[] detect(Collider collider, Tilemap tilemap) {
+		if (!collider.is_enabled) return new TileCollisionInfo[0];
+
 		Optional<Object2D> opt_obj_tilemap = TileBeanEngine.world.tryGet(tilemap.getOwner());
 		if (!opt_obj_tilemap.isPresent()) return new TileCollisionInfo[0];
 		Object2D obj_tilemap = opt_obj_tilemap.get();
