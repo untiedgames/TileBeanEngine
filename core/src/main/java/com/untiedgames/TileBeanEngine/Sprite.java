@@ -167,8 +167,14 @@ public class Sprite extends Drawable {
 					int h = texture.getHeight();
 					float w_half = (float)w * .5f;
 					float h_half = (float)h * .5f;
+					float x = obj.x - w_half;
+					float y = obj.y - h_half;
+					if (TileBeanEngine.always_draw_at_ints) {
+						x = (float)Math.floor(x);
+						y = (float)Math.floor(y);
+					}
 					spritebatch.setColor(obj.r, obj.g, obj.b, obj.a);
-					spritebatch.draw(texture, obj.x - w_half, obj.y - h_half, w_half, h_half, w, h, obj.scale_x, -obj.scale_y, obj.rotation * 180f / (float)Math.PI, 0, 0, w, h, false, false);
+					spritebatch.draw(texture, x, y, w_half, h_half, w, h, obj.scale_x, -obj.scale_y, obj.rotation * 180f / (float)Math.PI, 0, 0, w, h, false, false);
 				}
 			}
 		}

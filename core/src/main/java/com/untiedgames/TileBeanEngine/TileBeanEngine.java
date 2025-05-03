@@ -47,6 +47,7 @@ public class TileBeanEngine {
 	private static int render_fps = 60; // The target frames per second for displaying the game. The default will be set to your monitor's refresh rate plus one.
 
 	public static boolean show_colliders = false;
+	public static boolean always_draw_at_ints = false;
 
 	// Rendering variables
 
