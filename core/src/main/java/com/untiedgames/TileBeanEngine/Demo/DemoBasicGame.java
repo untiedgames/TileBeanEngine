@@ -500,12 +500,15 @@ public class DemoBasicGame extends Game {
 			// Collision detection (Player vs. terrain) //
 			//////////////////////////////////////////////
 			
-			TileCollisionInfo[] info_list = Collision.detect(collider_player, tilemap);
-
-			float y_prev = obj_player.y; // Save the player's previous Y position
+			float y_prev = obj_player.y; // Save the player's previous Y position, pre-collision
 			
 			// Resolve collision(s)
-			Collision.resolve(info_list);
+			// This is done in a short loop to get the most accurate collision result (within reason).
+			for (int i = 0; i < 4; i++) {
+				TileCollisionInfo[] info_list = Collision.detect(collider_player, tilemap);
+				if (info_list.length == 0) break;
+				Collision.resolve(info_list);
+			}
 			
 			if (obj_player.y < y_prev) {
 				if (player_velocity_y >= 0.0f) {
